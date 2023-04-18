@@ -21,8 +21,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let tabBar = UITabBarController()
         
         let homeView = HomeView()
+        let noteView = NoteView()
         
-        tabBar.viewControllers = [homeView]
+        tabBar.viewControllers = [noteView,homeView]
+        
+        noteView.tabBarItem = UITabBarItem(title: "Note", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
         
         homeView.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
         let rootView = UINavigationController(rootViewController: tabBar)
