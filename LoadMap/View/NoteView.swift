@@ -11,7 +11,6 @@ import Then
 import RxSwift
 import RxCocoa
 import RealmSwift
-import RxRealm
 
 
 class NoteView: UIViewController{
@@ -19,7 +18,7 @@ class NoteView: UIViewController{
     let bag = DisposeBag()
     let realm = try! Realm()
     
-    var testData : Results<Note>?
+    var noteData : Results<Note>?
     
     let tableView = UITableView().then{
         $0.register(NoteCell.self, forCellReuseIdentifier: "noteCell")
@@ -34,7 +33,7 @@ class NoteView: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
-        testData = realm.objects(Note.self)
+        noteData = realm.objects(Note.self)
         attribute()
         bind()
         layout()
@@ -42,14 +41,14 @@ class NoteView: UIViewController{
 }
 
 extension NoteView{
-
+    
     func bind(){
         
-//        Observable.from([testData])
-//            .bind(to: tableView.rx.items(cellIdentifier: "noteCell",cellType: NoteCell.self)){tableView,data,cell in
-//                cell.dateLabel.text = data.noteContent
-//            }
-//            .disposed(by: bag)
+        //        Observable.from([testData])
+        //            .bind(to: tableView.rx.items(cellIdentifier: "noteCell",cellType: NoteCell.self)){tableView,data,cell in
+        //                cell.dateLabel.text = data.noteContent
+        //            }
+        //            .disposed(by: bag)
         
         tableView.rx.itemSelected
             .bind(onNext: {_ in
@@ -82,12 +81,12 @@ extension NoteView{
 
 extension NoteView:UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        testData?.count ?? 1
+        noteData?.count ?? 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "noteCell") as? NoteCell else {return UITableViewCell()}
-        cell.textView.text = testData?[indexPath.row].noteContent
+        cell.textView.text = noteData?[indexPath.row].noteContent
         return cell
     }
     

@@ -8,17 +8,12 @@
 import Foundation
 import RxDataSources
 
-struct Home{
+struct Goal{
     var header: GoalHeader
     var items: [GoalItem]
 }
 
-extension Home:SectionModelType{
-    init(original: Home, items: [GoalItem]) {
-        self = original
-        self.items = items
-    }
-}
+
 
 struct GoalHeader{
     var icon: String

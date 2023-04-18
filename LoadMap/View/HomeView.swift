@@ -7,47 +7,45 @@
 
 import UIKit
 import SnapKit
-import RxDataSources
 import Then
-import RxSwift
-import RxCocoa
+import RealmSwift
 
 class HomeView: UIViewController{
     
-    let bag = DisposeBag()
+    //let bag = DisposeBag()
+    
+    let realm = try! Realm()
     
     let tableView = UITableView().then{
         $0.register(HomeItemCell.self, forCellReuseIdentifier: "goalItemCell")
         $0.register(HomeHeaderCell.self, forHeaderFooterViewReuseIdentifier: "Header")
     }
     
-     var dataSource: RxTableViewSectionedReloadDataSource<Home>{
-        return RxTableViewSectionedReloadDataSource<Home>(
-            configureCell: { dataSource, view, index, item in
-                guard let cell = view.dequeueReusableCell(withIdentifier: "goalItemCell",for: index) as? HomeItemCell else { return UITableViewCell()}
-                cell.expanded = dataSource.sectionModels[index.section].header.expanded
-                cell.isHidden = cell.expanded
-                return cell
-            }
-        )}
-    
+    let addButton = UIButton().then{
+        $0.backgroundColor = .yellow
+        $0.addTarget(self, action: #selector(addPageMove), for: .touchDown)
+    }
+
+    @objc func addPageMove(){
+        self.navigationController?.pushViewController(GoalAddView(), animated: true)
+    }
 
     
-    let data: [Home] = [
-        Home(header: GoalHeader(icon: "😺", title: "title", startDay: Date(), endDay: Date()), items: [GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false)]),
-        Home(header: GoalHeader(icon: "abc", title: "title", startDay: Date(), endDay: Date()), items: [GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false)]),
-        Home(header: GoalHeader(icon: "abc", title: "title", startDay: Date(), endDay: Date()), items: [GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false)])
+    var data: [Goal] = [
+        Goal(header: GoalHeader(icon: "😺", title: "title", startDay: Date(), endDay: Date()), items: [GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false)]),
+        Goal(header: GoalHeader(icon: "abc", title: "title", startDay: Date(), endDay: Date()), items: [GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false)]),
+        Goal(header: GoalHeader(icon: "abc", title: "title", startDay: Date(), endDay: Date()), items: [GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false)])
     ]
     
 
-    let items =  BehaviorRelay<[Home]>(value: [])
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
   
-        //tableView.delegate = self
+        tableView.delegate = self
+        tableView.dataSource = self
         bind()
         layout()
     }
@@ -55,56 +53,70 @@ class HomeView: UIViewController{
 
 extension HomeView{
 
-  
-    
     func bind(){
-        self.items.accept(data)
-        items.bind(to: tableView.rx.items(dataSource: dataSource)).disposed(by: bag)
-
-  
 
     }
     
     private func layout(){
-        view.addSubview(tableView)
+        [tableView,addButton].forEach{
+            view.addSubview($0)
+        }
         
         // 테이블뷰 오토레이아웃
         tableView.snp.makeConstraints{
             $0.top.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
+        
+        //글작성 버튼 오토레이아웃
+        addButton.snp.makeConstraints{
+            $0.width.height.equalTo(50)
+            $0.bottom.trailing.equalTo(view.safeAreaLayoutGuide).offset(-10)
+        }
     }
 }
 
+//MARK: - TableView DataSource
+extension HomeView: UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if data[section].header.expanded{
+            return  data[section].items.count
+        }else{
+            return 0
+        }
+       
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "goalItemCell") as? HomeItemCell else { return UITableViewCell()}
+        cell.titleLabel.text = data[indexPath.section].items[indexPath.row].itemName
+        
+        return cell
+        
+    }
+    
+    
+}
 
+//MARK: - TableView Delegate
 extension HomeView: UITableViewDelegate{
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        data.count
+    }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "Header") as? HomeHeaderCell else {return nil}
-        headerView.viewMore.rx.tap
-            .subscribe(onNext: {
-                
-                let rowCountInSection = tableView.numberOfRows(inSection: section)
-                
-                for row in 0..<rowCountInSection {
-                    let indexPath = IndexPath(row: row, section: section)
-                    var data = self.items.value
-                    data[section].header.expanded = true
-                    self.items.accept(data)
-                    let cell = tableView.cellForRow(at: indexPath)
-                    //cell?.isHidden = true
-                    tableView.beginUpdates()
-                    self.tableView.reloadSections([indexPath.section], with: .fade)
-                    tableView.endUpdates()
-                }
-                
-            })
-            .disposed(by: bag)
+        headerView.viewMore.tag = section
+        headerView.viewMore.addTarget(self, action: #selector(sectionButtonTapped(sender:)), for: .touchDown)
+
         headerView.emojlabel.text = data[section].header.icon
         headerView.titleLabel.text = data[section].header.title
         return headerView
     }
-    
-
-    
+    @objc func sectionButtonTapped(sender: UIButton){
+        let section = sender.tag
+        data[section].header.expanded.toggle()
+        tableView.reloadSections([section], with: .automatic)
+    }
 }

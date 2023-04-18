@@ -22,14 +22,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let homeView = HomeView()
         let noteView = NoteView()
+        let calendarView = CalendarLineView()
         
-        tabBar.viewControllers = [homeView,noteView]
+        tabBar.viewControllers = [homeView,noteView,calendarView]
         
 
         
         noteView.tabBarItem = UITabBarItem(title: "Note", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
         
         homeView.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
+        calendarView.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
+        
         let rootView = UINavigationController(rootViewController: tabBar)
         
         window?.rootViewController = rootView

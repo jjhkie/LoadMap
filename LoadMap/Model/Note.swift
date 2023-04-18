@@ -7,7 +7,7 @@
 
 import Foundation
 import RealmSwift
-import RxRealm
+
 
 class Note: Object{
     @objc dynamic var noteDate : Date?
