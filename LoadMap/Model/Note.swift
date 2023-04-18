@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import RealmSwift
+import RxRealm
 
-
-struct Note{
-    var noteDate : Date
-    var noteContent: String 
+class Note: Object{
+    @objc dynamic var noteDate : Date?
+    @objc dynamic var noteContent: String?
 }

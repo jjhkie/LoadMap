@@ -10,32 +10,32 @@ import SnapKit
 import Then
 import RxSwift
 import RxCocoa
+import RealmSwift
+import RxRealm
+
 
 class NoteView: UIViewController{
     
     let bag = DisposeBag()
+    let realm = try! Realm()
     
-    let testData : [Note] = [
-        Note(noteDate: Date(), noteContent: "content1"),
-        Note(noteDate: Date(), noteContent: "content2"),
-        Note(noteDate: Date(), noteContent: "content3"),
-        Note(noteDate: Date(), noteContent: "content4"),
-        Note(noteDate: Date(), noteContent: "content5")
-    ]
-    
-    var data = BehaviorRelay<[Note]>(value: [])
-    
+    var testData : Results<Note>?
     
     let tableView = UITableView().then{
         $0.register(NoteCell.self, forCellReuseIdentifier: "noteCell")
     }
-   
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tableView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        data.accept(testData)
-        
+        tableView.dataSource = self
+        testData = realm.objects(Note.self)
+        attribute()
         bind()
         layout()
     }
@@ -44,10 +44,31 @@ class NoteView: UIViewController{
 extension NoteView{
 
     func bind(){
-        data.bind(to: tableView.rx.items(cellIdentifier: "noteCell",cellType: NoteCell.self)){row,data,cell in
-            cell.textLabel?.text = data.noteContent
-        }.disposed(by: bag)
         
+//        Observable.from([testData])
+//            .bind(to: tableView.rx.items(cellIdentifier: "noteCell",cellType: NoteCell.self)){tableView,data,cell in
+//                cell.dateLabel.text = data.noteContent
+//            }
+//            .disposed(by: bag)
+        
+        tableView.rx.itemSelected
+            .bind(onNext: {_ in
+                print("click")
+                self.tableView.reloadData()
+            })
+            .disposed(by: bag)
+        
+        
+    }
+    
+    private func attribute(){
+        self.navigationController?.navigationBar.topItem?.title = "다이어리"
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action:#selector(addButtonPressed))
+        navigationController?.navigationBar.topItem?.rightBarButtonItem = addButton
+    }
+    
+    @objc func addButtonPressed(){
+        self.navigationController?.pushViewController(NoteAddView(), animated: true)
     }
     
     private func layout(){
@@ -57,4 +78,18 @@ extension NoteView{
             $0.edges.equalToSuperview()
         }
     }
+}
+
+extension NoteView:UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        testData?.count ?? 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "noteCell") as? NoteCell else {return UITableViewCell()}
+        cell.textView.text = testData?[indexPath.row].noteContent
+        return cell
+    }
+    
+    
 }
