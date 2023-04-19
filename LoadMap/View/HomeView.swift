@@ -10,6 +10,8 @@ import SnapKit
 import Then
 import RealmSwift
 
+
+
 class HomeView: UIViewController{
     
     //let bag = DisposeBag()

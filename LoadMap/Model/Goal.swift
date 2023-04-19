@@ -15,6 +15,7 @@ struct Goal{
 
 
 
+
 struct GoalHeader{
     var icon: String
     var title: String
