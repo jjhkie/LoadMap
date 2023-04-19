@@ -16,6 +16,7 @@ class CalendarLineView: UIViewController{
         $0.dateFormat = "yyyy.MM.dd"
     }
     
+    //캘린더
     let calendar = FSCalendar().then{
         $0.register(FSCalendarCell.self, forCellReuseIdentifier: "Cell")
         $0.scope = .month
@@ -24,27 +25,34 @@ class CalendarLineView: UIViewController{
         $0.weekdayHeight = 30
     }
     
+    //하단 테이블뷰
     let tableView = UITableView().then{
         $0.register(UITableViewCell.self, forCellReuseIdentifier: "tableCell")
         $0.backgroundColor = .red
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    fileprivate lazy var scopeGesture: UIPanGestureRecognizer = {
-         [unowned self] in
-         let panGesture = UIPanGestureRecognizer(target: self.calendar, action: #selector(self.calendar.handleScopeGesture(_:)))
-         panGesture.delegate = self
-         panGesture.minimumNumberOfTouches = 1
-         panGesture.maximumNumberOfTouches = 2
-         return panGesture
-     }()
+    //제스처 인식
+    lazy var scopeGesture = UIPanGestureRecognizer(target: self.calendar, action: #selector(self.calendar.handleScopeGesture(_:))).then{
+
+        $0.delegate = self
+        $0.minimumNumberOfTouches = 1
+        $0.maximumNumberOfTouches = 2
+    }
     
-    var calendarHeihtConstraint: Constraint!
-    
-    var eventsArray = [Date()]
+    struct TestDate{
+        let content: String
+        let startDay : Date
+        let endDay: Date
+    }
+    var eventsArray = [
+        TestDate(content: "abc",startDay: Date(), endDay: Date().addingTimeInterval(172800)),
+        TestDate(content: "abc",startDay: Date(), endDay: Date().addingTimeInterval(172800)),
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         //1
         self.view.addGestureRecognizer(self.scopeGesture)
@@ -55,6 +63,7 @@ class CalendarLineView: UIViewController{
         //테이블뷰의 panGesture가 scopeGesture보다 우선되지 않도록 설정한다.
         self.tableView.panGestureRecognizer.require(toFail: self.scopeGesture)
         
+        tableView.dataSource = self
         
         calendar.delegate = self
         calendar.dataSource = self
@@ -64,6 +73,8 @@ class CalendarLineView: UIViewController{
         layout()
     }
 }
+
+//MARK: - Gesture Delegate
 
 extension CalendarLineView:UIGestureRecognizerDelegate{
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -81,11 +92,10 @@ extension CalendarLineView:UIGestureRecognizerDelegate{
     }
 }
 
+//MARK: - Layout
 extension CalendarLineView{
     
     func setCalendarUI(){
-        
-       
         
         self.calendar.locale = Locale(identifier: "ko_KR")
         // 캘린더 스크롤 방향 지정
@@ -138,6 +148,31 @@ extension CalendarLineView{
         }
     }
 }
+
+//MARK: - TableView DataSource, Delegate
+extension CalendarLineView: UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
+        var count = eventsArray.filter{
+            $0.startDay <= calendar.selectedDate ?? Date() && $0.endDay >= calendar.selectedDate ?? Date()
+        }.count
+        print(count)
+        return count
+       
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "tableCell")else {return UITableViewCell()}
+        
+        cell.textLabel?.text = "abc"
+        return cell
+    }
+
+
+}
+
+//MARK: - Clendar DataSource
+
 extension CalendarLineView: FSCalendarDataSource{
     
    
@@ -146,7 +181,7 @@ extension CalendarLineView: FSCalendarDataSource{
     //설정한 날짜가 2023년 1월 1일이라면
     //설정한 날짜 이전의 달력은 볼 수 없다.
     func minimumDate(for calendar: FSCalendar) -> Date {
-        guard let displayminimumDay = formatter.date(from: "2023.03.10") else { return Date() }
+        guard let displayminimumDay = formatter.date(from: "2020.01.01") else { return Date() }
         return displayminimumDay
     }
     
@@ -154,7 +189,7 @@ extension CalendarLineView: FSCalendarDataSource{
     //달력에서 선택 가능한 최대 날짜 선정
     //설정한 날짜까지만 달력에서 보인다.
     func maximumDate(for calendar: FSCalendar) -> Date {
-        guard let displayminimumDay = formatter.date(from: "2023.05.10") else { return Date() }
+        guard let displayminimumDay = formatter.date(from: "2040.12.31") else { return Date() }
         return displayminimumDay
     }
     
@@ -169,11 +204,9 @@ extension CalendarLineView: FSCalendarDataSource{
         let components = today.dateComponents([.day], from: date)
         
         //1이 포함된 일의 셀의 배경색을 변경한다.
-        if components.day == 1{
-            print(date)
-            //cell.titleLabel.textColor = .red
-            cell.backgroundColor = .black
-        }
+//        if components.day == 1{
+//            cell.backgroundColor = .black
+//        }
         
         return cell
     }
@@ -182,14 +215,13 @@ extension CalendarLineView: FSCalendarDataSource{
     //해당 날짜의 이벤트의 개수를 확인할 수 있다.
     // 이벤트 밑에 Dot 표시 개수
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-        if self.eventsArray.contains(date){
-            return 1
-        }
-        //        if self.eventsArray_Done.contains(date){
-        //            return 1
-        //        }
         
-        return 1
+        var arr = eventsArray.filter{
+            $0.startDay <= date && date <= $0.endDay
+        }
+            
+        print(arr)
+        return arr.count
     }
     
 
@@ -218,6 +250,7 @@ extension CalendarLineView: FSCalendarDelegate,FSCalendarDelegateAppearance{
           let currentPageString = formatter.string(from: currentPageDate)
           
           print("현재 페이지: \(currentPageString)")
+        
     }
     
     //MARK: - ShouldSelect
@@ -239,8 +272,8 @@ extension CalendarLineView: FSCalendarDelegate,FSCalendarDelegateAppearance{
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         let date = formatter.string(from: date)
-        
         print("선택한 날짜 : \(date)")
+        tableView.reloadData()
     }
     
     //MARK:  ShouldDeselectDate
@@ -324,9 +357,7 @@ extension CalendarLineView: FSCalendarDelegate,FSCalendarDelegateAppearance{
     //달력에서 날짜에 연관된 이벤트의 기본 색상 배열을 설정
     // Default Event Dot 색상 분기처리 - FSCalendarDelegateAppearance
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventDefaultColorsFor date: Date) -> [UIColor]?{
-        if self.eventsArray.contains(date){
-            return [UIColor.blue]
-        }
+    
         
         //        if self.eventsArray_Done.contains(date){
         //            return [UIColor.red]
@@ -339,9 +370,7 @@ extension CalendarLineView: FSCalendarDelegate,FSCalendarDelegateAppearance{
     //MARK:  EventSelectionColorsForDate
     // Selected Event Dot 색상 분기처리 - FSCalendarDelegateAppearance
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventSelectionColorsFor date: Date) -> [UIColor]? {
-        if self.eventsArray.contains(date){
-            return [UIColor.green]
-        }
+  
         
         //        if self.eventsArray_Done.contains(date){
         //            return [UIColor.red]
@@ -351,7 +380,7 @@ extension CalendarLineView: FSCalendarDelegate,FSCalendarDelegateAppearance{
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventOffsetFor date: Date) -> CGPoint {
-        return CGPoint(x: 0, y: 1)
+        return CGPoint(x: 0, y: 0)
     }
     
     
