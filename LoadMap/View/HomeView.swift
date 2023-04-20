@@ -82,7 +82,7 @@ extension HomeView{
 extension HomeView: UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if data[section].header.expanded{
-            return  data[section].items.count
+            return  data[section].items?.count ?? 0
         }else{
             return 0
         }
@@ -91,7 +91,7 @@ extension HomeView: UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "goalItemCell") as? HomeItemCell else { return UITableViewCell()}
-        cell.titleLabel.text = data[indexPath.section].items[indexPath.row].itemName
+        cell.titleLabel.text = data[indexPath.section].items?[indexPath.row].itemName
         
         return cell
         

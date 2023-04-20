@@ -6,14 +6,12 @@
 //
 
 import Foundation
-import RxDataSources
+import RealmSwift
 
-struct Goal{
+struct Goal: Object{
     var header: GoalHeader
-    var items: [GoalItem]
+    var items: [GoalItem]?
 }
-
-
 
 
 struct GoalHeader{
