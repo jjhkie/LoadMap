@@ -8,21 +8,19 @@
 import Foundation
 import RealmSwift
 
-struct Goal: Object{
-    var header: GoalHeader
-    var items: [GoalItem]?
+class Goal: Object{
+    @objc dynamic var icon: String?
+    @objc dynamic var title: String?
+    @objc dynamic var startDay : Date = Date()
+    @objc dynamic var endDay : Date = Date()
+    @objc dynamic var expanded : Bool = false
+    var items = List<GoalItem>()
 }
 
 
-struct GoalHeader{
-    var icon: String
-    var title: String
-    var startDay : Date
-    var endDay : Date
-    var expanded : Bool = false
-}
 
-struct GoalItem{
-    var itemName: String
-    var itemComplete : Bool
+
+class GoalItem:Object{
+    @objc dynamic var itemName: String?
+    @objc dynamic var itemComplete : Bool = false
 }

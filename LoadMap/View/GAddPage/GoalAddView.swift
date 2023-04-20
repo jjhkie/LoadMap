@@ -15,7 +15,10 @@ class GoalAddView:UIViewController{
     
     let realm = try! Realm()
     
-    var goalData = Goal(header: GoalHeader(icon: "", title: "", startDay: Date(), endDay: Date()), items: [])
+    var goalData = Goal()
+    
+    var goaladdItem = GoalItem()
+    
     
     let tableView = UITableView().then{
         $0.register(UITableViewCell.self, forCellReuseIdentifier: "tableCell")
@@ -55,7 +58,6 @@ extension GoalAddView{
         try! self.realm.write{
             self.realm.add(goalData)
         }
-        print(goalData)
         self.navigationController?.popViewController(animated: true)
     }
 }
@@ -68,7 +70,7 @@ extension GoalAddView: UITableViewDataSource{
         6
     }
     @objc func addView(){
-        
+        goalData.items.append(goaladdItem)
         print("abcde")
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -97,9 +99,11 @@ extension GoalAddView: UITableViewDataSource{
             return cell
         case 5:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell") as? GoalItemCell else { return UITableViewCell()}
+            cell.contentTextView.delegate = self
+            cell.contentTextView.tag = 3
             cell.addButton.setTitle("Click", for: .normal)
             cell.addButton.addTarget(self, action: #selector(addView), for: .touchDown)
-       
+            
             return cell
         default:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "tableCell") else { return UITableViewCell()}
@@ -121,9 +125,12 @@ extension GoalAddView:UITextFieldDelegate{
     func textFieldDidChangeSelection(_ textField: UITextField) {
         switch textField.tag{
         case 1:
-            goalData.header.icon = textField.text ?? ""
+            goalData.icon = textField.text
         case 2:
-            goalData.header.title = textField.text ?? ""
+            goalData.title = textField.text
+
+        case 3:
+            goaladdItem.itemName = textField.text
         default:
             break;
         }

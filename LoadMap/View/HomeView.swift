@@ -18,6 +18,8 @@ class HomeView: UIViewController{
     
     let realm = try! Realm()
     
+    var goalData : Results<Goal>?
+    
     let tableView = UITableView().then{
         $0.register(HomeItemCell.self, forCellReuseIdentifier: "goalItemCell")
         $0.register(HomeHeaderCell.self, forHeaderFooterViewReuseIdentifier: "Header")
@@ -31,21 +33,15 @@ class HomeView: UIViewController{
     @objc func addPageMove(){
         self.navigationController?.pushViewController(GoalAddView(), animated: true)
     }
-
-    
-    var data: [Goal] = [
-        Goal(header: GoalHeader(icon: "😺", title: "title", startDay: Date(), endDay: Date()), items: [GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false)]),
-        Goal(header: GoalHeader(icon: "abc", title: "title", startDay: Date(), endDay: Date()), items: [GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false)]),
-        Goal(header: GoalHeader(icon: "abc", title: "title", startDay: Date(), endDay: Date()), items: [GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false),GoalItem(itemName: "Item1", itemComplete: false)])
-    ]
-    
-
-    
-    
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
   
+        goalData = realm.objects(Goal.self)
+        
         tableView.delegate = self
         tableView.dataSource = self
         bind()
@@ -81,8 +77,12 @@ extension HomeView{
 //MARK: - TableView DataSource
 extension HomeView: UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if data[section].header.expanded{
-            return  data[section].items?.count ?? 0
+        if let data = goalData?[section].expanded{
+            if data{
+                return goalData?[section].items.count ?? 0
+            }else{
+                return 0
+            }
         }else{
             return 0
         }
@@ -91,7 +91,8 @@ extension HomeView: UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "goalItemCell") as? HomeItemCell else { return UITableViewCell()}
-        cell.titleLabel.text = data[indexPath.section].items?[indexPath.row].itemName
+        
+        cell.titleLabel.text = goalData?[indexPath.row].title
         
         return cell
         
@@ -104,7 +105,7 @@ extension HomeView: UITableViewDataSource{
 extension HomeView: UITableViewDelegate{
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        data.count
+        goalData?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -112,13 +113,13 @@ extension HomeView: UITableViewDelegate{
         headerView.viewMore.tag = section
         headerView.viewMore.addTarget(self, action: #selector(sectionButtonTapped(sender:)), for: .touchDown)
 
-        headerView.emojlabel.text = data[section].header.icon
-        headerView.titleLabel.text = data[section].header.title
+        headerView.emojlabel.text = goalData?[section].icon
+        headerView.titleLabel.text = goalData?[section].title
         return headerView
     }
     @objc func sectionButtonTapped(sender: UIButton){
         let section = sender.tag
-        data[section].header.expanded.toggle()
+        goalData?[section].expanded.toggle()
         tableView.reloadSections([section], with: .automatic)
     }
 }

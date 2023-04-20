@@ -19,7 +19,7 @@ class GoalItemCell: UITableViewCell{
         $0.text = "업무"
     }
     
-    let contentTextView = UITextView()
+    let contentTextView = UITextField()
     
     let addButton = UIButton().then{
         $0.backgroundColor = .red
