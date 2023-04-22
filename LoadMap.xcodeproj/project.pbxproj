@@ -11,20 +11,22 @@
 		B90084C729EE0F3E006D7E39 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90084C629EE0F3E006D7E39 /* NoteCell.swift */; };
 		B90084C929EE1541006D7E39 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90084C829EE1541006D7E39 /* Note.swift */; };
 		B90084CE29EE1F69006D7E39 /* NoteAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90084CD29EE1F69006D7E39 /* NoteAddView.swift */; };
-		B90084D229EE9597006D7E39 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = B90084D129EE9597006D7E39 /* Realm */; };
-		B90084D429EE9597006D7E39 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B90084D329EE9597006D7E39 /* RealmSwift */; };
 		B90084D629EEA136006D7E39 /* GoalAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90084D529EEA136006D7E39 /* GoalAddView.swift */; };
 		B90084D929EEA5C5006D7E39 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = B90084D829EEA5C5006D7E39 /* FSCalendar */; };
 		B90084DB29EEA5D5006D7E39 /* CalendarLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90084DA29EEA5D5006D7E39 /* CalendarLineView.swift */; };
+		B94D52FE29F2290000770663 /* GoalAddViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94D52FD29F2290000770663 /* GoalAddViewModel.swift */; };
+		B96211F729F3AA010026FE0B /* GoalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96211F629F3AA010026FE0B /* GoalViewModel.swift */; };
+		B96211F929F3AEC00026FE0B /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96211F829F3AEC00026FE0B /* Protocol.swift */; };
+		B962121829F3C6250026FE0B /* RxRealm in Frameworks */ = {isa = PBXBuildFile; productRef = B962121729F3C6250026FE0B /* RxRealm */; };
+		B962121B29F3C6520026FE0B /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = B962121A29F3C6520026FE0B /* Differentiator */; };
+		B962121D29F3C6520026FE0B /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = B962121C29F3C6520026FE0B /* RxDataSources */; };
 		B965D04E29ED091A00CCB9A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B965D04D29ED091A00CCB9A1 /* AppDelegate.swift */; };
 		B965D05029ED091A00CCB9A1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B965D04F29ED091A00CCB9A1 /* SceneDelegate.swift */; };
 		B965D05729ED091A00CCB9A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B965D05629ED091A00CCB9A1 /* Assets.xcassets */; };
 		B965D05A29ED091A00CCB9A1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B965D05829ED091A00CCB9A1 /* LaunchScreen.storyboard */; };
-		B965D06229ED0A6300CCB9A1 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B965D06129ED0A6300CCB9A1 /* HomeView.swift */; };
+		B965D06229ED0A6300CCB9A1 /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B965D06129ED0A6300CCB9A1 /* GoalView.swift */; };
 		B965D06629ED0E1500CCB9A1 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = B965D06529ED0E1500CCB9A1 /* SnapKit */; };
 		B965D06929ED0E2200CCB9A1 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = B965D06829ED0E2200CCB9A1 /* Then */; };
-		B965D07329ED0E4700CCB9A1 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = B965D07229ED0E4700CCB9A1 /* Differentiator */; };
-		B965D07529ED0E4700CCB9A1 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = B965D07429ED0E4700CCB9A1 /* RxDataSources */; };
 		B965D07729ED127700CCB9A1 /* Goal.swift in Sources */ = {isa = PBXBuildFile; fileRef = B965D07629ED127700CCB9A1 /* Goal.swift */; };
 		B965D07A29ED1E6300CCB9A1 /* HomeHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B965D07929ED1E6300CCB9A1 /* HomeHeaderCell.swift */; };
 		B965D07E29ED636000CCB9A1 /* HomeItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B965D07D29ED636000CCB9A1 /* HomeItemCell.swift */; };
@@ -41,13 +43,16 @@
 		B90084CD29EE1F69006D7E39 /* NoteAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteAddView.swift; sourceTree = "<group>"; };
 		B90084D529EEA136006D7E39 /* GoalAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalAddView.swift; sourceTree = "<group>"; };
 		B90084DA29EEA5D5006D7E39 /* CalendarLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarLineView.swift; sourceTree = "<group>"; };
+		B94D52FD29F2290000770663 /* GoalAddViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalAddViewModel.swift; sourceTree = "<group>"; };
+		B96211F629F3AA010026FE0B /* GoalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalViewModel.swift; sourceTree = "<group>"; };
+		B96211F829F3AEC00026FE0B /* Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		B965D04A29ED091A00CCB9A1 /* LoadMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoadMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B965D04D29ED091A00CCB9A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B965D04F29ED091A00CCB9A1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		B965D05629ED091A00CCB9A1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B965D05929ED091A00CCB9A1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B965D05B29ED091A00CCB9A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B965D06129ED0A6300CCB9A1 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		B965D06129ED0A6300CCB9A1 /* GoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalView.swift; sourceTree = "<group>"; };
 		B965D07629ED127700CCB9A1 /* Goal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Goal.swift; sourceTree = "<group>"; };
 		B965D07929ED1E6300CCB9A1 /* HomeHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderCell.swift; sourceTree = "<group>"; };
 		B965D07D29ED636000CCB9A1 /* HomeItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeItemCell.swift; sourceTree = "<group>"; };
@@ -62,13 +67,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B90084D429EE9597006D7E39 /* RealmSwift in Frameworks */,
 				B965D06629ED0E1500CCB9A1 /* SnapKit in Frameworks */,
-				B965D07529ED0E4700CCB9A1 /* RxDataSources in Frameworks */,
-				B965D07329ED0E4700CCB9A1 /* Differentiator in Frameworks */,
+				B962121B29F3C6520026FE0B /* Differentiator in Frameworks */,
 				B965D06929ED0E2200CCB9A1 /* Then in Frameworks */,
+				B962121D29F3C6520026FE0B /* RxDataSources in Frameworks */,
+				B962121829F3C6250026FE0B /* RxRealm in Frameworks */,
 				B90084D929EEA5C5006D7E39 /* FSCalendar in Frameworks */,
-				B90084D229EE9597006D7E39 /* Realm in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +87,24 @@
 				B90084C629EE0F3E006D7E39 /* NoteCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		B96211F529F3A7B60026FE0B /* GoalPage */ = {
+			isa = PBXGroup;
+			children = (
+				B90084CF29EE63BC006D7E39 /* Cell */,
+				B965D06129ED0A6300CCB9A1 /* GoalView.swift */,
+				B96211F629F3AA010026FE0B /* GoalViewModel.swift */,
+			);
+			path = GoalPage;
+			sourceTree = "<group>";
+		};
+		B96211FA29F3AEC30026FE0B /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				B96211F829F3AEC00026FE0B /* Protocol.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		B965D04129ED091900CCB9A1 = {
@@ -106,6 +128,7 @@
 			children = (
 				B965D04D29ED091A00CCB9A1 /* AppDelegate.swift */,
 				B965D04F29ED091A00CCB9A1 /* SceneDelegate.swift */,
+				B96211FA29F3AEC30026FE0B /* Common */,
 				B965D07829ED127B00CCB9A1 /* Model */,
 				B965D06329ED0A6800CCB9A1 /* View */,
 				B965D05629ED091A00CCB9A1 /* Assets.xcassets */,
@@ -118,12 +141,11 @@
 		B965D06329ED0A6800CCB9A1 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				B90084CF29EE63BC006D7E39 /* Cell */,
-				B965D06129ED0A6300CCB9A1 /* HomeView.swift */,
+				B96211F529F3A7B60026FE0B /* GoalPage */,
+				B969863A29F10A4600865AB2 /* GAddPage */,
 				B90084C429EE0D31006D7E39 /* NoteView.swift */,
 				B90084CD29EE1F69006D7E39 /* NoteAddView.swift */,
 				B90084DA29EEA5D5006D7E39 /* CalendarLineView.swift */,
-				B969863A29F10A4600865AB2 /* GAddPage */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -142,6 +164,7 @@
 			children = (
 				B969863B29F10A6600865AB2 /* Cell */,
 				B90084D529EEA136006D7E39 /* GoalAddView.swift */,
+				B94D52FD29F2290000770663 /* GoalAddViewModel.swift */,
 			);
 			path = GAddPage;
 			sourceTree = "<group>";
@@ -176,11 +199,10 @@
 			packageProductDependencies = (
 				B965D06529ED0E1500CCB9A1 /* SnapKit */,
 				B965D06829ED0E2200CCB9A1 /* Then */,
-				B965D07229ED0E4700CCB9A1 /* Differentiator */,
-				B965D07429ED0E4700CCB9A1 /* RxDataSources */,
-				B90084D129EE9597006D7E39 /* Realm */,
-				B90084D329EE9597006D7E39 /* RealmSwift */,
 				B90084D829EEA5C5006D7E39 /* FSCalendar */,
+				B962121729F3C6250026FE0B /* RxRealm */,
+				B962121A29F3C6520026FE0B /* Differentiator */,
+				B962121C29F3C6520026FE0B /* RxDataSources */,
 			);
 			productName = LoadMap;
 			productReference = B965D04A29ED091A00CCB9A1 /* LoadMap.app */;
@@ -213,9 +235,9 @@
 			packageReferences = (
 				B965D06429ED0E1500CCB9A1 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				B965D06729ED0E2200CCB9A1 /* XCRemoteSwiftPackageReference "Then" */,
-				B965D07129ED0E4700CCB9A1 /* XCRemoteSwiftPackageReference "RxDataSources" */,
-				B90084D029EE9597006D7E39 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				B90084D729EEA5C5006D7E39 /* XCRemoteSwiftPackageReference "FSCalendar" */,
+				B962121629F3C6250026FE0B /* XCRemoteSwiftPackageReference "RxRealm" */,
+				B962121929F3C6520026FE0B /* XCRemoteSwiftPackageReference "RxDataSources" */,
 			);
 			productRefGroup = B965D04B29ED091A00CCB9A1 /* Products */;
 			projectDirPath = "";
@@ -244,15 +266,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				B969863929F108E900865AB2 /* GoalAddMainCell.swift in Sources */,
-				B965D06229ED0A6300CCB9A1 /* HomeView.swift in Sources */,
+				B965D06229ED0A6300CCB9A1 /* GoalView.swift in Sources */,
 				B965D04E29ED091A00CCB9A1 /* AppDelegate.swift in Sources */,
 				B90084DB29EEA5D5006D7E39 /* CalendarLineView.swift in Sources */,
 				B969863F29F114DE00865AB2 /* GoalColorCell.swift in Sources */,
 				B90084D629EEA136006D7E39 /* GoalAddView.swift in Sources */,
 				B90084CE29EE1F69006D7E39 /* NoteAddView.swift in Sources */,
 				B965D07729ED127700CCB9A1 /* Goal.swift in Sources */,
+				B94D52FE29F2290000770663 /* GoalAddViewModel.swift in Sources */,
+				B96211F929F3AEC00026FE0B /* Protocol.swift in Sources */,
 				B965D07E29ED636000CCB9A1 /* HomeItemCell.swift in Sources */,
 				B965D07A29ED1E6300CCB9A1 /* HomeHeaderCell.swift in Sources */,
+				B96211F729F3AA010026FE0B /* GoalViewModel.swift in Sources */,
 				B90084C929EE1541006D7E39 /* Note.swift in Sources */,
 				B969863D29F110E300865AB2 /* GoalDateCell.swift in Sources */,
 				B90084C529EE0D31006D7E39 /* NoteView.swift in Sources */,
@@ -468,20 +493,30 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B90084D029EE9597006D7E39 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/realm-swift";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		B90084D729EEA5C5006D7E39 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/WenchaoD/FSCalendar";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.0.0;
+			};
+		};
+		B962121629F3C6250026FE0B /* XCRemoteSwiftPackageReference "RxRealm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxRealm";
+			requirement = {
+				kind = versionRange;
+				maximumVersion = 4.0.0;
+				minimumVersion = 3.0.0;
+			};
+		};
+		B962121929F3C6520026FE0B /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources";
+			requirement = {
+				kind = versionRange;
+				maximumVersion = 5.0.0;
+				minimumVersion = 4.0.0;
 			};
 		};
 		B965D06429ED0E1500CCB9A1 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
@@ -500,31 +535,28 @@
 				minimumVersion = 3.0.0;
 			};
 		};
-		B965D07129ED0E4700CCB9A1 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		B90084D129EE9597006D7E39 /* Realm */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B90084D029EE9597006D7E39 /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = Realm;
-		};
-		B90084D329EE9597006D7E39 /* RealmSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B90084D029EE9597006D7E39 /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = RealmSwift;
-		};
 		B90084D829EEA5C5006D7E39 /* FSCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B90084D729EEA5C5006D7E39 /* XCRemoteSwiftPackageReference "FSCalendar" */;
 			productName = FSCalendar;
+		};
+		B962121729F3C6250026FE0B /* RxRealm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B962121629F3C6250026FE0B /* XCRemoteSwiftPackageReference "RxRealm" */;
+			productName = RxRealm;
+		};
+		B962121A29F3C6520026FE0B /* Differentiator */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B962121929F3C6520026FE0B /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = Differentiator;
+		};
+		B962121C29F3C6520026FE0B /* RxDataSources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B962121929F3C6520026FE0B /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = RxDataSources;
 		};
 		B965D06529ED0E1500CCB9A1 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -535,16 +567,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B965D06729ED0E2200CCB9A1 /* XCRemoteSwiftPackageReference "Then" */;
 			productName = Then;
-		};
-		B965D07229ED0E4700CCB9A1 /* Differentiator */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B965D07129ED0E4700CCB9A1 /* XCRemoteSwiftPackageReference "RxDataSources" */;
-			productName = Differentiator;
-		};
-		B965D07429ED0E4700CCB9A1 /* RxDataSources */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B965D07129ED0E4700CCB9A1 /* XCRemoteSwiftPackageReference "RxDataSources" */;
-			productName = RxDataSources;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -10,11 +10,11 @@ import SnapKit
 
 class HomeItemCell: UITableViewCell{
     var expanded = false
-    var titleLabel = UILabel()
+    var goalTitleLabel = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        titleLabel.text = "hey test"
+        
         layout()
     }
     
@@ -25,9 +25,9 @@ class HomeItemCell: UITableViewCell{
 
 extension HomeItemCell{
     private func layout(){
-        contentView.addSubview(titleLabel)
+        contentView.addSubview(goalTitleLabel)
         
-        titleLabel.snp.makeConstraints{
+        goalTitleLabel.snp.makeConstraints{
             $0.top.leading.equalToSuperview()
         }
         

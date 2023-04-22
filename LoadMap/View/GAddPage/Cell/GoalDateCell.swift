@@ -23,6 +23,10 @@ class GoalDateCell: UITableViewCell{
         $0.textAlignment = .right
     }
     
+    let datePicker = UIDatePicker().then{
+        $0.datePickerMode = .date
+    }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -47,7 +51,7 @@ extension GoalDateCell{
         }
         
         dateLabel.snp.makeConstraints{
-            $0.width.equalTo(titleLabel.snp.width).multipliedBy(7)
+            $0.width.equalToSuperview().multipliedBy(0.3)
         }
     }
 }

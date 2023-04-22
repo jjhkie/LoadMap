@@ -16,15 +16,15 @@ class GoalColorCell:UITableViewCell{
         $0.distribution = .fill
     }
     
-    private let titleLabel = UILabel().then{
-        $0.text = "색상"
+    let titleLabel = UILabel().then{
+        $0.textAlignment = .left
     }
     
     let colorButton = UIColorWell()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         layout()
     }
     
@@ -34,6 +34,8 @@ class GoalColorCell:UITableViewCell{
 }
 
 extension GoalColorCell{
+    
+    
     private func layout(){
         
         [titleLabel,colorButton].forEach{
@@ -43,9 +45,12 @@ extension GoalColorCell{
         contentView.addSubview(containerView)
         
         containerView.snp.makeConstraints{
-            $0.edges.equalToSuperview()
+            $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0))
         }
         
+        titleLabel.snp.makeConstraints{
+            $0.width.equalToSuperview().multipliedBy(0.3)
+        }
         
     }
 }

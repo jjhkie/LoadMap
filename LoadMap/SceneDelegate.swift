@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let tabBar = UITabBarController()
         
-        let homeView = HomeView()
+        let homeView = GoalView()
         let noteView = NoteView()
         let calendarView = CalendarLineView()
         

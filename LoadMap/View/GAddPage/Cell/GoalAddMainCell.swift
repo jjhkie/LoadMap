@@ -8,25 +8,47 @@
 import UIKit
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
 
-class GoalAddMainCell: UITableViewCell{
+
+final class GoalAddMainCell: UITableViewCell{
     
-    let containserStackView = UIStackView().then{
+    private let bag = DisposeBag()
+    
+    lazy var viewModel = GoalAddViewModel()
+    
+    //전체 뷰
+    private let containserStackView = UIStackView().then{
         $0.axis = .horizontal
+        $0.spacing = 10
     }
     
-    let imageTextView = UITextField().then{
-        $0.placeholder = "이미지"
+    //이모티콘 작성 뷰
+    private let imageTextView = UITextField().then{
+        $0.textAlignment = .center
+        $0.font = .systemFont(ofSize: 40, weight: .bold)
+        $0.placeholder = "+"
+        $0.textColor = .white
+        $0.backgroundColor = .gray
+        $0.layer.cornerRadius = 20
     }
     
-    let titleTextView = UITextField().then{
+    //제목 작성 뷰
+    private let titleTextView = UITextField().then{
         $0.placeholder = "글제목"
     }
     
     
+    
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        imageTextView.delegate = self
+        
+        bind(viewModel)
         layout()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -35,6 +57,13 @@ class GoalAddMainCell: UITableViewCell{
 }
 
 extension GoalAddMainCell{
+    
+    private func bind(_ VM: GoalAddViewModel){
+        print("viewController : \(Unmanaged.passUnretained(VM).toOpaque())")
+        imageTextView.rx.text.orEmpty
+            .bind(to: VM.emojiText)
+            .disposed(by: bag)
+    }
     
     private func layout(){
         [imageTextView,titleTextView].forEach { view in
@@ -45,16 +74,26 @@ extension GoalAddMainCell{
         contentView.addSubview(containserStackView)
         
         containserStackView.snp.makeConstraints{
-            $0.edges.equalToSuperview()
+            $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0))
         }
         
         imageTextView.snp.makeConstraints{
-            $0.width.equalToSuperview().dividedBy(4)
+            $0.width.equalToSuperview().multipliedBy(0.3)
+            $0.height.equalTo(imageTextView.snp.width)
         }
-        titleTextView.snp.makeConstraints{
-            $0.width.equalTo(imageTextView.snp.width).multipliedBy(3)
-        }
-        
     }
 }
 
+extension GoalAddMainCell:UITextFieldDelegate{
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let text = textField.text{
+            if text.count > 0{
+                textField.deleteBackward()
+            }
+            return true
+        }
+        print("\(textField.text) ||| \(range) |||| \(string)")
+        return true
+    }
+    
+}

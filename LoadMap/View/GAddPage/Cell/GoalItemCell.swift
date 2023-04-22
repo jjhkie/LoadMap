@@ -15,9 +15,7 @@ class GoalItemCell: UITableViewCell{
         $0.distribution = .fillEqually
     }
     
-    private let titleLabel = UILabel().then{
-        $0.text = "업무"
-    }
+    let titleLabel = UILabel()
     
     let contentTextView = UITextField()
     

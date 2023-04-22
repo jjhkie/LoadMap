@@ -11,6 +11,7 @@ import Then
 import RxSwift
 import RxCocoa
 import RealmSwift
+import RxDataSources
 
 
 class NoteView: UIViewController{
@@ -23,6 +24,8 @@ class NoteView: UIViewController{
     let tableView = UITableView().then{
         $0.register(NoteCell.self, forCellReuseIdentifier: "noteCell")
     }
+    
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
