@@ -16,8 +16,6 @@ final class GoalAddMainCell: UITableViewCell{
     
     private let bag = DisposeBag()
     
-    lazy var viewModel = GoalAddViewModel()
-    
     //전체 뷰
     private let containserStackView = UIStackView().then{
         $0.axis = .horizontal
@@ -25,7 +23,7 @@ final class GoalAddMainCell: UITableViewCell{
     }
     
     //이모티콘 작성 뷰
-    private let imageTextView = UITextField().then{
+    let imageTextView = UITextField().then{
         $0.textAlignment = .center
         $0.font = .systemFont(ofSize: 40, weight: .bold)
         $0.placeholder = "+"
@@ -40,13 +38,11 @@ final class GoalAddMainCell: UITableViewCell{
     }
     
     
-    
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
         imageTextView.delegate = self
         
-        bind(viewModel)
         layout()
         
     }
@@ -58,12 +54,23 @@ final class GoalAddMainCell: UITableViewCell{
 
 extension GoalAddMainCell{
     
-    private func bind(_ VM: GoalAddViewModel){
-        print("viewController : \(Unmanaged.passUnretained(VM).toOpaque())")
+    func bind(_ VM: GoalAddViewModel){
         imageTextView.rx.text.orEmpty
-            .bind(to: VM.emojiText)
+            .subscribe(VM.emojiText)
+            .disposed(by: bag)
+
+        titleTextView.rx.text.orEmpty
+            .subscribe(VM.titleText)
+            .disposed(by: bag)
+        
+        VM.selectedColor
+            .subscribe(onNext: {[weak self] color in
+                self?.imageTextView.backgroundColor = color
+            })
             .disposed(by: bag)
     }
+    
+
     
     private func layout(){
         [imageTextView,titleTextView].forEach { view in

@@ -15,6 +15,9 @@
 		B90084D929EEA5C5006D7E39 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = B90084D829EEA5C5006D7E39 /* FSCalendar */; };
 		B90084DB29EEA5D5006D7E39 /* CalendarLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90084DA29EEA5D5006D7E39 /* CalendarLineView.swift */; };
 		B94D52FE29F2290000770663 /* GoalAddViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94D52FD29F2290000770663 /* GoalAddViewModel.swift */; };
+		B95C727829F52460003106B2 /* FScalendar+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95C727729F52460003106B2 /* FScalendar+Rx.swift */; };
+		B95C727B29F561D3003106B2 /* NoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95C727A29F561D3003106B2 /* NoteViewModel.swift */; };
+		B95C727E29F565C3003106B2 /* NoteAddViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95C727D29F565C3003106B2 /* NoteAddViewModel.swift */; };
 		B96211F729F3AA010026FE0B /* GoalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96211F629F3AA010026FE0B /* GoalViewModel.swift */; };
 		B96211F929F3AEC00026FE0B /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96211F829F3AEC00026FE0B /* Protocol.swift */; };
 		B962121829F3C6250026FE0B /* RxRealm in Frameworks */ = {isa = PBXBuildFile; productRef = B962121729F3C6250026FE0B /* RxRealm */; };
@@ -44,6 +47,9 @@
 		B90084D529EEA136006D7E39 /* GoalAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalAddView.swift; sourceTree = "<group>"; };
 		B90084DA29EEA5D5006D7E39 /* CalendarLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarLineView.swift; sourceTree = "<group>"; };
 		B94D52FD29F2290000770663 /* GoalAddViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalAddViewModel.swift; sourceTree = "<group>"; };
+		B95C727729F52460003106B2 /* FScalendar+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FScalendar+Rx.swift"; sourceTree = "<group>"; };
+		B95C727A29F561D3003106B2 /* NoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewModel.swift; sourceTree = "<group>"; };
+		B95C727D29F565C3003106B2 /* NoteAddViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteAddViewModel.swift; sourceTree = "<group>"; };
 		B96211F629F3AA010026FE0B /* GoalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalViewModel.swift; sourceTree = "<group>"; };
 		B96211F829F3AEC00026FE0B /* Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		B965D04A29ED091A00CCB9A1 /* LoadMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoadMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,6 +95,24 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		B95C727929F5613E003106B2 /* NotePage */ = {
+			isa = PBXGroup;
+			children = (
+				B90084C429EE0D31006D7E39 /* NoteView.swift */,
+				B95C727A29F561D3003106B2 /* NoteViewModel.swift */,
+			);
+			path = NotePage;
+			sourceTree = "<group>";
+		};
+		B95C727C29F565B5003106B2 /* NoteAddPage */ = {
+			isa = PBXGroup;
+			children = (
+				B90084CD29EE1F69006D7E39 /* NoteAddView.swift */,
+				B95C727D29F565C3003106B2 /* NoteAddViewModel.swift */,
+			);
+			path = NoteAddPage;
+			sourceTree = "<group>";
+		};
 		B96211F529F3A7B60026FE0B /* GoalPage */ = {
 			isa = PBXGroup;
 			children = (
@@ -103,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				B96211F829F3AEC00026FE0B /* Protocol.swift */,
+				B95C727729F52460003106B2 /* FScalendar+Rx.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -143,8 +168,8 @@
 			children = (
 				B96211F529F3A7B60026FE0B /* GoalPage */,
 				B969863A29F10A4600865AB2 /* GAddPage */,
-				B90084C429EE0D31006D7E39 /* NoteView.swift */,
-				B90084CD29EE1F69006D7E39 /* NoteAddView.swift */,
+				B95C727929F5613E003106B2 /* NotePage */,
+				B95C727C29F565B5003106B2 /* NoteAddPage */,
 				B90084DA29EEA5D5006D7E39 /* CalendarLineView.swift */,
 			);
 			path = View;
@@ -275,14 +300,17 @@
 				B965D07729ED127700CCB9A1 /* Goal.swift in Sources */,
 				B94D52FE29F2290000770663 /* GoalAddViewModel.swift in Sources */,
 				B96211F929F3AEC00026FE0B /* Protocol.swift in Sources */,
+				B95C727E29F565C3003106B2 /* NoteAddViewModel.swift in Sources */,
 				B965D07E29ED636000CCB9A1 /* HomeItemCell.swift in Sources */,
 				B965D07A29ED1E6300CCB9A1 /* HomeHeaderCell.swift in Sources */,
 				B96211F729F3AA010026FE0B /* GoalViewModel.swift in Sources */,
 				B90084C929EE1541006D7E39 /* Note.swift in Sources */,
+				B95C727B29F561D3003106B2 /* NoteViewModel.swift in Sources */,
 				B969863D29F110E300865AB2 /* GoalDateCell.swift in Sources */,
 				B90084C529EE0D31006D7E39 /* NoteView.swift in Sources */,
 				B965D05029ED091A00CCB9A1 /* SceneDelegate.swift in Sources */,
 				B90084C729EE0F3E006D7E39 /* NoteCell.swift in Sources */,
+				B95C727829F52460003106B2 /* FScalendar+Rx.swift in Sources */,
 				B969864129F1185300865AB2 /* GoalItemCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

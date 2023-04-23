@@ -19,6 +19,8 @@ protocol dataManage{
 
 class GoalViewModel{
     
+    let bag = DisposeBag()
+    
     let realm = try! Realm()
     
     var objectData : Results<Goal>?
@@ -32,7 +34,9 @@ class GoalViewModel{
 //MARK: - Basic
 extension GoalViewModel:ViewModelBasic{
 
-    struct Input {}
+    struct Input {
+        
+    }
     
     struct Output {
         let cellData : Driver<[Goal]>
@@ -41,11 +45,9 @@ extension GoalViewModel:ViewModelBasic{
     
     func inOut(input: Input) -> Output {
 
-        
+
         let cellArray = Observable.array(from: objectData!)
 
-        
-        
         return Output(
             cellData:cellArray
                 .asDriver(onErrorJustReturn: [])
@@ -57,6 +59,4 @@ extension GoalViewModel:dataManage{
     func loadData() {
         self.objectData = realm.objects(Goal.self)
     }
-    
-    
 }

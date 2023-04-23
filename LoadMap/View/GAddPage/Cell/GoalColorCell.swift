@@ -8,8 +8,12 @@
 import UIKit
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
 
 class GoalColorCell:UITableViewCell{
+    
+    private let bag = DisposeBag()
     
     private let containerView = UIStackView().then{
         $0.axis = .horizontal
@@ -35,6 +39,20 @@ class GoalColorCell:UITableViewCell{
 
 extension GoalColorCell{
     
+    func bind(_ VM: GoalAddViewModel){
+        
+        let colorObservable = colorButton.rx.controlEvent(.valueChanged)
+            .map { _ in
+                
+                self.colorButton.selectedColor }
+            .compactMap { $0 }
+            .asObservable()
+        
+        colorObservable
+            .bind(to: VM.selectedColor)
+            .disposed(by: bag)
+
+    }
     
     private func layout(){
         

@@ -20,8 +20,6 @@ class GoalView: UIViewController{
     
     let bag = DisposeBag()
     
-
-    
     let tableView = UITableView().then{
         $0.register(HomeItemCell.self, forCellReuseIdentifier: "goalItemCell")
         $0.register(HomeHeaderCell.self, forHeaderFooterViewReuseIdentifier: "Header")
@@ -29,21 +27,11 @@ class GoalView: UIViewController{
     
     let addButton = UIButton().then{
         $0.backgroundColor = .yellow
-        $0.addTarget(self, action: #selector(addPageMove), for: .touchDown)
     }
 
-    @objc func addPageMove(){
-        self.navigationController?.pushViewController(GoalAddView(), animated: true)
-    }
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        tableView.reloadData()
-//    }
     override func viewDidLoad() {
         super.viewDidLoad()
   
-        
-       
         bind(viewModel)
         layout()
     }
@@ -57,10 +45,18 @@ extension GoalView{
         let input = GoalViewModel.Input()
         let output = VM.inOut(input: input)
         
+        
+        addButton.rx.tap
+            .subscribe(onNext: {
+                self.navigationController?.pushViewController(GoalAddView(), animated: true)
+            })
+            .disposed(by: bag)
+        
         output.cellData
             .drive(tableView.rx.items(cellIdentifier: "goalItemCell",cellType: HomeItemCell.self)){row,data,cell in
                 
                 cell.goalTitleLabel.text = data.title
+                //cell.backgroundColor = data.boxColor
                 
             }
             .disposed(by: bag)

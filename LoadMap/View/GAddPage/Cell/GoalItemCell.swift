@@ -8,7 +8,17 @@
 import UIKit
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
+
 class GoalItemCell: UITableViewCell{
+    
+    let bag = DisposeBag()
+    
+    private let wrapView = UIStackView().then{
+        $0.axis = .vertical
+        $0.distribution = .fill
+    }
     
     private let containerView = UIStackView().then{
         $0.axis = .horizontal
@@ -21,13 +31,16 @@ class GoalItemCell: UITableViewCell{
     
     let addButton = UIButton().then{
         $0.backgroundColor = .red
-       
+        
     }
-  
+    
+    var worksData :[String] = []
+    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layout()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -36,20 +49,52 @@ class GoalItemCell: UITableViewCell{
 }
 
 extension GoalItemCell{
+    
+    func bind(_ VM: GoalAddViewModel){
+        
+        
+        addButton.rx.tap
+            .subscribe(onNext: {
+                
+                if let text = self.contentTextView.text{
+                    print(text)
+                    let addView = UIButton(type: .system)
+                    
+                    addView.setTitle(text, for: .normal)
+                    self.worksData.append(text)
+
+ 
+                    VM.workAdd(self.worksData)
+                    self.wrapView.addArrangedSubview(addView)
+                    addView.snp.makeConstraints{
+                        $0.height.equalTo(50)
+                    }
+                    self.contentTextView.text = ""
+                }
+
+                print("abc")
+            })
+            .disposed(by: bag)
+    }
+    
+    
     private func layout(){
         
         [titleLabel,contentTextView,addButton].forEach{
             containerView.addArrangedSubview($0)
         }
         
-        contentView.addSubview(containerView)
+        wrapView.addArrangedSubview(containerView)
         
-        containerView.snp.makeConstraints{
-            $0.edges.equalToSuperview()
+        [wrapView].forEach{
+            contentView.addSubview($0)
         }
-        
-        addButton.snp.makeConstraints{
-            $0.width.height.equalTo(30)
+        containerView.snp.makeConstraints{
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(40)
+        }
+        wrapView.snp.makeConstraints{
+            $0.edges.equalToSuperview()
         }
     }
 }

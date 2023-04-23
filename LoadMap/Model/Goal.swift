@@ -5,13 +5,14 @@
 //  Created by 김진혁 on 2023/04/17.
 //
 
-import Foundation
 import RealmSwift
 import RxDataSources
+import UIKit
 
 class Goal: Object{
     @objc dynamic var icon: String?
     @objc dynamic var title: String?
+    //@objc dynamic var boxColor : UIColor = UIColor.red
     @objc dynamic var startDay : Date = Date()
     @objc dynamic var endDay : Date = Date()
     @objc dynamic var expanded : Bool = false
@@ -27,35 +28,40 @@ class GoalItem:Object{
 
 
 //TableView 구현 데이터 타입
-enum CellType:CaseIterable {
-    case title
-    case color
-    case startDay
-    case endDay
-    case work
+enum CellType{
+    case title(emoji: String?, title: String?)
+    case color(selecColor: UIColor)
+    case setDay(selecDay: [Date?])
+    case works(work: [String])
     
-    var content: String{
+
+    var cellName: String?{
         switch self{
-            
         case .title:
-            return " 제목"
+            return nil
         case .color:
             return "색상"
-        case .startDay:
-            return "시작 날짜"
-        case .endDay:
-            return "종료 날짜"
-        case .work:
-            return "업무"
+        case .setDay:
+            return "기간"
+        case .works:
+            return "할일"
         }
     }
+    
+}
+
+struct GoalCellData{
+    var emojiAndTitle:[String]
+    var color: UIColor
+    var setDay: [Date]
+    var setWork: [GoalItem?]
 }
 
 
 
 // 2. Section 모델
 struct TableCellData {
-    var header: String
+    var header: String?
     var items: [CellType]
 }
 
@@ -64,6 +70,4 @@ extension TableCellData: SectionModelType{
         self = original
         self.items = items
     }
-    
-    
 }

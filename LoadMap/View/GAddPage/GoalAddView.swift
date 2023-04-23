@@ -18,15 +18,11 @@ class GoalAddView:UIViewController{
     let bag = DisposeBag()
     let realm = try! Realm()
     
-    var goalData = Goal()
-    
-    var goaladdItem = GoalItem()
     
     //뷰모델
     private let viewModel = GoalAddViewModel()
     
     deinit{
-        //dataSource = nil
         print("종료되었습니다.")
         
     }
@@ -64,7 +60,6 @@ extension GoalAddView{
     func bind(_ VM: GoalAddViewModel){
         
 
-        print("Main : \(Unmanaged.passUnretained(VM).toOpaque())")
         let input = GoalAddViewModel.Input()
         let output = VM.inOut(input: input)
         
@@ -103,12 +98,9 @@ extension GoalAddView{
     }
     @objc func addButton(){
         
-        try! self.realm.write{
-            self.realm.add(goalData)
-        }
-        //self.dataSource = nil
+        viewModel.dataSave()
+
         self.navigationController?.popViewController(animated: true)
-        
     }
 }
 
