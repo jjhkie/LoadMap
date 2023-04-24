@@ -14,7 +14,7 @@ import RxSwift
 
 
 protocol dataManage{
-    func loadData()
+
 }
 
 class GoalViewModel{
@@ -23,11 +23,9 @@ class GoalViewModel{
     
     let realm = try! Realm()
     
-    var objectData : Results<Goal>?
+    lazy var objectData = realm.objects(Goal.self)
     
-    init(){
-        loadData()
-    }
+
 }
 
 
@@ -46,17 +44,18 @@ extension GoalViewModel:ViewModelBasic{
     func inOut(input: Input) -> Output {
 
 
-        let cellArray = Observable.array(from: objectData!)
+
+        let _cellData = Observable.array(from: objectData)
+            .map{
+                $0.isEmpty ? [Goal()] : $0
+            }
 
         return Output(
-            cellData:cellArray
-                .asDriver(onErrorJustReturn: [])
+            cellData:_cellData.asDriver(onErrorJustReturn: [])
         )
     }
 }
 
 extension GoalViewModel:dataManage{
-    func loadData() {
-        self.objectData = realm.objects(Goal.self)
-    }
+
 }

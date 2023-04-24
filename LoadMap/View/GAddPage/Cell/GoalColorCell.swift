@@ -28,7 +28,7 @@ class GoalColorCell:UITableViewCell{
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
+        
         layout()
     }
     
@@ -39,19 +39,45 @@ class GoalColorCell:UITableViewCell{
 
 extension GoalColorCell{
     
-    func bind(_ VM: GoalAddViewModel){
+    func rgbValue(_ color: UIColor) -> GoalColor{
         
+        var red: CGFloat = 0.0
+        var green: CGFloat = 0.0
+        var blue: CGFloat = 0.0
+        var alpha: CGFloat = 0.0
+//
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+//
+//        let redValue = Int(red * 255.0)
+//        let greenValue = Int(green * 255.0)
+//        let blueValue = Int(blue * 255.0)
+//        let alphaValue = Int(alpha * 255.0)
+        
+        let value = GoalColor(red: red, green: green, blue: blue, alpha: alpha)
+//        value.redValue = redValue
+//        value.blueValue = blueValue
+//        value.greenValue = greenValue
+//        value.alphaValue = alphaValue
+        return value
+    }
+    
+    func bind(_ VM: GoalAddViewModel){
+
         let colorObservable = colorButton.rx.controlEvent(.valueChanged)
-            .map { _ in
-                
-                self.colorButton.selectedColor }
-            .compactMap { $0 }
+            .map { [self]_ in
+                rgbValue(colorButton.selectedColor!)}
             .asObservable()
+        
+        colorObservable
+            .subscribe(onNext: {
+                print($0)
+            })
+            .disposed(by: bag)
         
         colorObservable
             .bind(to: VM.selectedColor)
             .disposed(by: bag)
-
+        
     }
     
     private func layout(){

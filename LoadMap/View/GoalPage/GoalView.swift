@@ -21,8 +21,12 @@ class GoalView: UIViewController{
     let bag = DisposeBag()
     
     let tableView = UITableView().then{
+        $0.separatorStyle = .none
+        
+        $0.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 100, right: 10)
+        $0.backgroundColor = .black
         $0.register(HomeItemCell.self, forCellReuseIdentifier: "goalItemCell")
-        $0.register(HomeHeaderCell.self, forHeaderFooterViewReuseIdentifier: "Header")
+        $0.register(UITableViewCell.self, forCellReuseIdentifier: "emptyCell")
     }
     
     let addButton = UIButton().then{
@@ -31,12 +35,11 @@ class GoalView: UIViewController{
 
     override func viewDidLoad() {
         super.viewDidLoad()
-  
+        view.backgroundColor = .black
         bind(viewModel)
         layout()
     }
 }
-
 
 
 extension GoalView{
@@ -52,13 +55,30 @@ extension GoalView{
             })
             .disposed(by: bag)
         
+ 
         output.cellData
             .drive(tableView.rx.items(cellIdentifier: "goalItemCell",cellType: HomeItemCell.self)){row,data,cell in
-                
-                cell.goalTitleLabel.text = data.title
-                //cell.backgroundColor = data.boxColor
-                
+                if data.title == nil{
+                   print("abc")
+            
+                }else{
+                    
+                    cell.setData(data)
+                    
+                    for value in data.items{
+                        print(value)
+                    }
+                }
             }
+            .disposed(by: bag)
+
+        
+        tableView.rx.modelSelected(Goal.self)
+            .subscribe(onNext: {value in
+                let view = GoalDetailView()
+                view.screenData = value
+                self.present(view, animated: true)
+            })
             .disposed(by: bag)
     }
     
@@ -69,7 +89,8 @@ extension GoalView{
         
         // 테이블뷰 오토레이아웃
         tableView.snp.makeConstraints{
-            $0.top.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.trailing.equalToSuperview().inset(20)
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
@@ -80,56 +101,3 @@ extension GoalView{
         }
     }
 }
-
-//MARK: - TableView DataSource
-//extension GoalView: UITableViewDataSource{
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        
-//        if goalData![section].expanded{
-//            return goalData?[section].items.count ?? 0
-//        }else{
-//            return 0
-//        }
-//    }
-//    
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: "goalItemCell") as? HomeItemCell else { return UITableViewCell()}
-//        
-//        cell.titleLabel.text = goalData?[indexPath.row].title
-//        
-//        return cell
-//        
-//    }
-//    
-//    
-//}
-
-//MARK: - TableView Delegate
-//extension GoalView: UITableViewDelegate{
-//
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 100
-//    }
-//
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        goalData?.count ?? 0
-//    }
-//
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "Header") as? HomeHeaderCell else {return nil}
-//        headerView.viewMore.tag = section
-//        headerView.viewMore.addTarget(self, action: #selector(sectionButtonTapped(sender:)), for: .touchDown)
-//
-//        headerView.emojlabel.text = goalData?[section].icon
-//        headerView.titleLabel.text = goalData?[section].title
-//        return headerView
-//    }
-//    @objc func sectionButtonTapped(sender: UIButton){
-//        let section = sender.tag
-//        try! realm.write{
-//            goalData?[section].expanded.toggle()
-//        }
-//
-//        tableView.reloadSections([section], with: .automatic)
-//    }
-//}

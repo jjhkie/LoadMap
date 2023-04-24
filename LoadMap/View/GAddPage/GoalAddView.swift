@@ -69,15 +69,6 @@ extension GoalAddView{
                 .disposed(by: bag)
 
         
-        let mainCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0))
-        
-        output.testData
-            .bind(onNext: {value in
-                print(value)
-            })
-            .disposed(by: bag)
-        
-        
         
         
     }

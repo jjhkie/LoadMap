@@ -64,8 +64,9 @@ extension GoalAddMainCell{
             .disposed(by: bag)
         
         VM.selectedColor
-            .subscribe(onNext: {[weak self] color in
-                self?.imageTextView.backgroundColor = color
+            .subscribe(onNext: {color in
+                
+                self.imageTextView.backgroundColor = color.uiColor
             })
             .disposed(by: bag)
     }

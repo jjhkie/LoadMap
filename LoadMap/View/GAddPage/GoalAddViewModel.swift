@@ -31,7 +31,7 @@ class GoalAddViewModel{
     
     let emojiText = BehaviorSubject<String>(value: "")
     let titleText = BehaviorSubject<String>(value:"")
-    let selectedColor = BehaviorSubject<UIColor>(value: UIColor.white)
+    let selectedColor = BehaviorSubject<GoalColor>(value: GoalColor())
     
     let worksData = BehaviorSubject<[String]>(value:[])
     var workArr: [String] = []
@@ -50,7 +50,6 @@ extension GoalAddViewModel:ViewModelBasic{
     
     struct Output{
         let tableData : Driver<[TableCellData]>
-        let testData : Observable<String>
     }
     
     func inOut(input: Input) -> Output{
@@ -59,8 +58,7 @@ extension GoalAddViewModel:ViewModelBasic{
         
         
         return Output(
-            tableData: self.cellData.asDriver(onErrorJustReturn: []),
-            testData: self.emojiText.asObservable()
+            tableData: self.cellData.asDriver(onErrorJustReturn: [])
         )
     }
 }
@@ -74,6 +72,7 @@ extension GoalAddViewModel:GoalAddPro{
         
         data.icon = try! emojiText.value()
         data.title = try! titleText.value()
+        data.boxColor = try! selectedColor.value()
         for value in try! worksData.value(){
             let item = GoalItem()
             item.itemName = value

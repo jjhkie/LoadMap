@@ -40,6 +40,18 @@ extension NoteAddView{
         let output = VM.inOut(input: input)
         
         
+        textView.rx.text.orEmpty
+            .bind(to: VM.noteText)
+            .disposed(by: bag)
+        
+        
+        output.noteSaved
+            .emit(onNext: {
+                self.navigationController?.popViewController(animated: true)
+            })
+            .disposed(by: bag)
+        
+        
         
 //        addButton.rx.tap
 //            .subscribe(onNext: {

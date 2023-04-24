@@ -12,13 +12,31 @@ import UIKit
 class Goal: Object{
     @objc dynamic var icon: String?
     @objc dynamic var title: String?
-    //@objc dynamic var boxColor : UIColor = UIColor.red
+    @objc dynamic var boxColor : GoalColor?
     @objc dynamic var startDay : Date = Date()
     @objc dynamic var endDay : Date = Date()
     @objc dynamic var expanded : Bool = false
     var items = List<GoalItem>()
 }
 
+class GoalColor:Object{
+    @objc dynamic var red: Float = 0.0
+    @objc dynamic var green: Float = 0.0
+    @objc dynamic var blue: Float = 0.0
+    @objc dynamic var alpha: Float = 1.0
+    
+    var uiColor: UIColor {
+        return UIColor(red: CGFloat(red), green: CGFloat(green), blue: CGFloat(blue), alpha: CGFloat(alpha))
+      }
+
+    convenience init(red: CGFloat,green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+          self.init()
+        self.red = Float(red)
+        self.green = Float(green)
+        self.blue = Float(blue)
+        self.alpha = Float(alpha)
+      }
+}
 
 class GoalItem:Object{
     @objc dynamic var itemName: String?
