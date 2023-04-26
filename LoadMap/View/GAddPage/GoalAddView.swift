@@ -33,6 +33,7 @@ class GoalAddView:UIViewController{
         $0.register(GoalColorCell.self, forCellReuseIdentifier: "colorCell")
         $0.register(GoalItemCell.self, forCellReuseIdentifier: "itemCell")
         $0.separatorInset = .zero
+        $0.separatorStyle = .none
         $0.rowHeight = UITableView.automaticDimension
         $0.estimatedRowHeight = 60.0
     }
@@ -68,7 +69,13 @@ extension GoalAddView{
                 .drive(tableView.rx.items(dataSource: VM.tableViewDataSource()))
                 .disposed(by: bag)
 
-        
+        output.addPageModal
+            .emit(onNext: {
+                let view = GoalItemPageView()
+                view.bind(self.viewModel)
+                self.present(view, animated: true)
+            })
+            .disposed(by: bag)
         
         
     }

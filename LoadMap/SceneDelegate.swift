@@ -28,7 +28,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
 
         
-        noteView.tabBarItem = UITabBarItem(title: "Note", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
+        noteView.tabBarItem = UITabBarItem(title: "메모", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
         
         homeView.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
         calendarView.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))

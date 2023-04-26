@@ -11,8 +11,17 @@ import RxSwift
 import RxCocoa
 import Foundation
 
+
 class NoteAddViewModel{
     
+    var noteDate: String
+    
+    init(noteDate: String) {
+        self.noteDate = noteDate
+    }
+    
+    let formatter = DateFormatter()
+   
     let bag = DisposeBag()
     let realm = try! Realm()
     
@@ -23,10 +32,8 @@ class NoteAddViewModel{
 
 extension NoteAddViewModel:ViewModelBasic{
 
-    
     struct Input{
         let addButtonTapped: Observable<Void>
-        
     }
     
     struct Output{
@@ -51,7 +58,7 @@ extension NoteAddViewModel{
     func addNote(){
         try! realm.write{
             let newNote = Note()
-            newNote.noteDate = Date()
+            newNote.noteDate = noteDate
             newNote.noteContent = try! noteText.value()
             realm.add(newNote)
         }

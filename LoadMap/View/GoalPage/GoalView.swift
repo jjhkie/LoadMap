@@ -24,7 +24,6 @@ class GoalView: UIViewController{
         $0.separatorStyle = .none
         
         $0.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 100, right: 10)
-        $0.backgroundColor = .black
         $0.register(HomeItemCell.self, forCellReuseIdentifier: "goalItemCell")
         $0.register(UITableViewCell.self, forCellReuseIdentifier: "emptyCell")
     }
@@ -35,7 +34,7 @@ class GoalView: UIViewController{
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
+        view.backgroundColor = .white
         bind(viewModel)
         layout()
     }

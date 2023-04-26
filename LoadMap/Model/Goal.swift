@@ -13,6 +13,7 @@ class Goal: Object{
     @objc dynamic var icon: String?
     @objc dynamic var title: String?
     @objc dynamic var boxColor : GoalColor?
+    @objc dynamic var creationDate : Date = Date()
     @objc dynamic var startDay : Date = Date()
     @objc dynamic var endDay : Date = Date()
     @objc dynamic var expanded : Bool = false
@@ -47,10 +48,10 @@ class GoalItem:Object{
 
 //TableView 구현 데이터 타입
 enum CellType{
-    case title(emoji: String?, title: String?)
-    case color(selecColor: UIColor)
-    case setDay(selecDay: [Date?])
-    case works(work: [String])
+    case title
+    case color
+    case setDay
+    case works
     
 
     var cellName: String?{
@@ -65,7 +66,6 @@ enum CellType{
             return "할일"
         }
     }
-    
 }
 
 struct GoalCellData{

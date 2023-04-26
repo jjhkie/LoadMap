@@ -16,35 +16,39 @@ final class GoalAddMainCell: UITableViewCell{
     
     private let bag = DisposeBag()
     
-    //전체 뷰
-    private let containserStackView = UIStackView().then{
-        $0.axis = .horizontal
-        $0.spacing = 10
+    //좌측 이미지
+    private let emojiLabel = UIImageView().then{
+        //Hugging - 고유 크기를 유지하려는 속성
+        $0.image = UIImage(systemName: "star")
+        $0.tintColor = .brown
     }
     
-    //이모티콘 작성 뷰
-    let imageTextView = UITextField().then{
-        $0.textAlignment = .center
-        $0.font = .systemFont(ofSize: 40, weight: .bold)
-        $0.placeholder = "+"
-        $0.textColor = .white
-        $0.backgroundColor = .gray
-        $0.layer.cornerRadius = 20
+    //텍스트필드 감싸는 StackView
+    private let textFieldStackView = UIStackView().then{
+        $0.axis = .vertical
+        $0.spacing = 20
     }
     
-    //제목 작성 뷰
+    //제목
     private let titleTextView = UITextField().then{
         $0.placeholder = "글제목"
+        $0.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        $0.font = .systemFont(ofSize: 18, weight: .bold)
     }
     
+    
+    let textplaceHolder = "설명"
+    //설명
+    private lazy var descriptionTextField = UITextView().then{
+        $0.text = textplaceHolder
+        $0.isEditable = true
+        $0.textColor = .lightGray
+        $0.textAlignment = .justified
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        selectionStyle = .none
-        imageTextView.delegate = self
-        
         layout()
-        
     }
     
     required init?(coder: NSCoder) {
@@ -52,10 +56,13 @@ final class GoalAddMainCell: UITableViewCell{
     }
 }
 
+
+
+
 extension GoalAddMainCell{
     
     func bind(_ VM: GoalAddViewModel){
-        imageTextView.rx.text.orEmpty
+        descriptionTextField.rx.text.orEmpty
             .subscribe(VM.emojiText)
             .disposed(by: bag)
 
@@ -63,10 +70,31 @@ extension GoalAddMainCell{
             .subscribe(VM.titleText)
             .disposed(by: bag)
         
+        //[설명 텍스트뷰]에 커서를 뒀을 때 발생하는 이벤트
+        descriptionTextField.rx.didBeginEditing
+            .subscribe(onNext: {
+                if self.descriptionTextField.text == self.textplaceHolder{
+                    self.descriptionTextField.text = ""
+                    self.descriptionTextField.textColor = .black
+                }
+            })
+            .disposed(by: bag)
+        
+        //[설명 텍스트뷰]에 커서를 제거했을 때 발생하는 이벤트
+        descriptionTextField.rx.didEndEditing
+            .subscribe(onNext: {
+                if self.descriptionTextField.text.isEmpty{
+                    self.descriptionTextField.text = self.textplaceHolder
+                    self.descriptionTextField.textColor = .lightGray
+                }
+            })
+            .disposed(by: bag)
+        
+        
         VM.selectedColor
             .subscribe(onNext: {color in
                 
-                self.imageTextView.backgroundColor = color.uiColor
+                print(color.uiColor)
             })
             .disposed(by: bag)
     }
@@ -74,34 +102,29 @@ extension GoalAddMainCell{
 
     
     private func layout(){
-        [imageTextView,titleTextView].forEach { view in
-            containserStackView.addArrangedSubview(view)
+        
+        [emojiLabel,textFieldStackView].forEach{
+            contentView.addSubview($0)
+        }
+        
+        [titleTextView,descriptionTextField].forEach { view in
+            textFieldStackView.addArrangedSubview(view)
+        }
+        
+        emojiLabel.snp.makeConstraints{
+            $0.top.leading.equalToSuperview().inset(UIEdgeInsets(top: 15, left: 5, bottom: 0, right: 0))
+            $0.height.width.equalTo(20)
+        }
+        
+        textFieldStackView.snp.makeConstraints{
+            $0.top.equalTo(emojiLabel.snp.top)
+            $0.leading.equalTo(emojiLabel.snp.trailing).offset(15)
+            $0.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(200)
         }
         
         
-        contentView.addSubview(containserStackView)
-        
-        containserStackView.snp.makeConstraints{
-            $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0))
-        }
-        
-        imageTextView.snp.makeConstraints{
-            $0.width.equalToSuperview().multipliedBy(0.3)
-            $0.height.equalTo(imageTextView.snp.width)
-        }
+
     }
 }
 
-extension GoalAddMainCell:UITextFieldDelegate{
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if let text = textField.text{
-            if text.count > 0{
-                textField.deleteBackward()
-            }
-            return true
-        }
-        print("\(textField.text) ||| \(range) |||| \(string)")
-        return true
-    }
-    
-}

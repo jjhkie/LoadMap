@@ -38,6 +38,8 @@
 		B969863D29F110E300865AB2 /* GoalDateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B969863C29F110E300865AB2 /* GoalDateCell.swift */; };
 		B969863F29F114DE00865AB2 /* GoalColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B969863E29F114DE00865AB2 /* GoalColorCell.swift */; };
 		B969864129F1185300865AB2 /* GoalItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B969864029F1185300865AB2 /* GoalItemCell.swift */; };
+		B9F1D47529F9428A00DE7D84 /* CalendarLineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F1D47429F9428A00DE7D84 /* CalendarLineViewModel.swift */; };
+		B9FABC0829F7D87700869C42 /* GoalItemPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FABC0729F7D87700869C42 /* GoalItemPageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +70,8 @@
 		B969863C29F110E300865AB2 /* GoalDateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDateCell.swift; sourceTree = "<group>"; };
 		B969863E29F114DE00865AB2 /* GoalColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalColorCell.swift; sourceTree = "<group>"; };
 		B969864029F1185300865AB2 /* GoalItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalItemCell.swift; sourceTree = "<group>"; };
+		B9F1D47429F9428A00DE7D84 /* CalendarLineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarLineViewModel.swift; sourceTree = "<group>"; };
+		B9FABC0729F7D87700869C42 /* GoalItemPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalItemPageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				B90084DA29EEA5D5006D7E39 /* CalendarLineView.swift */,
+				B9F1D47429F9428A00DE7D84 /* CalendarLineViewModel.swift */,
 			);
 			path = CalendarPage;
 			sourceTree = "<group>";
@@ -200,6 +205,7 @@
 			children = (
 				B969863B29F10A6600865AB2 /* Cell */,
 				B90084D529EEA136006D7E39 /* GoalAddView.swift */,
+				B9FABC0729F7D87700869C42 /* GoalItemPageView.swift */,
 				B94D52FD29F2290000770663 /* GoalAddViewModel.swift */,
 			);
 			path = GAddPage;
@@ -304,6 +310,7 @@
 				B969863929F108E900865AB2 /* GoalAddMainCell.swift in Sources */,
 				B965D06229ED0A6300CCB9A1 /* GoalView.swift in Sources */,
 				B965D04E29ED091A00CCB9A1 /* AppDelegate.swift in Sources */,
+				B9FABC0829F7D87700869C42 /* GoalItemPageView.swift in Sources */,
 				B90084DB29EEA5D5006D7E39 /* CalendarLineView.swift in Sources */,
 				B969863F29F114DE00865AB2 /* GoalColorCell.swift in Sources */,
 				B90084D629EEA136006D7E39 /* GoalAddView.swift in Sources */,
@@ -321,6 +328,7 @@
 				B90084C529EE0D31006D7E39 /* NoteView.swift in Sources */,
 				B965D05029ED091A00CCB9A1 /* SceneDelegate.swift in Sources */,
 				B90084C729EE0F3E006D7E39 /* NoteCell.swift in Sources */,
+				B9F1D47529F9428A00DE7D84 /* CalendarLineViewModel.swift in Sources */,
 				B95C727829F52460003106B2 /* FScalendar+Rx.swift in Sources */,
 				B969864129F1185300865AB2 /* GoalItemCell.swift in Sources */,
 				B94509E329F65580008C0C97 /* CircleView.swift in Sources */,

@@ -12,19 +12,33 @@ import RxCocoa
 import Then
 import RealmSwift
 
-class NoteAddView: UIViewController{
-    let bag = DisposeBag()
+final class NoteAddView: UIViewController{
+    private let bag = DisposeBag()
     
-    let viewModel = NoteAddViewModel()
+    var selectedDate :Date? = nil
     
-    let textView = UITextView()
-    let addButton = UIButton().then{
+    private let formatter = DateFormatter().then{
+        $0.dateFormat = "yyyy-MM-dd"
+    }
+    
+    private lazy var viewModel = NoteAddViewModel(noteDate: formatter.string(from: selectedDate!))
+    
+    private lazy var dateLabel = UILabel().then{
+        if let date = selectedDate{
+            $0.text = "\(formatter.string(from: date))"
+        }
+    }
+    
+    private lazy var textView = UITextView()
+    
+    private lazy var addButton = UIButton().then{
         $0.backgroundColor = .red //xxx
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .white
         bind(viewModel)
         layout()
     }
@@ -51,40 +65,20 @@ extension NoteAddView{
             })
             .disposed(by: bag)
         
-        
-        
-//        addButton.rx.tap
-//            .subscribe(onNext: {
-//
-//                if !self.textView.text.isEmpty{
-//                    try! self.realm.write{
-//                        let newNote = Note()
-//                        newNote.noteDate = Date()
-//                        newNote.noteContent = self.textView.text
-//                        self.realm.add(newNote)
-//                    }
-//                    self.navigationController?.popViewController(animated: true)
-//                }else{
-//                    let alert =  UIAlertController(title: "내용을 작성해주세요.", message: "", preferredStyle: .alert)
-//                    let action = UIAlertAction(title: "닫기", style: .default, handler: nil)
-//                            alert.addAction(action)
-//                    self.present(alert, animated: true)
-//                }
-//
-//
-//            })
-//            .disposed(by: bag)
     }
     
     
     private func layout(){
-        [textView,addButton].forEach{
+        [dateLabel,textView,addButton].forEach{
             view.addSubview($0)
         }
-        
-        
+        dateLabel.snp.makeConstraints{
+            $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.height.equalTo(50)
+        }
         textView.snp.makeConstraints{
-            $0.edges.equalToSuperview()
+            $0.top.equalTo(dateLabel.snp.bottom)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
         addButton.snp.makeConstraints{
             $0.leading.trailing.equalToSuperview()

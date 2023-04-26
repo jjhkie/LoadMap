@@ -11,6 +11,7 @@ import FSCalendar
 
 class RxFSCalendarDelegateProxy: DelegateProxy<FSCalendar, FSCalendarDelegate>, DelegateProxyType, FSCalendarDelegate{
     
+   
     //DelegateProxyType 프로토콜은 Delegate 프록시 객체를 정의하고, Delegate 클래스의 구현체를 등록하는 메서드를 정의한다.
     // 해당 메서드는 Delegate 클래스들의 구현체를 등록하는 데 사용됩니다. 등록된 구현체들은 프록시 객체가 처리해야 하는 Delegate 메서드 호출에 사용됩니다.
     static func registerKnownImplementations() {
@@ -38,17 +39,14 @@ class RxFSCalendarDelegateProxy: DelegateProxy<FSCalendar, FSCalendarDelegate>, 
 
 extension Reactive where Base: FSCalendar {
     
-    var delegate: DelegateProxy<FSCalendar, FSCalendarDelegate> {
+    var delegate: RxFSCalendarDelegateProxy {
         return RxFSCalendarDelegateProxy.proxy(for: base)
     }
     
-    var didSelect: ControlEvent<Date> {
-        let source =  delegate.methodInvoked(#selector(FSCalendarDelegate.calendar(_:didSelect:at:)))
-            .map { parameters -> Date in
-                guard let date = parameters[1] as? Date else {
-                    fatalError("Failed to convert parameter to Date")
-                }
-                return date
+    var dateSelect: ControlEvent<Date> {
+        let source =  delegate.methodInvoked(#selector(FSCalendarDelegate.calendar(_:didDeselect:at:)))
+            .map {value in
+                Date()
             }
         return ControlEvent(events: source)
     }

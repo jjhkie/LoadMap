@@ -9,8 +9,13 @@ import UIKit
 import FSCalendar
 import SnapKit
 import Then
+import RealmSwift
 
 class CalendarLineView: UIViewController{
+    
+    private let realm = try! Realm()
+    
+    lazy var dateObject = realm.objects(Note.self)
     
     fileprivate let formatter = DateFormatter().then{
         $0.dateFormat = "yyyy.MM.dd"
@@ -153,7 +158,7 @@ extension CalendarLineView{
 extension CalendarLineView: UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        var count = eventsArray.filter{
+        let count = eventsArray.filter{
             $0.startDay <= calendar.selectedDate ?? Date() && $0.endDay >= calendar.selectedDate ?? Date()
         }.count
         print(count)
@@ -275,6 +280,8 @@ extension CalendarLineView: FSCalendarDelegate,FSCalendarDelegateAppearance{
         print("선택한 날짜 : \(date)")
         tableView.reloadData()
     }
+    
+    
     
     //MARK:  ShouldDeselectDate
     //특정 날짜의 선택을 해제할 때 호출되는 메서드

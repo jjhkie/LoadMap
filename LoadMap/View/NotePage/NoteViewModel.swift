@@ -12,13 +12,17 @@ import RxCocoa
 import RxSwift
 
 class NoteViewModel{
+    
+    let bag = DisposeBag()
+    
+    private let formmater = DateFormatter().then{
+        $0.dateFormat = "yyyy-MM-dd"
+    }
     let realm = try! Realm()
     
-    var noteData : Results<Note>?
+    lazy var noteData : Results<Note>? = realm.objects(Note.self)
     
-    init(){
-        loadData()
-    }
+    let selectedDate = BehaviorSubject(value: Date())
 }
 
 
@@ -35,14 +39,17 @@ extension NoteViewModel:ViewModelBasic{
     
     func inOut(input: Input) -> Output {
         
-        let cellArray = Observable.array(from: noteData!)
         
-        return Output(cellData: cellArray.asDriver(onErrorJustReturn: []))
-    }
-}
+        
+        let cellData = selectedDate
+            .flatMap{value -> Observable<[Results<Note>.ElementType]> in
+                let formatDate = self.formmater.string(from: value)
+                let predicate = NSPredicate(format: "noteDate == %@",formatDate)
+                let filterData = self.noteData?.filter(predicate)
+                return Observable.array(from: filterData!)
+            }
+        
 
-extension NoteViewModel{
-    func loadData() {
-        self.noteData = realm.objects(Note.self)
+        return Output(cellData: cellData.asDriver(onErrorJustReturn: []))
     }
 }

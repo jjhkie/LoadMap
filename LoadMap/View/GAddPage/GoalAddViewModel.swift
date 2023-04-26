@@ -23,19 +23,22 @@ class GoalAddViewModel{
     private var realm = try! Realm()
     
     let cellData = BehaviorRelay<[TableCellData]>(value:[TableCellData(items: [
-        .title(emoji: nil, title: nil),
-        .color(selecColor: UIColor.white),
-        .setDay(selecDay: []),
-        .works(work: [])
+        .title,
+        .color,
+        .setDay,
+        .works
     ])])
     
     let emojiText = BehaviorSubject<String>(value: "")
     let titleText = BehaviorSubject<String>(value:"")
     let selectedColor = BehaviorSubject<GoalColor>(value: GoalColor())
     
-    let worksData = BehaviorSubject<[String]>(value:[])
-    var workArr: [String] = []
+    let _startDate = BehaviorSubject<Date>(value: Date())
+    let _endDate = BehaviorSubject<Date>(value: Date().addingTimeInterval(24 * 60 * 60))
     
+    let worksData = BehaviorSubject<[String]>(value:["abcd"])
+    
+    let _addPageModal = PublishSubject<Void>()
     func workAdd(_ data: [String]){
         worksData.onNext(data)
     }
@@ -50,6 +53,7 @@ extension GoalAddViewModel:ViewModelBasic{
     
     struct Output{
         let tableData : Driver<[TableCellData]>
+        let addPageModal : Signal<Void>
     }
     
     func inOut(input: Input) -> Output{
@@ -58,7 +62,8 @@ extension GoalAddViewModel:ViewModelBasic{
         
         
         return Output(
-            tableData: self.cellData.asDriver(onErrorJustReturn: [])
+            tableData: self.cellData.asDriver(onErrorJustReturn: []),
+            addPageModal: _addPageModal.asSignal(onErrorJustReturn: Void())
         )
     }
 }
@@ -73,6 +78,8 @@ extension GoalAddViewModel:GoalAddPro{
         data.icon = try! emojiText.value()
         data.title = try! titleText.value()
         data.boxColor = try! selectedColor.value()
+        data.startDay = try! _startDate.value()
+        data.endDay = try! _endDate.value()
         for value in try! worksData.value(){
             let item = GoalItem()
             item.itemName = value
@@ -88,7 +95,7 @@ extension GoalAddViewModel:GoalAddPro{
     func tableViewDataSource() -> RxTableViewSectionedReloadDataSource<TableCellData> {
         return RxTableViewSectionedReloadDataSource<TableCellData>(
             configureCell: { dataSource, tableView, indexPath, item in
-                print(indexPath)
+ 
                 switch item{
                 case .title:
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: "mainCell") as? GoalAddMainCell else {return UITableViewCell()}
@@ -104,17 +111,14 @@ extension GoalAddViewModel:GoalAddPro{
                     return cell
                 case .setDay:
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: "dateCell") as? GoalDateCell else {return UITableViewCell()}
-                    //cell.selectionStyle = .none
-                    
+                    cell.bind(self)
                     return cell
                 case .works:
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell") as? GoalItemCell else {return UITableViewCell()}
-                    cell.titleLabel.text = item.cellName
-                    cell.selectionStyle = .none
-                    cell.bind(self)
-                    cell.addButton.setTitle("Click", for: .normal)
                     
-                    //cell.addButton.addTarget(self, action: #selector(addView), for: .touchDown)
+             
+                    cell.bind(self)
+
                     
                     return cell
                 }

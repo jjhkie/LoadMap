@@ -15,30 +15,38 @@ class GoalItemCell: UITableViewCell{
     
     let bag = DisposeBag()
     
-    private let wrapView = UIStackView().then{
-        $0.axis = .vertical
-        $0.distribution = .fill
+    private let emojiView = UIImageView().then{
+        $0.image = UIImage(systemName: "list.bullet.clipboard")
+        $0.tintColor = .orange
     }
     
     private let containerView = UIStackView().then{
-        $0.axis = .horizontal
-        $0.distribution = .fillEqually
+        $0.axis = .vertical
+        $0.spacing = 20
     }
     
-    let titleLabel = UILabel()
+    let titleContainerView = UIView()
     
-    let contentTextView = UITextField()
+    let titleLabel = UILabel().then{
+        $0.text = "할 일"
+        $0.font = .systemFont(ofSize: 18, weight: .bold)
+    }
     
     let addButton = UIButton().then{
-        $0.backgroundColor = .red
+        $0.layer.cornerRadius = 10
+        $0.setImage(UIImage(systemName: "plus"), for: .normal)
         
     }
     
-    var worksData :[String] = []
+    private let workTableView = UITableView().then{
+        $0.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+    }
+
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
         layout()
         
     }
@@ -52,49 +60,58 @@ extension GoalItemCell{
     
     func bind(_ VM: GoalAddViewModel){
         
-        
+
         addButton.rx.tap
-            .subscribe(onNext: {
+            .bind(to: VM._addPageModal)
+            .disposed(by: bag)
+        
+        VM.worksData.asDriver(onErrorJustReturn: [])
+            .drive(workTableView.rx.items(cellIdentifier: "cell",cellType: UITableViewCell.self)){row,data,cell in
                 
-                if let text = self.contentTextView.text{
-                    print(text)
-                    let addView = UIButton(type: .system)
-                    
-                    addView.setTitle(text, for: .normal)
-                    self.worksData.append(text)
-
- 
-                    VM.workAdd(self.worksData)
-                    self.wrapView.addArrangedSubview(addView)
-                    addView.snp.makeConstraints{
-                        $0.height.equalTo(50)
-                    }
-                    self.contentTextView.text = ""
-                }
-
-                print("abc")
-            })
+                print("item table")
+                cell.textLabel?.text = data
+            }
             .disposed(by: bag)
     }
     
     
     private func layout(){
         
-        [titleLabel,contentTextView,addButton].forEach{
+        [titleLabel,addButton].forEach{
+            titleContainerView.addSubview($0)
+        }
+        
+        [titleContainerView,workTableView].forEach{
             containerView.addArrangedSubview($0)
         }
         
-        wrapView.addArrangedSubview(containerView)
-        
-        [wrapView].forEach{
+        [emojiView,containerView].forEach{
             contentView.addSubview($0)
         }
-        containerView.snp.makeConstraints{
-            $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(40)
+        
+        titleLabel.snp.makeConstraints{
+            $0.top.leading.bottom.equalToSuperview()
         }
-        wrapView.snp.makeConstraints{
-            $0.edges.equalToSuperview()
+        
+        emojiView.snp.makeConstraints{
+            $0.top.leading.equalToSuperview().inset(UIEdgeInsets(top: 15, left: 5, bottom: 0, right: 0))
+            $0.height.width.equalTo(20)
+        }
+        
+        containerView.snp.makeConstraints{
+            $0.top.equalTo(emojiView.snp.top)
+            $0.leading.equalTo(emojiView.snp.trailing).offset(15)
+            $0.trailing.bottom.equalToSuperview()
+        }
+        
+        addButton.snp.makeConstraints{
+            $0.width.height.equalTo(20)
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(titleLabel.snp.trailing).offset(20)
+        }
+        
+        workTableView.snp.makeConstraints{
+            $0.height.equalTo(400)
         }
     }
 }

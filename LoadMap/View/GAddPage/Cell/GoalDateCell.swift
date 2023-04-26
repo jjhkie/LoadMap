@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 import Then
-import FSCalendar
 import RxCocoa
 import RxSwift
 
@@ -16,62 +15,57 @@ import RxSwift
 
 class GoalDateCell: UITableViewCell{
     
+    let bag = DisposeBag()
+    
+    private let emojiView = UIImageView().then{
+        $0.image = UIImage(systemName: "calendar")
+        $0.tintColor = .purple
+    }
+    
     private let containerView = UIStackView().then {
         $0.axis = .vertical
-        $0.distribution = .fill
+        $0.spacing = 20
     }
     
-    let titleLabel = UILabel()
-    
-    
-    let calendar = FSCalendar().then{
-        $0.allowsMultipleSelection = true
+    let titleLabel = UILabel().then{
+        $0.text = "기간"
+        $0.font = .systemFont(ofSize: 18, weight: .bold)
     }
     
-    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        print(date)
-        print(calendar.selectedDates)
-        print(calendar.selectedDate)
-        print(calendar.selectedDates.min())
-        
-        var item = Calendar.current.date(byAdding: .day, value: 1, to: date)
-        
-        calendar.select(item)
-        
-        if calendar.selectedDates.count > 1{
-            //var dates: [Date] = []
-            var dateIterator = calendar.selectedDates.min()
-            while dateIterator != calendar.selectedDates.max() {
-                //dates.append(dateIterator!)
-                dateIterator = Calendar.current.date(byAdding: .day, value: 1, to: dateIterator!)
-                calendar.select(dateIterator)
-            }
-            
-        }
-        //        if let firstSelectedDate = calendar.selectedDates.first,
-        //           let lastSelectedDate = calendar.selectedDates.last {
-        //            // 선택된 날짜의 범위를 구합니다.
-        //            let fromDate = min(firstSelectedDate, lastSelectedDate)
-        //            let toDate = max(firstSelectedDate, lastSelectedDate)
-        //            // 범위 내의 날짜들을 전부 선택합니다.
-        //            var dates: [Date] = []
-        //            var dateIterator = fromDate
-        //            while dateIterator <= toDate {
-        //                dates.append(dateIterator)
-        //                dateIterator = Calendar.current.date(byAdding: .day, value: 1, to: dateIterator)!
-        //            }
-        //
-        //            calendar.select(dates)
-        //        }
+    private let dateStackView = UIStackView().then{
+        $0.axis = .horizontal
+        $0.alignment = .leading
+        $0.spacing = 10
     }
     
+    let startDate = UIDatePicker().then{
+        $0.locale = Locale(identifier: "ko-KR")
+        $0.datePickerMode = .date
+        $0.preferredDatePickerStyle = .compact
+        $0.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        
+    }
     
+    let dateCenterLine = UILabel().then{
+        $0.text = "~"
+        $0.textAlignment = .center
+        
+    }
     
+    let endDate = UIDatePicker().then{
+        $0.locale = Locale(identifier: "ko-KR")
+        $0.datePickerMode = .date
+        $0.preferredDatePickerStyle = .compact
+        
+    }
+    
+    let freeSpace = UIView().then{
+        $0.setContentHuggingPriority(.defaultLow, for: .horizontal)
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        //calendar.delegate = self
+        selectionStyle = .none
         layout()
         
    
@@ -84,26 +78,53 @@ class GoalDateCell: UITableViewCell{
 
 extension GoalDateCell{
     
-    func bind(){
+    func bind(_ VM: GoalAddViewModel){
+        startDate.rx.date
+            .bind(to: VM._startDate)
+            .disposed(by: bag)
         
+        endDate.rx.date
+            .bind(to: VM._endDate)
+            .disposed(by: bag)
     }
     
     private func layout(){
-        [titleLabel,calendar].forEach{
+        
+        [startDate,dateCenterLine,endDate,freeSpace].forEach{
+            dateStackView.addArrangedSubview($0)
+        }
+        
+        [titleLabel,dateStackView].forEach{
             containerView.addArrangedSubview($0)
         }
         
-        contentView.addSubview(containerView)
+        [emojiView,containerView].forEach{
+            contentView.addSubview($0)
+        }
+        
+
+        emojiView.snp.makeConstraints{
+            $0.top.leading.equalToSuperview().inset(UIEdgeInsets(top: 15, left: 5, bottom: 0, right: 0))
+            $0.height.width.equalTo(20)
+        }
         
         containerView.snp.makeConstraints{
-            $0.edges.equalToSuperview()
+            $0.top.equalTo(emojiView.snp.top)
+            $0.leading.equalTo(emojiView.snp.trailing).offset(15)
+            $0.trailing.bottom.equalToSuperview()
         }
         
-        titleLabel.snp.makeConstraints{
-            $0.height.equalTo(60)
+        startDate.snp.makeConstraints{
+            $0.width.equalTo(100)
         }
-        calendar.snp.makeConstraints{
-            $0.height.equalTo(titleLabel.snp.height).multipliedBy(4)
+        
+        endDate.snp.makeConstraints{
+            $0.width.equalTo(100)
+    
+        }
+        dateCenterLine.snp.makeConstraints{
+            $0.width.equalTo(10)
+            $0.height.equalToSuperview()
         }
     }
 }

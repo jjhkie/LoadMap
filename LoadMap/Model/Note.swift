@@ -10,6 +10,7 @@ import RealmSwift
 
 
 class Note: Object{
-    @objc dynamic var noteDate : Date?
+    
+    @objc dynamic var noteDate : String?
     @objc dynamic var noteContent: String?
 }

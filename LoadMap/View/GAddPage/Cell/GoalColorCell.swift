@@ -15,20 +15,35 @@ class GoalColorCell:UITableViewCell{
     
     private let bag = DisposeBag()
     
+    
+    private let emojiLabel = UIImageView().then{
+
+        $0.image = UIImage(systemName: "sparkles")
+        $0.tintColor = .brown
+    }
+    
     private let containerView = UIStackView().then{
-        $0.axis = .horizontal
-        $0.distribution = .fill
+        $0.axis = .vertical
     }
     
     let titleLabel = UILabel().then{
-        $0.textAlignment = .left
+        $0.text = "색상"
+        $0.font = .systemFont(ofSize: 18, weight: .bold)
     }
     
+    
+    private let colorStackView = UIStackView().then{
+        $0.axis = .horizontal
+    }
     let colorButton = UIColorWell()
+    
+    let freeView = UIView().then{
+        $0.setContentHuggingPriority(.defaultLow, for: .horizontal)
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+        selectionStyle = .none
         layout()
     }
     
@@ -45,19 +60,12 @@ extension GoalColorCell{
         var green: CGFloat = 0.0
         var blue: CGFloat = 0.0
         var alpha: CGFloat = 0.0
-//
+
         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-//
-//        let redValue = Int(red * 255.0)
-//        let greenValue = Int(green * 255.0)
-//        let blueValue = Int(blue * 255.0)
-//        let alphaValue = Int(alpha * 255.0)
+
         
         let value = GoalColor(red: red, green: green, blue: blue, alpha: alpha)
-//        value.redValue = redValue
-//        value.blueValue = blueValue
-//        value.greenValue = greenValue
-//        value.alphaValue = alphaValue
+
         return value
     }
     
@@ -82,19 +90,30 @@ extension GoalColorCell{
     
     private func layout(){
         
-        [titleLabel,colorButton].forEach{
+        [emojiLabel,containerView].forEach{
+            contentView.addSubview($0)
+        }
+        
+        [colorButton,freeView].forEach{
+            colorStackView.addArrangedSubview($0)
+        }
+        
+        [titleLabel,colorStackView].forEach{
             containerView.addArrangedSubview($0)
         }
         
-        contentView.addSubview(containerView)
+        emojiLabel.snp.makeConstraints{
+            $0.top.leading.equalToSuperview().inset(UIEdgeInsets(top: 15, left: 5, bottom: 0, right: 0))
+            $0.height.width.equalTo(20)
+        }
         
         containerView.snp.makeConstraints{
-            $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0))
+            $0.top.equalTo(emojiLabel.snp.top)
+            $0.leading.equalTo(emojiLabel.snp.trailing).offset(15)
+            $0.trailing.bottom.equalToSuperview()
         }
         
-        titleLabel.snp.makeConstraints{
-            $0.width.equalToSuperview().multipliedBy(0.3)
-        }
+
         
     }
 }
