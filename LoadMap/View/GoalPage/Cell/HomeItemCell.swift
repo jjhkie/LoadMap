@@ -11,6 +11,8 @@ import Then
 
 class HomeItemCell: UITableViewCell{
     
+    private let progressBar = CustomProgressView()
+    
     private let containerView = UIStackView().then{
         $0.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         $0.layer.cornerRadius = 5
@@ -52,14 +54,19 @@ extension HomeItemCell{
         titleLabel.text = item.title
         descriptionLabel.text = item.icon
         
+        for value in item.items{
+            progressBar.dotCount.append(value)
+        }
+        
+       
+        
         let components = Calendar.current.dateComponents([.day], from: Date(), to: item.endDay)
         let daysLeft = components.day!
         dDayLabel.text = "D - \(daysLeft)"
         
-        print(item.items.first)
         
         for value in item.items{
-            let circle = CircleView(size: 10)
+            let circle = CircleView(size: 15)
             circle.fillBool = value.itemComplete
             if value.itemComplete{
                 circle.backgroundColor = item.boxColor?.uiColor
@@ -74,11 +81,16 @@ extension HomeItemCell{
     }
     
     private func layout(){
-        [titleLabel,descriptionLabel,dDayLabel,itemStackView].forEach{
+        
+//        progressBar.addSubview(itemStackView)
+//        
+//        itemStackView.snp.makeConstraints{
+//            $0.edges.equalToSuperview()
+//        }
+        
+        [titleLabel,descriptionLabel,dDayLabel,progressBar].forEach{
             containerView.addArrangedSubview($0)
         }
-        
-
         
         contentView.addSubview(containerView)
         

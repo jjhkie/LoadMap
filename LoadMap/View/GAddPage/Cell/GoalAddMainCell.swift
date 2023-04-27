@@ -121,7 +121,6 @@ extension GoalAddMainCell{
         baseView.infoStackView.addArrangedSubview(descriptionTextField)
 
         descriptionTextField.snp.makeConstraints{
-            $0.top.equalTo(baseView.titleTextView.snp.bottom)
             $0.leading.equalTo(baseView.titleTextView.snp.leading)
             $0.trailing.bottom.equalToSuperview()
             $0.height.equalTo(200)

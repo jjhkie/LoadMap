@@ -36,12 +36,11 @@ class GoalAddViewModel{
     let _startDate = BehaviorSubject<Date>(value: Date())
     let _endDate = BehaviorSubject<Date>(value: Date().addingTimeInterval(24 * 60 * 60))
     
-    let worksData = BehaviorSubject<[String]>(value:["abcd"])
+    //var worksData = PublishSubject<[String]>()
+    var worksData = BehaviorRelay<[String]>(value: [])
     
     let _addPageModal = PublishSubject<Void>()
-    func workAdd(_ data: [String]){
-        worksData.onNext(data)
-    }
+
 }
 
 //MARK: - Input Output
@@ -80,7 +79,8 @@ extension GoalAddViewModel:GoalAddPro{
         data.boxColor = try! selectedColor.value()
         data.startDay = try! _startDate.value()
         data.endDay = try! _endDate.value()
-        for value in try! worksData.value(){
+        
+        for value in worksData.value{
             let item = GoalItem()
             item.itemName = value
             data.items.append(item)

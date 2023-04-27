@@ -10,6 +10,7 @@ import RxDataSources
 import UIKit
 
 class Goal: Object{
+    @objc dynamic var id = UUID().uuidString
     @objc dynamic var icon: String?
     @objc dynamic var title: String?
     @objc dynamic var boxColor : GoalColor?

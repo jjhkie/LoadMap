@@ -16,6 +16,7 @@ import RxCocoa
 class GoalView: UIViewController{
     
     
+
     lazy var viewModel = GoalViewModel()
     
     let bag = DisposeBag()
@@ -30,6 +31,8 @@ class GoalView: UIViewController{
     
     let addButton = UIButton().then{
         $0.backgroundColor = .yellow
+        $0.layer.cornerRadius = 25
+        
     }
 
     override func viewDidLoad() {
@@ -61,9 +64,7 @@ extension GoalView{
                    print("abc")
             
                 }else{
-                    
                     cell.setData(data)
-                    
                     for value in data.items{
                         print(value)
                     }
@@ -74,9 +75,12 @@ extension GoalView{
         
         tableView.rx.modelSelected(Goal.self)
             .subscribe(onNext: {value in
-                let view = GoalDetailView()
-                view.screenData = value
-                self.present(view, animated: true)
+                VM.updateDate(value.id)
+                print(value)
+                self.loadViewIfNeeded()
+//                let view = GoalDetailView()
+//                view.screenData = value
+//                self.present(view, animated: true)
             })
             .disposed(by: bag)
     }

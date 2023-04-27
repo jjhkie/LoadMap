@@ -42,12 +42,12 @@ final class GoalItemPageView: UIViewController{
 extension GoalItemPageView{
     
     func bind(_ VM: GoalAddViewModel){
-        VM.worksData.asDriver(onErrorJustReturn: [])
-            .drive(tableView.rx.items(cellIdentifier: "cell",cellType: UITableViewCell.self)){row,data,cell in
-                
-                cell.textLabel?.text = data
-            }
-            .disposed(by: bag)
+//        VM.worksData.asDriver(onErrorJustReturn: [])
+//            .drive(tableView.rx.items(cellIdentifier: "cell",cellType: UITableViewCell.self)){row,data,cell in
+//                
+//                cell.textLabel?.text = data
+//            }
+//            .disposed(by: bag)
     }
     
     private func layout(){

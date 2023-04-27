@@ -19,17 +19,23 @@ class GoalItemCell: UITableViewCell{
         $0.emojiImage.image = UIImage(systemName: "list.bullet.clipboard")
         $0.emojiImage.tintColor = .cyan
         
+        $0.infoStackView.spacing = 0
         $0.titleTextView.text = "업무"
-        $0.titleTextView.textColor = .lightGray
     }
     
-
+    var workArr: [String] = []
     
-    private let workTableView = UITableView().then{
+    private let workTextPlaceHolder = "업무를 추가해주세요"
+    
+    private lazy var workTextView = UITextView().then{
+        $0.isEditable = true
+        $0.textColor = .lightGray
+        $0.text = workTextPlaceHolder
+    }
+    
+    private lazy var tableView = UITableView().then{
         $0.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
-
-    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -47,14 +53,54 @@ extension GoalItemCell{
     
     func bind(_ VM: GoalAddViewModel){
         
-        
-        VM.worksData.asDriver(onErrorJustReturn: [])
-            .drive(workTableView.rx.items(cellIdentifier: "cell",cellType: UITableViewCell.self)){row,data,cell in
+        workTextView.rx.didEndEditing
+            .subscribe(onNext: {[weak workTextView] in
+                guard let textView = workTextView else {return}
                 
-                print("item table")
+                if textView.text.isEmpty{
+                    textView.text = self.workTextPlaceHolder
+                    textView.textColor = .lightGray
+                }
+            })
+            .disposed(by: bag)
+        
+        workTextView.rx.didBeginEditing
+            .subscribe(onNext: {[weak workTextView] in
+                guard let textView = workTextView else {return}
+                
+                if textView.text == self.workTextPlaceHolder{
+                    textView.text = ""
+                    textView.textColor = .black
+                }
+            })
+            .disposed(by: bag)
+        
+        //textField enter 이벤트
+        workTextView.rx.didChange
+            .subscribe(onNext: {[weak workTextView] in
+                guard let textView = workTextView else {return}
+                
+                if textView.text.last == "\n" && !textView.text.isEmpty {
+                    self.workArr.append(textView.text)
+                    VM.worksData.accept(self.workArr)
+                    textView.text = self.workTextPlaceHolder
+                    textView.textColor = .lightGray
+                    textView.resignFirstResponder()
+                    
+                    
+                }
+            })
+            .disposed(by: bag)
+        
+        VM.worksData.asDriver()
+            .drive(tableView.rx.items(cellIdentifier: "cell",cellType: UITableViewCell.self)){view,data,cell in
+                
                 cell.textLabel?.text = data
             }
             .disposed(by: bag)
+        
+        
+
     }
     
     
@@ -63,6 +109,18 @@ extension GoalItemCell{
         
         baseView.snp.makeConstraints{
             $0.edges.equalToSuperview()
+        }
+        
+        
+        baseView.infoStackView.addArrangedSubview(workTextView)
+        baseView.infoStackView.addArrangedSubview(tableView)
+        
+        tableView.snp.makeConstraints{
+            $0.height.equalTo(100)
+        }
+
+        workTextView.snp.makeConstraints{
+            $0.height.equalTo(50)
         }
         
     }

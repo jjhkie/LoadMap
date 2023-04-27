@@ -41,6 +41,7 @@
 		B96A3D1C29F9FBE4009F421D /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A3D1B29F9FBE4009F421D /* Date+.swift */; };
 		B96A3D2029FA0A36009F421D /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A3D1F29FA0A36009F421D /* BaseView.swift */; };
 		B96A3D2229FA4010009F421D /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A3D2129FA4010009F421D /* UIColor+.swift */; };
+		B96A3D2429FA9BC2009F421D /* DotProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A3D2329FA9BC2009F421D /* DotProgressBar.swift */; };
 		B9F1D47529F9428A00DE7D84 /* CalendarLineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F1D47429F9428A00DE7D84 /* CalendarLineViewModel.swift */; };
 		B9FABC0829F7D87700869C42 /* GoalItemPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FABC0729F7D87700869C42 /* GoalItemPageView.swift */; };
 /* End PBXBuildFile section */
@@ -76,6 +77,7 @@
 		B96A3D1B29F9FBE4009F421D /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		B96A3D1F29FA0A36009F421D /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		B96A3D2129FA4010009F421D /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		B96A3D2329FA9BC2009F421D /* DotProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotProgressBar.swift; sourceTree = "<group>"; };
 		B9F1D47429F9428A00DE7D84 /* CalendarLineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarLineViewModel.swift; sourceTree = "<group>"; };
 		B9FABC0729F7D87700869C42 /* GoalItemPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalItemPageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -235,6 +237,7 @@
 			children = (
 				B94509E229F65580008C0C97 /* CircleView.swift */,
 				B96A3D1F29FA0A36009F421D /* BaseView.swift */,
+				B96A3D2329FA9BC2009F421D /* DotProgressBar.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -343,6 +346,7 @@
 				B965D07E29ED636000CCB9A1 /* HomeItemCell.swift in Sources */,
 				B96211F729F3AA010026FE0B /* GoalViewModel.swift in Sources */,
 				B90084C929EE1541006D7E39 /* Note.swift in Sources */,
+				B96A3D2429FA9BC2009F421D /* DotProgressBar.swift in Sources */,
 				B95C727B29F561D3003106B2 /* NoteViewModel.swift in Sources */,
 				B969863D29F110E300865AB2 /* GoalDateCell.swift in Sources */,
 				B90084C529EE0D31006D7E39 /* NoteView.swift in Sources */,

@@ -24,7 +24,7 @@ class GoalViewModel{
 
 //MARK: - Basic
 extension GoalViewModel:ViewModelBasic{
-
+    
     struct Input {
         
     }
@@ -35,17 +35,28 @@ extension GoalViewModel:ViewModelBasic{
     }
     
     func inOut(input: Input) -> Output {
-
-
-
+        
+        
+        
         let _cellData = Observable.array(from: objectData)
             .map{
                 $0.isEmpty ? [Goal()] : $0
             }
-
+        
         return Output(
             cellData:_cellData.asDriver(onErrorJustReturn: [])
         )
+    }
+    
+    func updateDate(_ id: String){
+        
+        if let update = realm.objects(Goal.self).filter(NSPredicate(format: "id = %@", id)).first{
+            try! realm.write{
+                update.items.filter{
+                    $0.itemComplete == false
+                }.first?.itemComplete = true
+            }
+        }
     }
 }
 
