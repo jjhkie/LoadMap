@@ -17,15 +17,11 @@ final class NoteAddView: UIViewController{
     
     var selectedDate :Date? = nil
     
-    private let formatter = DateFormatter().then{
-        $0.dateFormat = "yyyy-MM-dd"
-    }
-    
-    private lazy var viewModel = NoteAddViewModel(noteDate: formatter.string(from: selectedDate!))
+    private lazy var viewModel = NoteAddViewModel(noteDate: selectedDate!.dayStringText)
     
     private lazy var dateLabel = UILabel().then{
         if let date = selectedDate{
-            $0.text = "\(formatter.string(from: date))"
+            $0.text = date.dayStringText
         }
     }
     

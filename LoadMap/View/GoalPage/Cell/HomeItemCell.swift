@@ -7,14 +7,37 @@
 
 import UIKit
 import SnapKit
+import Then
 
 class HomeItemCell: UITableViewCell{
-    var expanded = false
-    var goalTitleLabel = UILabel()
+    
+    private let containerView = UIStackView().then{
+        $0.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        $0.layer.cornerRadius = 5
+        $0.axis = .vertical
+    }
+    
+    private let titleLabel = UILabel().then{
+        $0.font = .systemFont(ofSize: 26, weight: .bold)
+    }
+    
+    private let descriptionLabel = UILabel().then{
+        $0.textColor = .lightGray
+    }
+    
+    //private let creationDate = UILabel()
+    
+    private let dDayLabel = UILabel()
+    
+    
+    private let itemStackView = UIStackView().then{
+        $0.axis = .horizontal
+        $0.distribution = .equalCentering
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+        contentView.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         layout()
     }
     
@@ -24,12 +47,56 @@ class HomeItemCell: UITableViewCell{
 }
 
 extension HomeItemCell{
-    private func layout(){
-        contentView.addSubview(goalTitleLabel)
+    
+    func setData(_ item:Goal){
+        titleLabel.text = item.title
+        descriptionLabel.text = item.icon
         
-        goalTitleLabel.snp.makeConstraints{
-            $0.top.leading.equalToSuperview()
+        let components = Calendar.current.dateComponents([.day], from: Date(), to: item.endDay)
+        let daysLeft = components.day!
+        dDayLabel.text = "D - \(daysLeft)"
+        
+        print(item.items.first)
+        
+        for value in item.items{
+            let circle = CircleView(size: 10)
+            circle.fillBool = value.itemComplete
+            if value.itemComplete{
+                circle.backgroundColor = item.boxColor?.uiColor
+            }else{
+                circle.backgroundColor = .red
+            }
+
+            circle.layer.cornerRadius = 5
+ 
+            itemStackView.addArrangedSubview(circle)
         }
+    }
+    
+    private func layout(){
+        [titleLabel,descriptionLabel,dDayLabel,itemStackView].forEach{
+            containerView.addArrangedSubview($0)
+        }
+        
+
+        
+        contentView.addSubview(containerView)
+        
+        containerView.snp.makeConstraints{
+            $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: 30, bottom: 10, right: 10))
+        }
+
+        titleLabel.snp.makeConstraints{
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(descriptionLabel.snp.top).offset(-10)
+        }
+        
+        descriptionLabel.snp.makeConstraints{
+            $0.top.equalTo(titleLabel.snp.bottom)
+            $0.bottom.equalTo(dDayLabel.snp.top).offset(-15)
+        }
+        
+       
         
     }
 }

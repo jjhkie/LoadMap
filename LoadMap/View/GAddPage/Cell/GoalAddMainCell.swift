@@ -16,31 +16,21 @@ final class GoalAddMainCell: UITableViewCell{
     
     private let bag = DisposeBag()
     
-    //좌측 이미지
-    private let emojiLabel = UIImageView().then{
-        //Hugging - 고유 크기를 유지하려는 속성
-        $0.image = UIImage(systemName: "star")
-        $0.tintColor = .brown
+    private let titlePlaceHolder = "제목"
+    
+    private let descriptionPlaceHolder = "설명"
+    
+    private lazy var baseView = BaseView(editEnable: true).then{
+        $0.emojiImage.image = UIImage(systemName: "star")
+        $0.emojiImage.tintColor = .brown
+        
+        $0.titleTextView.text = titlePlaceHolder
+        $0.titleTextView.textColor = .lightGray
     }
-    
-    //텍스트필드 감싸는 StackView
-    private let textFieldStackView = UIStackView().then{
-        $0.axis = .vertical
-        $0.spacing = 20
-    }
-    
-    //제목
-    private let titleTextView = UITextField().then{
-        $0.placeholder = "글제목"
-        $0.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        $0.font = .systemFont(ofSize: 18, weight: .bold)
-    }
-    
-    
-    let textplaceHolder = "설명"
+
     //설명
     private lazy var descriptionTextField = UITextView().then{
-        $0.text = textplaceHolder
+        $0.text = descriptionPlaceHolder
         $0.isEditable = true
         $0.textColor = .lightGray
         $0.textAlignment = .justified
@@ -56,24 +46,44 @@ final class GoalAddMainCell: UITableViewCell{
     }
 }
 
-
-
-
 extension GoalAddMainCell{
     
     func bind(_ VM: GoalAddViewModel){
+        
+        //제목 textView의 텍스트 이벤트
+        baseView.titleTextView.rx.text.orEmpty
+            .subscribe(VM.titleText)
+            .disposed(by: bag)
+        
+        
         descriptionTextField.rx.text.orEmpty
             .subscribe(VM.emojiText)
             .disposed(by: bag)
-
-        titleTextView.rx.text.orEmpty
-            .subscribe(VM.titleText)
+        
+        baseView.titleTextView.rx.didBeginEditing
+            .subscribe(onNext: {
+                if self.baseView.titleTextView.text == self.titlePlaceHolder{
+                    self.baseView.titleTextView.text = ""
+                    self.baseView.titleTextView.textColor = .black
+                }
+            })
             .disposed(by: bag)
+        
+        baseView.titleTextView.rx.didEndEditing
+            .subscribe(onNext: {
+                if self.baseView.titleTextView.text.isEmpty{
+                    self.baseView.titleTextView.text = self.titlePlaceHolder
+                    self.baseView.titleTextView.textColor = .lightGray
+                }
+            })
+            .disposed(by: bag)
+
+
         
         //[설명 텍스트뷰]에 커서를 뒀을 때 발생하는 이벤트
         descriptionTextField.rx.didBeginEditing
             .subscribe(onNext: {
-                if self.descriptionTextField.text == self.textplaceHolder{
+                if self.descriptionTextField.text == self.descriptionPlaceHolder{
                     self.descriptionTextField.text = ""
                     self.descriptionTextField.textColor = .black
                 }
@@ -84,7 +94,7 @@ extension GoalAddMainCell{
         descriptionTextField.rx.didEndEditing
             .subscribe(onNext: {
                 if self.descriptionTextField.text.isEmpty{
-                    self.descriptionTextField.text = self.textplaceHolder
+                    self.descriptionTextField.text = self.descriptionPlaceHolder
                     self.descriptionTextField.textColor = .lightGray
                 }
             })
@@ -102,28 +112,20 @@ extension GoalAddMainCell{
 
     
     private func layout(){
+        contentView.addSubview(baseView)
         
-        [emojiLabel,textFieldStackView].forEach{
-            contentView.addSubview($0)
+        baseView.snp.makeConstraints{
+            $0.edges.equalToSuperview()
         }
         
-        [titleTextView,descriptionTextField].forEach { view in
-            textFieldStackView.addArrangedSubview(view)
-        }
-        
-        emojiLabel.snp.makeConstraints{
-            $0.top.leading.equalToSuperview().inset(UIEdgeInsets(top: 15, left: 5, bottom: 0, right: 0))
-            $0.height.width.equalTo(20)
-        }
-        
-        textFieldStackView.snp.makeConstraints{
-            $0.top.equalTo(emojiLabel.snp.top)
-            $0.leading.equalTo(emojiLabel.snp.trailing).offset(15)
+        baseView.infoStackView.addArrangedSubview(descriptionTextField)
+
+        descriptionTextField.snp.makeConstraints{
+            $0.top.equalTo(baseView.titleTextView.snp.bottom)
+            $0.leading.equalTo(baseView.titleTextView.snp.leading)
             $0.trailing.bottom.equalToSuperview()
             $0.height.equalTo(200)
         }
-        
-        
 
     }
 }

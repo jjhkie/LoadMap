@@ -17,22 +17,15 @@ class GoalDateCell: UITableViewCell{
     
     let bag = DisposeBag()
     
-    private let emojiView = UIImageView().then{
-        $0.image = UIImage(systemName: "calendar")
-        $0.tintColor = .purple
+    private lazy var baseView = BaseView(editEnable: false).then{
+        $0.emojiImage.image = UIImage(systemName: "calendar")
+        $0.emojiImage.tintColor = .orange
+        
+        $0.titleTextView.text = "기간"
     }
     
-    private let containerView = UIStackView().then {
-        $0.axis = .vertical
-        $0.spacing = 20
-    }
     
-    let titleLabel = UILabel().then{
-        $0.text = "기간"
-        $0.font = .systemFont(ofSize: 18, weight: .bold)
-    }
-    
-    private let dateStackView = UIStackView().then{
+    private lazy var dateStackView = UIStackView().then{
         $0.axis = .horizontal
         $0.alignment = .leading
         $0.spacing = 10
@@ -90,29 +83,17 @@ extension GoalDateCell{
     
     private func layout(){
         
+        contentView.addSubview(baseView)
+        
+        baseView.snp.makeConstraints{
+            $0.edges.equalToSuperview()
+        }
+        
         [startDate,dateCenterLine,endDate,freeSpace].forEach{
             dateStackView.addArrangedSubview($0)
         }
         
-        [titleLabel,dateStackView].forEach{
-            containerView.addArrangedSubview($0)
-        }
-        
-        [emojiView,containerView].forEach{
-            contentView.addSubview($0)
-        }
-        
-
-        emojiView.snp.makeConstraints{
-            $0.top.leading.equalToSuperview().inset(UIEdgeInsets(top: 15, left: 5, bottom: 0, right: 0))
-            $0.height.width.equalTo(20)
-        }
-        
-        containerView.snp.makeConstraints{
-            $0.top.equalTo(emojiView.snp.top)
-            $0.leading.equalTo(emojiView.snp.trailing).offset(15)
-            $0.trailing.bottom.equalToSuperview()
-        }
+        baseView.infoStackView.addArrangedSubview(dateStackView)
         
         startDate.snp.makeConstraints{
             $0.width.equalTo(100)

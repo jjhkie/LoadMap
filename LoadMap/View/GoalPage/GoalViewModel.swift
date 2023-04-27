@@ -12,11 +12,6 @@ import RxCocoa
 import RxSwift
 
 
-
-protocol dataManage{
-
-}
-
 class GoalViewModel{
     
     let bag = DisposeBag()
@@ -24,8 +19,6 @@ class GoalViewModel{
     let realm = try! Realm()
     
     lazy var objectData = realm.objects(Goal.self)
-    
-
 }
 
 
@@ -56,6 +49,4 @@ extension GoalViewModel:ViewModelBasic{
     }
 }
 
-extension GoalViewModel:dataManage{
 
-}

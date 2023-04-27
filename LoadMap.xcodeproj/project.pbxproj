@@ -38,6 +38,9 @@
 		B969863D29F110E300865AB2 /* GoalDateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B969863C29F110E300865AB2 /* GoalDateCell.swift */; };
 		B969863F29F114DE00865AB2 /* GoalColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B969863E29F114DE00865AB2 /* GoalColorCell.swift */; };
 		B969864129F1185300865AB2 /* GoalItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B969864029F1185300865AB2 /* GoalItemCell.swift */; };
+		B96A3D1C29F9FBE4009F421D /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A3D1B29F9FBE4009F421D /* Date+.swift */; };
+		B96A3D2029FA0A36009F421D /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A3D1F29FA0A36009F421D /* BaseView.swift */; };
+		B96A3D2229FA4010009F421D /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A3D2129FA4010009F421D /* UIColor+.swift */; };
 		B9F1D47529F9428A00DE7D84 /* CalendarLineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F1D47429F9428A00DE7D84 /* CalendarLineViewModel.swift */; };
 		B9FABC0829F7D87700869C42 /* GoalItemPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FABC0729F7D87700869C42 /* GoalItemPageView.swift */; };
 /* End PBXBuildFile section */
@@ -70,6 +73,9 @@
 		B969863C29F110E300865AB2 /* GoalDateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDateCell.swift; sourceTree = "<group>"; };
 		B969863E29F114DE00865AB2 /* GoalColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalColorCell.swift; sourceTree = "<group>"; };
 		B969864029F1185300865AB2 /* GoalItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalItemCell.swift; sourceTree = "<group>"; };
+		B96A3D1B29F9FBE4009F421D /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
+		B96A3D1F29FA0A36009F421D /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		B96A3D2129FA4010009F421D /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		B9F1D47429F9428A00DE7D84 /* CalendarLineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarLineViewModel.swift; sourceTree = "<group>"; };
 		B9FABC0729F7D87700869C42 /* GoalItemPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalItemPageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -143,7 +149,8 @@
 			children = (
 				B96211F829F3AEC00026FE0B /* Protocol.swift */,
 				B95C727729F52460003106B2 /* FScalendar+Rx.swift */,
-				B94509E229F65580008C0C97 /* CircleView.swift */,
+				B96A3D1B29F9FBE4009F421D /* Date+.swift */,
+				B96A3D2129FA4010009F421D /* UIColor+.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -169,6 +176,7 @@
 			children = (
 				B965D04D29ED091A00CCB9A1 /* AppDelegate.swift */,
 				B965D04F29ED091A00CCB9A1 /* SceneDelegate.swift */,
+				B96A3D1A29F9FBD0009F421D /* Custom */,
 				B96211FA29F3AEC30026FE0B /* Common */,
 				B965D07829ED127B00CCB9A1 /* Model */,
 				B965D06329ED0A6800CCB9A1 /* View */,
@@ -220,6 +228,15 @@
 				B969864029F1185300865AB2 /* GoalItemCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		B96A3D1A29F9FBD0009F421D /* Custom */ = {
+			isa = PBXGroup;
+			children = (
+				B94509E229F65580008C0C97 /* CircleView.swift */,
+				B96A3D1F29FA0A36009F421D /* BaseView.swift */,
+			);
+			path = Custom;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -320,6 +337,9 @@
 				B94509E129F634DD008C0C97 /* GoalDetailView.swift in Sources */,
 				B96211F929F3AEC00026FE0B /* Protocol.swift in Sources */,
 				B95C727E29F565C3003106B2 /* NoteAddViewModel.swift in Sources */,
+				B96A3D2229FA4010009F421D /* UIColor+.swift in Sources */,
+				B96A3D2029FA0A36009F421D /* BaseView.swift in Sources */,
+				B96A3D1C29F9FBE4009F421D /* Date+.swift in Sources */,
 				B965D07E29ED636000CCB9A1 /* HomeItemCell.swift in Sources */,
 				B96211F729F3AA010026FE0B /* GoalViewModel.swift in Sources */,
 				B90084C929EE1541006D7E39 /* Note.swift in Sources */,
