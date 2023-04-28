@@ -60,6 +60,8 @@ extension GoalView{
  
         output.cellData
             .drive(tableView.rx.items(cellIdentifier: "goalItemCell",cellType: HomeItemCell.self)){row,data,cell in
+
+                
                 if data.title == nil{
                    print("abc")
             

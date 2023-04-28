@@ -9,7 +9,7 @@ import RealmSwift
 import RxDataSources
 import UIKit
 
-class Goal: Object{
+class Goal: Object,Identifiable{
     @objc dynamic var id = UUID().uuidString
     @objc dynamic var icon: String?
     @objc dynamic var title: String?

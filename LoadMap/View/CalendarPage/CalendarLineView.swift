@@ -168,8 +168,11 @@ extension CalendarLineView: UITableViewDataSource{
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "tableCell")else {return UITableViewCell()}
-        
-        cell.textLabel?.text = "abc"
+        var cellConfiguration = cell.defaultContentConfiguration()
+        cellConfiguration.text = "abc"
+        cellConfiguration.image = UIImage(systemName: "star")
+       
+        cell.contentConfiguration = cellConfiguration
         return cell
     }
 
