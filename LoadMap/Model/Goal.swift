@@ -15,9 +15,9 @@ class Goal: Object,Identifiable{
     @objc dynamic var title: String?
     @objc dynamic var boxColor : GoalColor?
     @objc dynamic var creationDate : Date = Date()
-    @objc dynamic var startDay : Date = Date()
-    @objc dynamic var endDay : Date = Date()
-    @objc dynamic var expanded : Bool = false
+    @objc dynamic var startDay : Date?
+    @objc dynamic var endDay : Date?
+    @objc dynamic var completion : Bool = false
     var items = List<GoalItem>()
 }
 
@@ -68,14 +68,6 @@ enum CellType{
         }
     }
 }
-
-struct GoalCellData{
-    var emojiAndTitle:[String]
-    var color: UIColor
-    var setDay: [Date]
-    var setWork: [GoalItem?]
-}
-
 
 
 // 2. Section 모델

@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 import Then
-import RealmSwift
 import RxSwift
 import RxDataSources
 
@@ -16,15 +15,22 @@ import RxDataSources
 class GoalAddView:UIViewController{
     
     let bag = DisposeBag()
-    let realm = try! Realm()
-    
     
     //뷰모델
-    private let viewModel = GoalAddViewModel()
+    private let viewModel: GoalAddViewModel
+    
+    
+    init(viewModel: GoalAddViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     deinit{
         print("종료되었습니다.")
-        
     }
     
     let tableView = UITableView().then{
@@ -38,10 +44,11 @@ class GoalAddView:UIViewController{
         $0.estimatedRowHeight = 60.0
     }
     
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.isHidden = false
         view.backgroundColor = .white
         
         bind(viewModel)
@@ -56,19 +63,19 @@ class GoalAddView:UIViewController{
 extension GoalAddView{
     
     // tableView Cell 에 대한 설정
-
+    
     
     func bind(_ VM: GoalAddViewModel){
         
-
+        
         let input = GoalAddViewModel.Input()
         let output = VM.inOut(input: input)
         
         //TableView DataSource 구현
-            output.tableData
-                .drive(tableView.rx.items(dataSource: VM.tableViewDataSource()))
-                .disposed(by: bag)
-
+        output.tableData
+            .drive(tableView.rx.items(dataSource: VM.tableViewDataSource()))
+            .disposed(by: bag)
+        
         output.addPageModal
             .emit(onNext: {
                 let view = GoalItemPageView()
@@ -97,19 +104,11 @@ extension GoalAddView{
     @objc func addButton(){
         
         viewModel.dataSave()
-
+        
         self.navigationController?.popViewController(animated: true)
     }
 }
 
-extension GoalAddView: UITableViewDelegate{
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0{
-            return UITableView.automaticDimension
-        }else{
-            return 60.0
-        }
-    }
-}
+
 
 

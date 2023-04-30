@@ -21,7 +21,7 @@ class NoteAddViewModel{
     }
     
     let formatter = DateFormatter()
-   
+    
     let bag = DisposeBag()
     let realm = try! Realm()
     
@@ -30,8 +30,8 @@ class NoteAddViewModel{
     let _noteSaved = PublishSubject<Void>()
 }
 
-extension NoteAddViewModel:ViewModelBasic{
-
+extension NoteAddViewModel{
+    
     struct Input{
         let addButtonTapped: Observable<Void>
     }
@@ -45,6 +45,7 @@ extension NoteAddViewModel:ViewModelBasic{
         input.addButtonTapped
             .subscribe(onNext: {
                 self.addNote()
+                self._noteSaved.onNext(Void())
             })
             .disposed(by: bag)
         
@@ -56,12 +57,12 @@ extension NoteAddViewModel:ViewModelBasic{
 
 extension NoteAddViewModel{
     func addNote(){
-        try! realm.write{
-            let newNote = Note()
-            newNote.noteDate = noteDate
-            newNote.noteContent = try! noteText.value()
-            realm.add(newNote)
-        }
-        _noteSaved.onNext(Void())
+        
+        let newNote = Note()
+        newNote.noteDate = noteDate
+        newNote.noteContent = try! noteText.value()
+        
+        DataManager.shared.addData(object: newNote)
+        
     }
 }

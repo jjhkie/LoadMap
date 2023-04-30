@@ -20,22 +20,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let tabBar = UITabBarController()
         
-        let homeView = GoalView()
-        let noteView = NoteView()
+        let homeView = UINavigationController(rootViewController: GoalView(viewModel: GoalViewModel()))
+        let noteView = UINavigationController(rootViewController:NoteView())
         let calendarView = CalendarLineView()
         
         tabBar.viewControllers = [homeView,noteView,calendarView]
-        
-
         
         noteView.tabBarItem = UITabBarItem(title: "메모", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
         
         homeView.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
         calendarView.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
         
-        let rootView = UINavigationController(rootViewController: tabBar)
+        //let rootView = UINavigationController(rootViewController: tabBar)
         
-        window?.rootViewController = rootView
+        window?.rootViewController = tabBar
         window?.makeKeyAndVisible()
     }
 

@@ -34,7 +34,7 @@ class GoalAddViewModel{
     let selectedColor = BehaviorSubject<GoalColor>(value: GoalColor())
     
     let _startDate = BehaviorSubject<Date>(value: Date())
-    let _endDate = BehaviorSubject<Date>(value: Date().addingTimeInterval(24 * 60 * 60))
+    let _endDate = BehaviorSubject<Date>(value: Date())
     
     //var worksData = PublishSubject<[String]>()
     var worksData = BehaviorRelay<[String]>(value: [])
@@ -44,7 +44,7 @@ class GoalAddViewModel{
 }
 
 //MARK: - Input Output
-extension GoalAddViewModel:ViewModelBasic{
+extension GoalAddViewModel{
     
     struct Input{
         
@@ -65,6 +65,9 @@ extension GoalAddViewModel:ViewModelBasic{
             addPageModal: _addPageModal.asSignal(onErrorJustReturn: Void())
         )
     }
+    
+
+
 }
 
 //MARK: - Function
@@ -77,18 +80,16 @@ extension GoalAddViewModel:GoalAddPro{
         data.icon = try! emojiText.value()
         data.title = try! titleText.value()
         data.boxColor = try! selectedColor.value()
-        data.startDay = try! _startDate.value()
-        data.endDay = try! _endDate.value()
+        data.startDay = try! _startDate.value().startOfDay().koreanTime
+        data.endDay = try! _endDate.value().endOfDay().koreanTime
         
         for value in worksData.value{
             let item = GoalItem()
             item.itemName = value
             data.items.append(item)
         }
-       
-        try! self.realm.write{
-            self.realm.add(data)
-        }
+        
+        DataManager.shared.addData(object: data)
     }
     
     

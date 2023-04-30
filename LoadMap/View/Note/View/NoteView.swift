@@ -17,13 +17,7 @@ class NoteView: UIViewController{
     
     private let bag = DisposeBag()
     
-    private let formatter = DateFormatter().then{
-        $0.dateFormat = "yyyy-MM-dd"
-    }
-    
-    private let forma = DateFormatter().then{
-        $0.dateStyle = .full
-    }
+
     private let viewModel = NoteViewModel()
     
     private let calendar = FSCalendar().then{
@@ -41,6 +35,7 @@ class NoteView: UIViewController{
         view.backgroundColor = .white
         
         calendar.delegate = self
+        calendar.dataSource = self
         attribute()
         layout()
         bind(viewModel)
@@ -51,19 +46,22 @@ class NoteView: UIViewController{
 
 extension NoteView: FSCalendarDelegate{
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        
+        if monthPosition == .previous || monthPosition == .next {
+            calendar.setCurrentPage(date, animated: true)
+        }
         viewModel.selectedDate.onNext(date)
         print(try! viewModel.selectedDate.value())
-        print(date)
-        let test = formatter.string(from: date)
-        print(test)
-        if let date = formatter.date(from: test) {
-            print("abc")
-            print(date)
-        }
     }
+    
+
 }
 
+extension NoteView: FSCalendarDataSource{
+    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+        
+        return viewModel.noteData.filter(NSPredicate(format: "noteDate == %@", date.dayStringText)).count
+    }
+}
 extension NoteView{
     
     func bind(_ VM: NoteViewModel){
@@ -71,17 +69,13 @@ extension NoteView{
         let input = NoteViewModel.Input()
         let output = VM.inOut(input: input)
      
-        
-    
-        
+
         output.cellData
             .drive(tableView.rx.items(cellIdentifier: "noteCell",cellType: NoteCell.self)){row,data,cell in
                 cell.textView.text = data.noteContent
             }
             .disposed(by: bag)
         
-
-
     }
     
     private func attribute(){
@@ -96,7 +90,7 @@ extension NoteView{
         if let selectedDate = calendar.selectedDate{
             view.selectedDate = selectedDate
         }else{
-            view.selectedDate = calendar.currentPage
+            view.selectedDate = Date()
         }
         self.navigationController?.pushViewController(view, animated: true)
     }

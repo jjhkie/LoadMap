@@ -8,9 +8,13 @@
 import UIKit
 import SnapKit
 import Then
+import RxSwift
 
 class HomeItemCell: UITableViewCell{
     
+    let bag = DisposeBag()
+    
+    //Views
     private let progressBar = CustomProgressView()
     
     private let containerView = UIStackView().then{
@@ -27,7 +31,10 @@ class HomeItemCell: UITableViewCell{
         $0.textColor = .lightGray
     }
     
-    //private let creationDate = UILabel()
+    let completeButton = UIButton().then{
+        $0.setTitle("Check", for: .normal)
+        $0.backgroundColor = .red
+    }
     
     private let dDayLabel = UILabel()
     
@@ -37,9 +44,15 @@ class HomeItemCell: UITableViewCell{
         $0.distribution = .equalCentering
     }
     
+    //Input
+    let completeButtonTapped = PublishSubject<Void>()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        selectionStyle = .none
         contentView.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        bind()
         layout()
     }
     
@@ -54,13 +67,18 @@ extension HomeItemCell{
         titleLabel.text = item.title
         descriptionLabel.text = item.icon
         
-        for value in item.items{
-            progressBar.dotCount.append(value)
-        }
+//        for value in item.items{
+//            progressBar.dotCount.append(value)
+//        }
         
-       
+        let itemTotalCount = item.items.count
         
-        let components = Calendar.current.dateComponents([.day], from: Date(), to: item.endDay)
+        let completeItemsCount = item.items.filter{
+            $0.itemComplete == true
+        }.count
+      
+        
+        let components = Calendar.current.dateComponents([.day], from: Date(), to: item.endDay!)
         let daysLeft = components.day!
         dDayLabel.text = "D - \(daysLeft)"
         
@@ -80,15 +98,19 @@ extension HomeItemCell{
         }
     }
     
+    func progressValue(_ complete: Int,_ total: Int){
+        progressBar.progress = Float(complete) / Float(total)
+    }
+    
+    func bind(){
+        completeButton.rx.tap
+            .bind(to: completeButtonTapped)
+            .disposed(by: bag)
+    }
+    
     private func layout(){
         
-//        progressBar.addSubview(itemStackView)
-//        
-//        itemStackView.snp.makeConstraints{
-//            $0.edges.equalToSuperview()
-//        }
-        
-        [titleLabel,descriptionLabel,dDayLabel,progressBar].forEach{
+        [titleLabel,descriptionLabel,dDayLabel,progressBar,completeButton].forEach{
             containerView.addArrangedSubview($0)
         }
         
@@ -97,18 +119,5 @@ extension HomeItemCell{
         containerView.snp.makeConstraints{
             $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: 30, bottom: 10, right: 10))
         }
-
-        titleLabel.snp.makeConstraints{
-            $0.top.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(descriptionLabel.snp.top).offset(-10)
-        }
-        
-        descriptionLabel.snp.makeConstraints{
-            $0.top.equalTo(titleLabel.snp.bottom)
-            $0.bottom.equalTo(dDayLabel.snp.top).offset(-15)
-        }
-        
-       
-        
     }
 }

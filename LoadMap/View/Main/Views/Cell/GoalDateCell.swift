@@ -73,6 +73,11 @@ extension GoalDateCell{
     
     func bind(_ VM: GoalAddViewModel){
         startDate.rx.date
+            .subscribe(onNext: {
+                print($0)
+            })
+            .disposed(by: bag)
+        startDate.rx.date
             .bind(to: VM._startDate)
             .disposed(by: bag)
         

@@ -10,7 +10,7 @@ import UIKit
 class CustomProgressView: UIProgressView {
     
     let dotView = CircleView(size: 20)
-    let dotViewArr :[CircleView] = [CircleView(size: 10),CircleView(size: 10),CircleView(size: 10)]
+    let dotViewArr :[CircleView] = [CircleView(size: 10),CircleView(size: 10),CircleView(size: 10),CircleView(size: 10),CircleView(size: 10)]
     var dotCount: [GoalItem] = []
     
     override init(frame: CGRect) {

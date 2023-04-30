@@ -13,80 +13,91 @@ import RxSwift
 import RxCocoa
 
 
-class GoalView: UIViewController{
-    
-    
+//TODO :
 
-    lazy var viewModel = GoalViewModel()
+final class GoalView: UIViewController{
     
-    let bag = DisposeBag()
+    private let bag = DisposeBag()
     
-    let tableView = UITableView().then{
+    private let viewModel: GoalViewModel
+    
+    private let tableView = UITableView().then{
         $0.separatorStyle = .none
-        
         $0.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 100, right: 10)
         $0.register(HomeItemCell.self, forCellReuseIdentifier: "goalItemCell")
-        $0.register(UITableViewCell.self, forCellReuseIdentifier: "emptyCell")
     }
     
-    let addButton = UIButton().then{
-        $0.backgroundColor = .yellow
-        $0.layer.cornerRadius = 25
-        
+    private let addButton = UIButton().then{
+        var config = UIButton.Configuration.filled()
+        config.baseBackgroundColor = .yellow
+        config.image = UIImage(systemName: "plus")
+        config.imagePadding = 10
+        $0.configuration = config
     }
-
+    
+    init(viewModel: GoalViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.isHidden = true
         view.backgroundColor = .white
-        bind(viewModel)
+        
+        bind(GoalViewModel())
         layout()
     }
 }
 
-
+//MARK: - Bind
 extension GoalView{
-
     func bind(_ VM: GoalViewModel){
         let input = GoalViewModel.Input()
         let output = VM.inOut(input: input)
         
         
+        //추가 버튼 클릭 이벤트
+        //클릭 시 AddPage로 이동
         addButton.rx.tap
             .subscribe(onNext: {
-                self.navigationController?.pushViewController(GoalAddView(), animated: true)
+                let view = GoalAddView(viewModel: GoalAddViewModel())
+                self.navigationController?.pushViewController(view, animated: true)
             })
             .disposed(by: bag)
         
- 
+        //테이블뷰 구현
         output.cellData
             .drive(tableView.rx.items(cellIdentifier: "goalItemCell",cellType: HomeItemCell.self)){row,data,cell in
-
                 
-                if data.title == nil{
-                   print("abc")
-            
-                }else{
-                    cell.setData(data)
-                    for value in data.items{
-                        print(value)
-                    }
-                }
+                let completedCount = data.items.filter{
+                    $0.itemComplete == true
+                }.count
+                
+                let totalCount = data.items.count
+                
+                cell.setData(data)
+                cell.progressValue(completedCount, totalCount)
+                self.viewModel.configureCell(cell, at: row)
             }
             .disposed(by: bag)
-
+        
         
         tableView.rx.modelSelected(Goal.self)
             .subscribe(onNext: {value in
-                VM.updateDate(value.id)
                 print(value)
-                self.loadViewIfNeeded()
-//                let view = GoalDetailView()
-//                view.screenData = value
-//                self.present(view, animated: true)
             })
             .disposed(by: bag)
     }
-    
+
+}
+
+//MARK: - Layout
+extension GoalView{
     private func layout(){
         [tableView,addButton].forEach{
             view.addSubview($0)
