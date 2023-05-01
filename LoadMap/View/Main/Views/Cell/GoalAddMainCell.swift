@@ -50,15 +50,26 @@ extension GoalAddMainCell{
     
     func bind(_ VM: GoalAddViewModel){
         
-        //제목 textView의 텍스트 이벤트
-        baseView.titleTextView.rx.text.orEmpty
-            .subscribe(VM.titleText)
+        baseView.titleTextView.rx.textWithBase
+            .bind(onNext: {text, textView in
+                if text == self.titlePlaceHolder && textView.textColor == .lightGray{
+                    VM.titleText.onNext("")
+                }else{
+                    VM.titleText.onNext(text)
+                }
+            })
             .disposed(by: bag)
         
-        
-        descriptionTextField.rx.text.orEmpty
-            .subscribe(VM.emojiText)
+        descriptionTextField.rx.textWithBase
+            .bind(onNext: {text, textView in
+                if text == self.descriptionPlaceHolder && textView.textColor == .lightGray{
+                    VM._descriptionText.onNext("")
+                }else{
+                    VM._descriptionText.onNext(text)
+                }
+            })
             .disposed(by: bag)
+        
         
         baseView.titleTextView.rx.didBeginEditing
             .subscribe(onNext: {

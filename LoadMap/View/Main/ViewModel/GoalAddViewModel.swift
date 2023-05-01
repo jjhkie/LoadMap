@@ -29,7 +29,7 @@ class GoalAddViewModel{
         .works
     ])])
     
-    let emojiText = BehaviorSubject<String>(value: "")
+    let _descriptionText = BehaviorSubject<String>(value: "")
     let titleText = BehaviorSubject<String>(value:"")
     let selectedColor = BehaviorSubject<GoalColor>(value: GoalColor())
     
@@ -40,6 +40,10 @@ class GoalAddViewModel{
     var worksData = BehaviorRelay<[String]>(value: [])
     
     let _addPageModal = PublishSubject<Void>()
+    
+    let _emptyAlert = PublishSubject<String>()
+    
+    let _successAdd = PublishSubject<Void>()
 
 }
 
@@ -53,6 +57,8 @@ extension GoalAddViewModel{
     struct Output{
         let tableData : Driver<[TableCellData]>
         let addPageModal : Signal<Void>
+        let emptyAlert : Signal<String>
+        let successAdd : Signal<Void>
     }
     
     func inOut(input: Input) -> Output{
@@ -62,7 +68,9 @@ extension GoalAddViewModel{
         
         return Output(
             tableData: self.cellData.asDriver(onErrorJustReturn: []),
-            addPageModal: _addPageModal.asSignal(onErrorJustReturn: Void())
+            addPageModal: _addPageModal.asSignal(onErrorJustReturn: Void()),
+            emptyAlert: _emptyAlert.asSignal(onErrorJustReturn:""),
+            successAdd: _successAdd.asSignal(onErrorJustReturn: Void())
         )
     }
     
@@ -75,21 +83,48 @@ extension GoalAddViewModel:GoalAddPro{
     
     
     func dataSave(){
-        let data = Goal()
+        var alertString = ""
+        let titleIsValue = try! titleText.value()
+        let descriptionIsValue = try! _descriptionText.value()
+        let workIsValue = try! worksData.value
         
-        data.icon = try! emojiText.value()
-        data.title = try! titleText.value()
-        data.boxColor = try! selectedColor.value()
-        data.startDay = try! _startDate.value().startOfDay().koreanTime
-        data.endDay = try! _endDate.value().endOfDay().koreanTime
-        
-        for value in worksData.value{
-            let item = GoalItem()
-            item.itemName = value
-            data.items.append(item)
+        if titleIsValue.isEmpty{
+            alertString.append("제목")
         }
         
-        DataManager.shared.addData(object: data)
+        if descriptionIsValue.isEmpty{
+            if !alertString.isEmpty{
+                alertString.append(",")
+            }
+            alertString.append("설명")
+        }
+        
+        if workIsValue.isEmpty{
+            if !alertString.isEmpty{
+                alertString.append(",")
+            }
+            alertString.append("업무")
+        }
+        
+        if alertString != ""{
+            _emptyAlert.onNext(alertString)
+        }else{
+            print("저장")
+            let data = Goal()
+            data.icon = try! _descriptionText.value()
+            data.title = try! titleText.value()
+            data.boxColor = try! selectedColor.value()
+            data.startDay = try! _startDate.value().startOfDay().koreanTime
+            data.endDay = try! _endDate.value().endOfDay().koreanTime
+            
+            for value in worksData.value{
+                let item = GoalItem()
+                item.itemName = value
+                data.items.append(item)
+            }
+            DataManager.shared.addData(object: data)
+        }
+
     }
     
     

@@ -204,7 +204,7 @@ extension CalendarLineView: FSCalendarDataSource{
         print(date.koreanTime)
         return viewmodel.objectData.filter{
             
-            return  $0.startDay! <= date.koreanTime && $0.endDay! >= date.koreanTime
+            return  $0.startDay <= date.koreanTime && $0.endDay >= date.koreanTime
             
         }.count
     }

@@ -27,7 +27,9 @@ class GoalColorCell:UITableViewCell{
         $0.axis = .horizontal
     }
     
-    let colorButton = UIColorWell()
+    let colorButton = UIColorWell().then{
+        $0.selectedColor = .black
+    }
     
     let freeView = UIView().then{
         $0.setContentHuggingPriority(.defaultLow, for: .horizontal)

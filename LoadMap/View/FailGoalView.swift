@@ -10,5 +10,21 @@ import UIKit
 
 final class FailGoalView: UIViewController{
     
-    let tableView = UICollectionView()
+    //private let collectionView = UICollectionView()
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .blue
+    }
+}
+
+
+//MARK: - Layout
+extension FailGoalView{
+    
+    
+    private func layout(){
+        
+    }
 }

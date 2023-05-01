@@ -13,7 +13,8 @@ import RxSwift
 import RxCocoa
 
 
-//TODO :
+//TODO : items에서 complete == false 인 값 중 제일 앞에 있는 값 가져오기
+
 
 final class GoalView: UIViewController{
     

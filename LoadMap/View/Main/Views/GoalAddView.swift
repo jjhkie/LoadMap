@@ -84,7 +84,18 @@ extension GoalAddView{
             })
             .disposed(by: bag)
         
+        output.emptyAlert
+            .emit(onNext: {
+                print($0)
+                print("내용이 없습니다.")
+            })
+            .disposed(by: bag)
         
+        output.successAdd
+            .emit(onNext: {
+                print("내용을 추가했습니다.")
+                //self.navigationController?.popViewController(animated: true)
+            })
     }
     
     private func layout(){
@@ -105,7 +116,7 @@ extension GoalAddView{
         
         viewModel.dataSave()
         
-        self.navigationController?.popViewController(animated: true)
+       
     }
 }
 

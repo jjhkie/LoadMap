@@ -10,6 +10,7 @@ import SnapKit
 import Then
 import RxSwift
 
+//TODO : Day 당일, Day 버튼 구현
 class HomeItemCell: UITableViewCell{
     
     let bag = DisposeBag()
@@ -30,6 +31,8 @@ class HomeItemCell: UITableViewCell{
     private let descriptionLabel = UILabel().then{
         $0.textColor = .lightGray
     }
+    
+    private let rightNowItem = UILabel()
     
     let completeButton = UIButton().then{
         $0.setTitle("Check", for: .normal)
@@ -67,21 +70,21 @@ extension HomeItemCell{
         titleLabel.text = item.title
         descriptionLabel.text = item.icon
         
-//        for value in item.items{
-//            progressBar.dotCount.append(value)
-//        }
-        
-        let itemTotalCount = item.items.count
-        
-        let completeItemsCount = item.items.filter{
-            $0.itemComplete == true
-        }.count
-      
-        
-        let components = Calendar.current.dateComponents([.day], from: Date(), to: item.endDay!)
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.day], from: item.startDay, to: item.endDay)
         let daysLeft = components.day!
-        dDayLabel.text = "D - \(daysLeft)"
         
+        if daysLeft == 0 {
+            dDayLabel.text = "당일"
+        }else{
+            dDayLabel.text = "D - \(daysLeft)"
+        }
+
+        
+        let rightNowData = item.items.filter{
+            $0.itemComplete == false
+        }.first?.itemName
+        rightNowItem.text = "\(rightNowData)"
         
         for value in item.items{
             let circle = CircleView(size: 15)
@@ -110,7 +113,7 @@ extension HomeItemCell{
     
     private func layout(){
         
-        [titleLabel,descriptionLabel,dDayLabel,progressBar,completeButton].forEach{
+        [titleLabel,descriptionLabel,dDayLabel,rightNowItem,progressBar,completeButton].forEach{
             containerView.addArrangedSubview($0)
         }
         

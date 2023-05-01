@@ -15,8 +15,8 @@ class Goal: Object,Identifiable{
     @objc dynamic var title: String?
     @objc dynamic var boxColor : GoalColor?
     @objc dynamic var creationDate : Date = Date()
-    @objc dynamic var startDay : Date?
-    @objc dynamic var endDay : Date?
+    @objc dynamic var startDay : Date = Date()
+    @objc dynamic var endDay : Date = Date()
     @objc dynamic var completion : Bool = false
     var items = List<GoalItem>()
 }
@@ -41,7 +41,7 @@ class GoalColor:Object{
 }
 
 class GoalItem:Object{
-    @objc dynamic var itemName: String?
+    @objc dynamic var itemName: String = ""
     @objc dynamic var itemComplete : Bool = false
 }
 
