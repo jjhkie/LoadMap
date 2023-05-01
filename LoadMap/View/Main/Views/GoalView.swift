@@ -89,8 +89,10 @@ extension GoalView{
         
         
         tableView.rx.modelSelected(Goal.self)
-            .subscribe(onNext: {value in
-                print(value)
+            .bind(onNext: {
+                let view = GoalDetailView(screenData: $0)
+                self.navigationController?.pushViewController(view, animated: true)
+                //self.present(view, animated: true)
             })
             .disposed(by: bag)
     }

@@ -68,7 +68,7 @@ extension HomeItemCell{
     
     func setData(_ item:Goal){
         titleLabel.text = item.title
-        descriptionLabel.text = item.icon
+        descriptionLabel.text = item.content
         
         let calendar = Calendar.current
         let components = calendar.dateComponents([.day], from: item.startDay, to: item.endDay)

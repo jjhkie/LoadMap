@@ -115,7 +115,7 @@ extension GoalItemCell{
                       }
                       self.baseView.backgroundColor = .blue
                       self.baseView.infoStackView.backgroundColor = .red
-                      self.baseView.updateContent()
+
                   })
                   .disposed(by: bag)
     }

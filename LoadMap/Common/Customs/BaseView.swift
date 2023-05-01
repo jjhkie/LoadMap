@@ -24,7 +24,7 @@ final class BaseView: UIView{
     lazy var titleTextView = UITextView().then{
         $0.isEditable = editenable
         $0.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0);
-        $0.font = .systemFont(ofSize: 18, weight: .bold)
+        $0.font = Constants.Fonts.topItem
         $0.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
     
@@ -40,12 +40,7 @@ final class BaseView: UIView{
 }
 
 extension BaseView{
-    func updateContent() {
-        
-        // 새로운 내용으로 레이아웃을 업데이트합니다.
-        setNeedsLayout()
-        layoutIfNeeded()
-    }
+
     private func layout(){
         [emojiImage,infoStackView].forEach{
             self.addSubview($0)

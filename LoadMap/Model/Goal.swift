@@ -11,8 +11,9 @@ import UIKit
 
 class Goal: Object,Identifiable{
     @objc dynamic var id = UUID().uuidString
-    @objc dynamic var icon: String?
-    @objc dynamic var title: String?
+
+    @objc dynamic var title: String = ""
+    @objc dynamic var content: String = ""
     @objc dynamic var boxColor : GoalColor?
     @objc dynamic var creationDate : Date = Date()
     @objc dynamic var startDay : Date = Date()

@@ -97,6 +97,10 @@ extension GoalAddView{
                 print("내용을 추가했습니다.")
                 //self.navigationController?.popViewController(animated: true)
             })
+            .disposed(by: bag)
+        
+    
+
     }
     
     private func layout(){

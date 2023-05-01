@@ -111,7 +111,7 @@ extension GoalAddViewModel:GoalAddPro{
         }else{
             print("저장")
             let data = Goal()
-            data.icon = try! _descriptionText.value()
+            data.content = try! _descriptionText.value()
             data.title = try! titleText.value()
             data.boxColor = try! selectedColor.value()
             data.startDay = try! _startDate.value().startOfDay().koreanTime

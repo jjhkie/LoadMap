@@ -44,6 +44,8 @@
 		B96A3D2029FA0A36009F421D /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A3D1F29FA0A36009F421D /* BaseView.swift */; };
 		B96A3D2229FA4010009F421D /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A3D2129FA4010009F421D /* UIColor+.swift */; };
 		B96A3D2429FA9BC2009F421D /* DotProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A3D2329FA9BC2009F421D /* DotProgressBar.swift */; };
+		B9AB1BD029FFE72B0078D3F0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AB1BCF29FFE72B0078D3F0 /* Constants.swift */; };
+		B9AB1BD429FFF3CC0078D3F0 /* ContainerItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AB1BD329FFF3CC0078D3F0 /* ContainerItemView.swift */; };
 		B9EDD1B029FE3D50004A9272 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9EDD1AF29FE3D50004A9272 /* DataManager.swift */; };
 		B9F1D47529F9428A00DE7D84 /* CalendarLineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F1D47429F9428A00DE7D84 /* CalendarLineViewModel.swift */; };
 		B9FABC0829F7D87700869C42 /* GoalItemPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FABC0729F7D87700869C42 /* GoalItemPageView.swift */; };
@@ -83,6 +85,8 @@
 		B96A3D1F29FA0A36009F421D /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		B96A3D2129FA4010009F421D /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		B96A3D2329FA9BC2009F421D /* DotProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotProgressBar.swift; sourceTree = "<group>"; };
+		B9AB1BCF29FFE72B0078D3F0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		B9AB1BD329FFF3CC0078D3F0 /* ContainerItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerItemView.swift; sourceTree = "<group>"; };
 		B9EDD1AF29FE3D50004A9272 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		B9F1D47429F9428A00DE7D84 /* CalendarLineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarLineViewModel.swift; sourceTree = "<group>"; };
 		B9FABC0729F7D87700869C42 /* GoalItemPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalItemPageView.swift; sourceTree = "<group>"; };
@@ -241,6 +245,7 @@
 				B94509E229F65580008C0C97 /* CircleView.swift */,
 				B96A3D1F29FA0A36009F421D /* BaseView.swift */,
 				B96A3D2329FA9BC2009F421D /* DotProgressBar.swift */,
+				B9AB1BD329FFF3CC0078D3F0 /* ContainerItemView.swift */,
 			);
 			path = Customs;
 			sourceTree = "<group>";
@@ -248,6 +253,7 @@
 		B9EDD1AD29FE3B5B004A9272 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
+				B9AB1BCF29FFE72B0078D3F0 /* Constants.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -412,6 +418,7 @@
 				B90084CE29EE1F69006D7E39 /* NoteAddView.swift in Sources */,
 				B965D07729ED127700CCB9A1 /* Goal.swift in Sources */,
 				B94D52FE29F2290000770663 /* GoalAddViewModel.swift in Sources */,
+				B9AB1BD429FFF3CC0078D3F0 /* ContainerItemView.swift in Sources */,
 				B94509E129F634DD008C0C97 /* GoalDetailView.swift in Sources */,
 				B96211F929F3AEC00026FE0B /* ViewModelType in Sources */,
 				B95C727E29F565C3003106B2 /* NoteAddViewModel.swift in Sources */,
@@ -423,6 +430,7 @@
 				B96211F729F3AA010026FE0B /* GoalViewModel.swift in Sources */,
 				B90084C929EE1541006D7E39 /* Note.swift in Sources */,
 				B96A3D2429FA9BC2009F421D /* DotProgressBar.swift in Sources */,
+				B9AB1BD029FFE72B0078D3F0 /* Constants.swift in Sources */,
 				B95C727B29F561D3003106B2 /* NoteViewModel.swift in Sources */,
 				B969863D29F110E300865AB2 /* GoalDateCell.swift in Sources */,
 				B90084C529EE0D31006D7E39 /* NoteView.swift in Sources */,
