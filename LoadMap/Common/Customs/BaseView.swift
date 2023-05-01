@@ -40,7 +40,12 @@ final class BaseView: UIView{
 }
 
 extension BaseView{
-    
+    func updateContent() {
+        
+        // 새로운 내용으로 레이아웃을 업데이트합니다.
+        setNeedsLayout()
+        layoutIfNeeded()
+    }
     private func layout(){
         [emojiImage,infoStackView].forEach{
             self.addSubview($0)

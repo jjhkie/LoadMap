@@ -152,7 +152,7 @@ extension GoalAddViewModel:GoalAddPro{
                 case .works:
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell") as? GoalItemCell else {return UITableViewCell()}
                     
-             
+                    
                     cell.bind(self)
 
                     

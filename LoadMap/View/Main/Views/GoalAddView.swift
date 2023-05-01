@@ -33,6 +33,7 @@ class GoalAddView:UIViewController{
         print("종료되었습니다.")
     }
     
+    
     let tableView = UITableView().then{
         $0.register(GoalAddMainCell.self, forCellReuseIdentifier: "mainCell")
         $0.register(GoalDateCell.self, forCellReuseIdentifier: "dateCell")
@@ -41,7 +42,7 @@ class GoalAddView:UIViewController{
         $0.separatorInset = .zero
         $0.separatorStyle = .none
         $0.rowHeight = UITableView.automaticDimension
-        $0.estimatedRowHeight = 60.0
+        $0.estimatedRowHeight = 300.0
     }
     
     
@@ -100,8 +101,9 @@ extension GoalAddView{
     
     private func layout(){
         view.addSubview(tableView)
+        
         tableView.snp.makeConstraints{
-            $0.edges.equalToSuperview().inset(20)
+            $0.edges.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
     }
 }

@@ -24,7 +24,7 @@ class GoalItemCell: UITableViewCell{
     }
     
     var workArr: [String] = []
-    
+ 
     private let workTextPlaceHolder = "업무를 추가해주세요"
     
     private lazy var workTextView = UITextView().then{
@@ -40,6 +40,7 @@ class GoalItemCell: UITableViewCell{
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
+        baseView.backgroundColor = .red
         layout()
         
     }
@@ -50,7 +51,7 @@ class GoalItemCell: UITableViewCell{
 }
 
 extension GoalItemCell{
-    
+   
     func bind(_ VM: GoalAddViewModel){
         
         workTextView.rx.didEndEditing
@@ -86,21 +87,37 @@ extension GoalItemCell{
                     textView.text = self.workTextPlaceHolder
                     textView.textColor = .lightGray
                     textView.resignFirstResponder()
-                    
-                    
                 }
             })
             .disposed(by: bag)
         
         VM.worksData.asDriver()
             .drive(tableView.rx.items(cellIdentifier: "cell",cellType: UITableViewCell.self)){view,data,cell in
-                
                 cell.textLabel?.text = data
             }
             .disposed(by: bag)
         
-        
-
+        VM.worksData.asObservable()
+                  .subscribe(onNext: { [weak tableView] items in
+                      guard let tableView = tableView else { return }
+                      let rowHeight: CGFloat = 50.0 // 각 셀의 높이
+                      let maxHeight: CGFloat = rowHeight * CGFloat(items.count) // 최대 높이
+                      print(maxHeight)
+                      tableView.snp.updateConstraints { make in
+                          make.height.equalTo( maxHeight)
+                      }
+                      self.baseView.snp.updateConstraints{
+                          $0.height.equalTo(300 + maxHeight)
+                          
+                      }
+                      self.baseView.infoStackView.snp.updateConstraints{
+                          $0.height.equalTo(100 + maxHeight)
+                      }
+                      self.baseView.backgroundColor = .blue
+                      self.baseView.infoStackView.backgroundColor = .red
+                      self.baseView.updateContent()
+                  })
+                  .disposed(by: bag)
     }
     
     
@@ -109,19 +126,25 @@ extension GoalItemCell{
         
         baseView.snp.makeConstraints{
             $0.edges.equalToSuperview()
+            $0.height.equalTo(300)
         }
         
         
         baseView.infoStackView.addArrangedSubview(workTextView)
+        //baseView.addSubview(tableView)
         baseView.infoStackView.addArrangedSubview(tableView)
-        
-        tableView.snp.makeConstraints{
+        baseView.infoStackView.snp.makeConstraints{
             $0.height.equalTo(100)
         }
-
-        workTextView.snp.makeConstraints{
-            $0.height.equalTo(50)
+  
+        tableView.snp.makeConstraints{
+//            $0.top.equalTo(baseView.infoStackView.snp.bottom)
+//            $0.leading.equalTo(baseView.infoStackView.snp.leading)
+//            $0.bottom.equalToSuperview()
+//            $0.trailing.equalToSuperview()
+            $0.height.equalTo(0)
         }
+
         
     }
 }

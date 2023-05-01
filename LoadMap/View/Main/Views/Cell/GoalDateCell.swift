@@ -23,8 +23,7 @@ class GoalDateCell: UITableViewCell{
         
         $0.titleTextView.text = "기간"
     }
-    
-    
+
     private lazy var dateStackView = UIStackView().then{
         $0.axis = .horizontal
         $0.alignment = .leading
@@ -97,9 +96,12 @@ extension GoalDateCell{
         [startDate,dateCenterLine,endDate,freeSpace].forEach{
             dateStackView.addArrangedSubview($0)
         }
+        [dateStackView].forEach{
+            baseView.infoStackView.addArrangedSubview($0)
+        }
+ 
         
-        baseView.infoStackView.addArrangedSubview(dateStackView)
-        
+
         startDate.snp.makeConstraints{
             $0.width.equalTo(100)
         }
