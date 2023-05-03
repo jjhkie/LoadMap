@@ -181,6 +181,7 @@ extension CalendarLineView: FSCalendarDataSource{
     //MARK: cellFor
     //달력의 셀을 구성하고 커스터마이징 한다.
     func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
+        
         let cell = calendar.dequeueReusableCell(withIdentifier: "Cell", for: date, at: position) as FSCalendarCell
         
         //Foundation 에서 제공하는 Calendar

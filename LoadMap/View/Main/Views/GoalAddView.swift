@@ -57,13 +57,17 @@ class GoalAddView:UIViewController{
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = false
         view.backgroundColor = .white
-        
+
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+                view.addGestureRecognizer(tapGesture)
+        tableView.backgroundColor = .white
         bind(viewModel)
         layout()
         navigationBarAdd()
     }
-    
-    
+    @objc func handleTap(_ gesture: UITapGestureRecognizer) {
+            view.endEditing(true)
+        }
 }
 
 //MARK: - Layout 및 UIUpdate.

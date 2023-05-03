@@ -20,6 +20,11 @@ extension Date{
         return dateFormatter("yyyy.MM.dd")
     }
     
+    var dayOfWeekString:String{
+        return dateFormatter("EE")
+    }
+
+    
     
     var dayStringText: String{
         let dateText = formatted(date: .numeric, time: .omitted)

@@ -30,6 +30,7 @@ final class GoalAddMainCell: UITableViewCell{
 
     //설명
     private lazy var descriptionTextField = UITextView().then{
+        $0.commonBackgroundColor()
         $0.text = descriptionPlaceHolder
         $0.isEditable = true
         $0.textColor = .lightGray
@@ -38,6 +39,7 @@ final class GoalAddMainCell: UITableViewCell{
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = .white
         layout()
     }
     

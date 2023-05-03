@@ -11,6 +11,9 @@ import RxSwift
 import RxCocoa
 import Then
 import RealmSwift
+//TODO
+///중요도 설정할 수 있도록 설정
+///중요도 이미지를 메인 image로 사용
 
 final class NoteAddView: UIViewController{
     private let bag = DisposeBag()
@@ -35,9 +38,17 @@ final class NoteAddView: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+                view.addGestureRecognizer(tapGesture)
+        
         bind(viewModel)
         layout()
     }
+    
+    @objc func handleTap(_ gesture: UITapGestureRecognizer) {
+            view.endEditing(true)
+        }
 }
 
 extension NoteAddView{

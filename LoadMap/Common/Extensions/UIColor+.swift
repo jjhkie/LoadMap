@@ -10,6 +10,18 @@ import UIKit
 
 extension UIColor{
     
+    static var layerOneColor: UIColor{
+        return UIColor(red: 255/255.0, green: 243/255.0, blue: 226/255.0, alpha: 1.0)
+    }
+    
+    static var layerThreeColor: UIColor{
+        return UIColor(red: 250/255.0, green: 152/255.0, blue: 132/255.0, alpha: 1.0)
+    }
+    
+    static var layerFourColor : UIColor{
+        return UIColor(red: 231/255.0, green: 70/255.0, blue: 70/255.0, alpha: 1.0)
+    }
+    
     var rgbValue: GoalColor{
         var red: CGFloat = 0.0
         var green: CGFloat = 0.0

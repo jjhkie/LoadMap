@@ -44,9 +44,12 @@
 		B96A3D2029FA0A36009F421D /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A3D1F29FA0A36009F421D /* BaseView.swift */; };
 		B96A3D2229FA4010009F421D /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A3D2129FA4010009F421D /* UIColor+.swift */; };
 		B96A3D2429FA9BC2009F421D /* DotProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A3D2329FA9BC2009F421D /* DotProgressBar.swift */; };
+		B9752EC02A020B42005420C2 /* GoalHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9752EBF2A020B42005420C2 /* GoalHeaderView.swift */; };
+		B9752EC22A022060005420C2 /* UITextView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9752EC12A022060005420C2 /* UITextView+.swift */; };
 		B9AB1BD029FFE72B0078D3F0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AB1BCF29FFE72B0078D3F0 /* Constants.swift */; };
 		B9AB1BD429FFF3CC0078D3F0 /* ContainerItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AB1BD329FFF3CC0078D3F0 /* ContainerItemView.swift */; };
 		B9EDD1B029FE3D50004A9272 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9EDD1AF29FE3D50004A9272 /* DataManager.swift */; };
+		B9EDF1B42A02580200097160 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9EDF1B32A02580200097160 /* CalendarCell.swift */; };
 		B9F1D47529F9428A00DE7D84 /* CalendarLineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F1D47429F9428A00DE7D84 /* CalendarLineViewModel.swift */; };
 		B9F29DB62A01168C00D6B350 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F29DB52A01168C00D6B350 /* UIButton+.swift */; };
 		B9F29DB82A0120BB00D6B350 /* GoalTaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F29DB72A0120BB00D6B350 /* GoalTaskCell.swift */; };
@@ -86,9 +89,12 @@
 		B96A3D1F29FA0A36009F421D /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		B96A3D2129FA4010009F421D /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		B96A3D2329FA9BC2009F421D /* DotProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotProgressBar.swift; sourceTree = "<group>"; };
+		B9752EBF2A020B42005420C2 /* GoalHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalHeaderView.swift; sourceTree = "<group>"; };
+		B9752EC12A022060005420C2 /* UITextView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+.swift"; sourceTree = "<group>"; };
 		B9AB1BCF29FFE72B0078D3F0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		B9AB1BD329FFF3CC0078D3F0 /* ContainerItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerItemView.swift; sourceTree = "<group>"; };
 		B9EDD1AF29FE3D50004A9272 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		B9EDF1B32A02580200097160 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		B9F1D47429F9428A00DE7D84 /* CalendarLineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarLineViewModel.swift; sourceTree = "<group>"; };
 		B9F29DB52A01168C00D6B350 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
 		B9F29DB72A0120BB00D6B350 /* GoalTaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalTaskCell.swift; sourceTree = "<group>"; };
@@ -120,6 +126,7 @@
 				B969864029F1185300865AB2 /* GoalItemCell.swift */,
 				B965D07D29ED636000CCB9A1 /* HomeItemCell.swift */,
 				B9F29DB72A0120BB00D6B350 /* GoalTaskCell.swift */,
+				B9752EBF2A020B42005420C2 /* GoalHeaderView.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -128,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				B90084C629EE0F3E006D7E39 /* NoteCell.swift */,
+				B9EDF1B32A02580200097160 /* CalendarCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -144,8 +152,8 @@
 		B941F0DD29FBBE60008993D7 /* Note */ = {
 			isa = PBXGroup;
 			children = (
-				B9EDD1B529FE72EB004A9272 /* ViewModel */,
 				B9EDD1B429FE72DD004A9272 /* View */,
+				B9EDD1B529FE72EB004A9272 /* ViewModel */,
 				B95C727929F5613E003106B2 /* NotePage */,
 			);
 			path = Note;
@@ -238,6 +246,7 @@
 				B96A3D2129FA4010009F421D /* UIColor+.swift */,
 				B95C12F929FF790C009FDFA5 /* UITextView+Rx.swift */,
 				B9F29DB52A01168C00D6B350 /* UIButton+.swift */,
+				B9752EC12A022060005420C2 /* UITextView+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -411,6 +420,7 @@
 			files = (
 				B969863929F108E900865AB2 /* GoalAddMainCell.swift in Sources */,
 				B95C12FA29FF790C009FDFA5 /* UITextView+Rx.swift in Sources */,
+				B9752EC02A020B42005420C2 /* GoalHeaderView.swift in Sources */,
 				B941F0DF29FBF0D6008993D7 /* FailGoalView.swift in Sources */,
 				B965D06229ED0A6300CCB9A1 /* GoalView.swift in Sources */,
 				B965D04E29ED091A00CCB9A1 /* AppDelegate.swift in Sources */,
@@ -431,11 +441,13 @@
 				B9EDD1B029FE3D50004A9272 /* DataManager.swift in Sources */,
 				B965D07E29ED636000CCB9A1 /* HomeItemCell.swift in Sources */,
 				B96211F729F3AA010026FE0B /* GoalViewModel.swift in Sources */,
+				B9752EC22A022060005420C2 /* UITextView+.swift in Sources */,
 				B9F29DB62A01168C00D6B350 /* UIButton+.swift in Sources */,
 				B90084C929EE1541006D7E39 /* Note.swift in Sources */,
 				B96A3D2429FA9BC2009F421D /* DotProgressBar.swift in Sources */,
 				B9AB1BD029FFE72B0078D3F0 /* Constants.swift in Sources */,
 				B95C727B29F561D3003106B2 /* NoteViewModel.swift in Sources */,
+				B9EDF1B42A02580200097160 /* CalendarCell.swift in Sources */,
 				B969863D29F110E300865AB2 /* GoalDateCell.swift in Sources */,
 				B90084C529EE0D31006D7E39 /* NoteView.swift in Sources */,
 				B965D05029ED091A00CCB9A1 /* SceneDelegate.swift in Sources */,

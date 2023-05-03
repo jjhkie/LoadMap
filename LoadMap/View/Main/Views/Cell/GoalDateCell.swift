@@ -31,21 +31,25 @@ final class GoalDateCell: UITableViewCell{
     private let titleLabel = UILabel().then{
         $0.text = "기간"
         $0.font = Constants.Fonts.topItem
+        $0.textColor = .black
+        $0.backgroundColor = .white
         
     }
     
     
     let dayButton = UIButton().then{
         $0.setTitle("하루", for: .normal)
-        $0.configuration = $0.fillGray
+        //$0.configuration = $0.fillGray
     }
     
     let peridButton = UIButton().then{
         $0.setTitle("기간", for: .normal)
-        $0.configuration = $0.fillGray
+        //$0.configuration = $0.fillGray
     }
 
-    private let containerView = UIView()
+    private let containerView = UIView().then{
+        $0.backgroundColor = .white
+    }
     
     private let oneDayCalendar = UIDatePicker().then{
         $0.locale = Locale(identifier: "ko-KR")
@@ -62,6 +66,7 @@ final class GoalDateCell: UITableViewCell{
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = .white
         selectionStyle = .none
         layout()
         

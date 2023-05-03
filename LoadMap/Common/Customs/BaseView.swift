@@ -22,15 +22,18 @@ final class BaseView: UIView{
     }
     
     lazy var titleTextView = UITextView().then{
+        $0.commonBackgroundColor()
         $0.isEditable = editenable
         $0.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0);
         $0.font = Constants.Fonts.topItem
+        $0.textColor = .black
         $0.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
     
     init(editEnable: Bool){
         self.editenable = editEnable
         super.init(frame: .zero)
+        self.backgroundColor = .white
         layout()
     }
     

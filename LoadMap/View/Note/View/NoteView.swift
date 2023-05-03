@@ -13,6 +13,7 @@ import RxCocoa
 import FSCalendar
 
 
+
 class NoteView: UIViewController{
     
     private let bag = DisposeBag()
@@ -21,8 +22,11 @@ class NoteView: UIViewController{
     private let viewModel = NoteViewModel()
     
     private let calendar = FSCalendar().then{
+        $0.register(CalendarCell.self, forCellReuseIdentifier: "calendarCell")
+        $0.register(FSCalendarCell.self, forCellReuseIdentifier: "Cell")
         $0.scope = .week
         $0.backgroundColor = .white
+        
     }
     
     private let tableView = UITableView().then{
@@ -53,6 +57,14 @@ extension NoteView: FSCalendarDelegate{
         print(try! viewModel.selectedDate.value())
     }
     
+    func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
+        let cell = calendar.dequeueReusableCell(withIdentifier: "calendarCell", for: date, at: position) as! CalendarCell
+        cell.dayLabel.text = "\(date.dayOfWeekString)"
+        cell.dayOfWeekLabel.text = "\(date.dayOfWeekString)"
+        //cell.subtitleLabel.text = "\(date.dayOfWeekString)"
+        return cell
+    }
+    
 
 }
 
@@ -61,6 +73,8 @@ extension NoteView: FSCalendarDataSource{
         
         return viewModel.noteData.filter(NSPredicate(format: "noteDate == %@", date.dayStringText)).count
     }
+    
+
 }
 extension NoteView{
     

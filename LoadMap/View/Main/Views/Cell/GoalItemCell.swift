@@ -29,6 +29,7 @@ class GoalItemCell: UITableViewCell{
     var workTextView = UITextView().then{
         $0.isEditable = true
         $0.textColor = .lightGray
+        $0.commonBackgroundColor()
     }
     
     

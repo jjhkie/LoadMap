@@ -22,17 +22,9 @@ final class GoalViewModel{
             .filter(NSPredicate(format: "completion == %d", false))
     }
     
-    var tableDataSource = RxTableViewSectionedReloadDataSource<SectionModel<Bool, Goal>>(configureCell:{(dataSource,tableView,indexPath, item) in
-        let cell = tableView.dequeueReusableCell(withIdentifier: "goalItemCell", for: indexPath)
-        cell.textLabel?.text = item.title
-        return cell
-    },titleForHeaderInSection: { dataSource, index in
-        if dataSource[index].model == true{
-            return "현재 진행 중인 업무 \(dataSource[index].items.count)"
-        }else{
-            return "진행 예정 업무 \(dataSource[index].items.count)"
-        }
-    })
+    let expandedSections = BehaviorRelay<[Bool]>(value: [true, true])
+    
+    
     
 }
 
@@ -61,7 +53,7 @@ extension GoalViewModel{
                 return [SectionModel(model: true, items: processSectionItem),
                         SectionModel(model: false, items: scheduledtoSectionItem)]
             }
-
+        
         
         return Output(
             cellData:_cellData.asDriver(onErrorJustReturn: [])
@@ -81,17 +73,34 @@ extension GoalViewModel{
         cell.completeButtonTapped
             .subscribe(onNext: {
                 let data = self.objectData[index]
-//                try! self.realm.write{
-//                    data.items.filter{
-//                        $0.itemComplete == false
-//                    }.first?.itemComplete = true
-//
-//                    if data.items.last?.itemComplete == true{
-//                        data.completion = true
-//                    }
-//                }
+                //                try! self.realm.write{
+                //                    data.items.filter{
+                //                        $0.itemComplete == false
+                //                    }.first?.itemComplete = true
+                //
+                //                    if data.items.last?.itemComplete == true{
+                //                        data.completion = true
+                //                    }
+                //                }
             })
             .disposed(by: cell.bag)
+    }
+    func tableDataSource() -> RxTableViewSectionedReloadDataSource<SectionModel<Bool, Goal>>{
+        return  RxTableViewSectionedReloadDataSource<SectionModel<Bool, Goal>>(configureCell:{(dataSource,tableView,indexPath, item) in
+            let cell = tableView.dequeueReusableCell(withIdentifier: "goalItemCell", for: indexPath) as! HomeItemCell
+            
+            let isExpanded = self.expandedSections.value[indexPath.section]
+            cell.contentView.isHidden = !isExpanded
+            cell.setData(item)
+            //cell.textLabel?.text = item.title
+            return cell
+        },titleForHeaderInSection: { dataSource, index in
+            if dataSource[index].model == true{
+                return "현재 진행 중인 업무 \(dataSource[index].items.count)"
+            }else{
+                return "진행 예정 업무 \(dataSource[index].items.count)"
+            }
+        })
     }
     
 }

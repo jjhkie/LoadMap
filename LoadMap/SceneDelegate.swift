@@ -80,6 +80,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
 
         let tabBar = UITabBarController()
+        tabBar.tabBar.tintColor = .layerFourColor
+        tabBar.tabBar.barTintColor = .blue
+        tabBar.tabBar.backgroundColor = .white
         let viewControllers = TabBarIndex.allCases.map {
             let viewController = $0.viewController
             viewController.tabBarItem = $0.tabBarItem
@@ -87,8 +90,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         tabBar.viewControllers = viewControllers
        
-
-        //tabBar.tabBar.items = TabBarIndex.allCases.map { $0.tabBarItem }
         
         
         window?.rootViewController = tabBar

@@ -9,10 +9,10 @@
 import UIKit
 
 extension UIButton{
-    var fillGray:UIButton.Configuration{
+    var fillCustomButtony:UIButton.Configuration{
         var config = UIButton.Configuration.filled()
-        config.baseBackgroundColor = .lightGray
-        config.baseForegroundColor = .white
+        config.baseBackgroundColor = .layerFourColor
+        config.baseForegroundColor = .layerOneColor
         config.contentInsets = NSDirectionalEdgeInsets(top: 3, leading: 3, bottom: 3, trailing: 3)
         return config
     }
