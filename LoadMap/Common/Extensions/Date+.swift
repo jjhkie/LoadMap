@@ -9,6 +9,18 @@ import Foundation
 
 
 extension Date{
+    
+    func dateFormatter(_ format: String) -> String{
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        return formatter.string(from: self)
+    }
+    
+    var basicFormatter:String{
+        return dateFormatter("yyyy.MM.dd")
+    }
+    
+    
     var dayStringText: String{
         let dateText = formatted(date: .numeric, time: .omitted)
         let timeFormat = NSLocalizedString("%@", comment: "StringDate")

@@ -48,7 +48,8 @@
 		B9AB1BD429FFF3CC0078D3F0 /* ContainerItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AB1BD329FFF3CC0078D3F0 /* ContainerItemView.swift */; };
 		B9EDD1B029FE3D50004A9272 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9EDD1AF29FE3D50004A9272 /* DataManager.swift */; };
 		B9F1D47529F9428A00DE7D84 /* CalendarLineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F1D47429F9428A00DE7D84 /* CalendarLineViewModel.swift */; };
-		B9FABC0829F7D87700869C42 /* GoalItemPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FABC0729F7D87700869C42 /* GoalItemPageView.swift */; };
+		B9F29DB62A01168C00D6B350 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F29DB52A01168C00D6B350 /* UIButton+.swift */; };
+		B9F29DB82A0120BB00D6B350 /* GoalTaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F29DB72A0120BB00D6B350 /* GoalTaskCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -89,7 +90,8 @@
 		B9AB1BD329FFF3CC0078D3F0 /* ContainerItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerItemView.swift; sourceTree = "<group>"; };
 		B9EDD1AF29FE3D50004A9272 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		B9F1D47429F9428A00DE7D84 /* CalendarLineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarLineViewModel.swift; sourceTree = "<group>"; };
-		B9FABC0729F7D87700869C42 /* GoalItemPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalItemPageView.swift; sourceTree = "<group>"; };
+		B9F29DB52A01168C00D6B350 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
+		B9F29DB72A0120BB00D6B350 /* GoalTaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalTaskCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,10 +115,11 @@
 			isa = PBXGroup;
 			children = (
 				B969863829F108E900865AB2 /* GoalAddMainCell.swift */,
-				B969863C29F110E300865AB2 /* GoalDateCell.swift */,
 				B969863E29F114DE00865AB2 /* GoalColorCell.swift */,
+				B969863C29F110E300865AB2 /* GoalDateCell.swift */,
 				B969864029F1185300865AB2 /* GoalItemCell.swift */,
 				B965D07D29ED636000CCB9A1 /* HomeItemCell.swift */,
+				B9F29DB72A0120BB00D6B350 /* GoalTaskCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -134,7 +137,6 @@
 			children = (
 				B9EDD1B129FE4267004A9272 /* Views */,
 				B9EDD1B229FE4280004A9272 /* ViewModel */,
-				B9FABC0729F7D87700869C42 /* GoalItemPageView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -235,6 +237,7 @@
 				B96A3D1B29F9FBE4009F421D /* Date+.swift */,
 				B96A3D2129FA4010009F421D /* UIColor+.swift */,
 				B95C12F929FF790C009FDFA5 /* UITextView+Rx.swift */,
+				B9F29DB52A01168C00D6B350 /* UIButton+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -411,7 +414,6 @@
 				B941F0DF29FBF0D6008993D7 /* FailGoalView.swift in Sources */,
 				B965D06229ED0A6300CCB9A1 /* GoalView.swift in Sources */,
 				B965D04E29ED091A00CCB9A1 /* AppDelegate.swift in Sources */,
-				B9FABC0829F7D87700869C42 /* GoalItemPageView.swift in Sources */,
 				B90084DB29EEA5D5006D7E39 /* CalendarLineView.swift in Sources */,
 				B969863F29F114DE00865AB2 /* GoalColorCell.swift in Sources */,
 				B90084D629EEA136006D7E39 /* GoalAddView.swift in Sources */,
@@ -422,12 +424,14 @@
 				B94509E129F634DD008C0C97 /* GoalDetailView.swift in Sources */,
 				B96211F929F3AEC00026FE0B /* ViewModelType in Sources */,
 				B95C727E29F565C3003106B2 /* NoteAddViewModel.swift in Sources */,
+				B9F29DB82A0120BB00D6B350 /* GoalTaskCell.swift in Sources */,
 				B96A3D2229FA4010009F421D /* UIColor+.swift in Sources */,
 				B96A3D2029FA0A36009F421D /* BaseView.swift in Sources */,
 				B96A3D1C29F9FBE4009F421D /* Date+.swift in Sources */,
 				B9EDD1B029FE3D50004A9272 /* DataManager.swift in Sources */,
 				B965D07E29ED636000CCB9A1 /* HomeItemCell.swift in Sources */,
 				B96211F729F3AA010026FE0B /* GoalViewModel.swift in Sources */,
+				B9F29DB62A01168C00D6B350 /* UIButton+.swift in Sources */,
 				B90084C929EE1541006D7E39 /* Note.swift in Sources */,
 				B96A3D2429FA9BC2009F421D /* DotProgressBar.swift in Sources */,
 				B9AB1BD029FFE72B0078D3F0 /* Constants.swift in Sources */,

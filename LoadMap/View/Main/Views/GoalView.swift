@@ -13,20 +13,14 @@ import RxSwift
 import RxCocoa
 
 
-//TODO : items에서 complete == false 인 값 중 제일 앞에 있는 값 가져오기
-
-
-final class GoalView: UIViewController{
+//TODO :
+/// progressBar animation 적용
+/// 진행중인 것과 예정인 것 나누기 
+final class GoalView: UITableViewController{
     
     private let bag = DisposeBag()
     
     private let viewModel: GoalViewModel
-    
-    private let tableView = UITableView().then{
-        $0.separatorStyle = .none
-        $0.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 100, right: 10)
-        $0.register(HomeItemCell.self, forCellReuseIdentifier: "goalItemCell")
-    }
     
     private let addButton = UIButton().then{
         var config = UIButton.Configuration.filled()
@@ -47,9 +41,8 @@ final class GoalView: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.isHidden = true
-        view.backgroundColor = .white
-        
+
+        attribute()
         bind(GoalViewModel())
         layout()
     }
@@ -71,22 +64,9 @@ extension GoalView{
             })
             .disposed(by: bag)
         
-        //테이블뷰 구현
         output.cellData
-            .drive(tableView.rx.items(cellIdentifier: "goalItemCell",cellType: HomeItemCell.self)){row,data,cell in
-                
-                let completedCount = data.items.filter{
-                    $0.itemComplete == true
-                }.count
-                
-                let totalCount = data.items.count
-                
-                cell.setData(data)
-                cell.progressValue(completedCount, totalCount)
-                self.viewModel.configureCell(cell, at: row)
-            }
+            .drive(tableView.rx.items(dataSource: VM.tableDataSource))
             .disposed(by: bag)
-        
         
         tableView.rx.modelSelected(Goal.self)
             .bind(onNext: {
@@ -96,22 +76,29 @@ extension GoalView{
             })
             .disposed(by: bag)
     }
-
+    
 }
 
 //MARK: - Layout
 extension GoalView{
+    
+    private func attribute(){
+        
+        navigationController?.navigationBar.isHidden = true
+        view.backgroundColor = .white
+        
+        tableView.delegate = nil
+        tableView.dataSource = nil
+        tableView.separatorStyle = .none
+        tableView.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 100, right: 10)
+        tableView.register(HomeItemCell.self, forCellReuseIdentifier: "goalItemCell")
+        
+    }
     private func layout(){
-        [tableView,addButton].forEach{
+        [addButton].forEach{
             view.addSubview($0)
         }
         
-        // 테이블뷰 오토레이아웃
-        tableView.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview().inset(20)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
-        }
         
         //글작성 버튼 오토레이아웃
         addButton.snp.makeConstraints{

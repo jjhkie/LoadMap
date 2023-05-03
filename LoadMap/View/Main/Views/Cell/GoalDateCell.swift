@@ -10,46 +10,51 @@ import SnapKit
 import Then
 import RxCocoa
 import RxSwift
+import FSCalendar
 
 
 
-class GoalDateCell: UITableViewCell{
+final class GoalDateCell: UITableViewCell{
     
     let bag = DisposeBag()
     
-    private lazy var baseView = BaseView(editEnable: false).then{
-        $0.emojiImage.image = UIImage(systemName: "calendar")
-        $0.emojiImage.tintColor = .orange
-        
-        $0.titleTextView.text = "기간"
-    }
-
-    private lazy var dateStackView = UIStackView().then{
+    private let containerStackView = UIStackView().then{
         $0.axis = .horizontal
-        $0.alignment = .leading
-        $0.spacing = 10
+        $0.spacing = 15
     }
     
-    let startDate = UIDatePicker().then{
+    private let emojiImage = UIImageView().then{
+        $0.image = Constants.Images.calendarImage
+        $0.tintColor = .orange
+    }
+    
+    private let titleLabel = UILabel().then{
+        $0.text = "기간"
+        $0.font = Constants.Fonts.topItem
+        
+    }
+    
+    
+    let dayButton = UIButton().then{
+        $0.setTitle("하루", for: .normal)
+        $0.configuration = $0.fillGray
+    }
+    
+    let peridButton = UIButton().then{
+        $0.setTitle("기간", for: .normal)
+        $0.configuration = $0.fillGray
+    }
+
+    private let containerView = UIView()
+    
+    private let oneDayCalendar = UIDatePicker().then{
         $0.locale = Locale(identifier: "ko-KR")
         $0.datePickerMode = .date
         $0.preferredDatePickerStyle = .compact
         $0.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        
     }
     
-    let dateCenterLine = UILabel().then{
-        $0.text = "~"
-        $0.textAlignment = .center
-        
-    }
-    
-    let endDate = UIDatePicker().then{
-        $0.locale = Locale(identifier: "ko-KR")
-        $0.datePickerMode = .date
-        $0.preferredDatePickerStyle = .compact
-        
-    }
+    let peridCalendar = FSCalendar()
     
     let freeSpace = UIView().then{
         $0.setContentHuggingPriority(.defaultLow, for: .horizontal)
@@ -70,49 +75,93 @@ class GoalDateCell: UITableViewCell{
 
 extension GoalDateCell{
     
-    func bind(_ VM: GoalAddViewModel){
-        startDate.rx.date
+    func reload() {
+        guard let tableView = superview as? UITableView, let indexPath = tableView.indexPath(for: self) else { return }
+        tableView.reloadRows(at: [indexPath], with: .none)
+    }
+    
+    func bind(viewmodel VM: GoalAddViewModel){
+        oneDayCalendar.rx.date
             .subscribe(onNext: {
-                print($0)
+                VM.startDateOnNext($0)
+                VM.endDateOnNext($0)
             })
             .disposed(by: bag)
-        startDate.rx.date
-            .bind(to: VM._startDate)
-            .disposed(by: bag)
         
-        endDate.rx.date
-            .bind(to: VM._endDate)
+        // 버튼 이벤트
+        dayButton.rx.tap
+            .subscribe(onNext: {
+                VM.dateButtonOnNext(true)
+            })
+            .disposed(by: bag)
+
+        peridButton.rx.tap
+            .subscribe(onNext: {
+                VM.dateButtonOnNext(false)
+            })
+            .disposed(by: bag)
+
+
+        VM._dateButton
+            .bind(onNext: {[weak self] in
+                guard let self = self else {return}
+                if $0{
+                    self.oneDayCalendar.isHidden = false
+                    self.peridCalendar.isHidden = true
+                    containerView.snp.updateConstraints{
+                        $0.height.equalTo(100)
+                    }
+                    self.reload()
+                }else{
+
+                    self.oneDayCalendar.isHidden = true
+                    self.peridCalendar.isHidden = false
+                    containerView.snp.updateConstraints{
+                        $0.height.equalTo(200)
+                    }
+                    self.reload()
+                }
+            })
             .disposed(by: bag)
     }
     
     private func layout(){
         
-        contentView.addSubview(baseView)
+        //제목 및 버튼을 담은 스택뷰
+        [emojiImage,titleLabel,dayButton,peridButton,freeSpace].forEach{
+            containerStackView.addArrangedSubview($0)
+        }
         
-        baseView.snp.makeConstraints{
+        emojiImage.snp.makeConstraints{
+            $0.width.height.equalTo(20)
+        }
+        
+        [oneDayCalendar,peridCalendar].forEach{
+            containerView.addSubview($0)
+        }
+        //contentView
+        [containerStackView,containerView].forEach{
+            contentView.addSubview($0)
+        }
+
+        containerStackView.snp.makeConstraints{
+            $0.leading.top.trailing.equalToSuperview().inset(UIEdgeInsets(top: 20, left: 5, bottom: 0, right: 0))
+        }
+        
+        containerView.snp.makeConstraints{
+            $0.leading.equalTo(titleLabel.snp.leading)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
+            $0.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.height.equalTo(200)
+        }
+        
+        oneDayCalendar.snp.makeConstraints{
+            $0.top.leading.equalToSuperview()
+        }
+        peridCalendar.snp.makeConstraints{
             $0.edges.equalToSuperview()
         }
-        
-        [startDate,dateCenterLine,endDate,freeSpace].forEach{
-            dateStackView.addArrangedSubview($0)
-        }
-        [dateStackView].forEach{
-            baseView.infoStackView.addArrangedSubview($0)
-        }
- 
-        
-
-        startDate.snp.makeConstraints{
-            $0.width.equalTo(100)
-        }
-        
-        endDate.snp.makeConstraints{
-            $0.width.equalTo(100)
-    
-        }
-        dateCenterLine.snp.makeConstraints{
-            $0.width.equalTo(10)
-            $0.height.equalToSuperview()
-        }
+      
     }
 }

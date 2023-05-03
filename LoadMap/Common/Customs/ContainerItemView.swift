@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Then
 
 final class ContainerItemView: UIView{
     
@@ -25,7 +26,9 @@ final class ContainerItemView: UIView{
         $0.font = Constants.Fonts.topItem
     }
     
-    private var itemContentView = UILabel()
+    var itemContentView = UILabel().then{
+        $0.numberOfLines = 0
+    }
     
     init(content : Goal, type : DetailViewType){
         self.data = content
@@ -48,9 +51,18 @@ extension ContainerItemView{
             topItemImage.image = Constants.Images.startImage
             topItemLabel.text = data.title
             itemContentView.text = data.content
-        case .status:
-            topItemImage.image = Constants.Images.statusImage
-            topItemLabel.text = "Status"
+        case .creation:
+            topItemImage.image = Constants.Images.creationImage
+            topItemLabel.text = "작성한 날짜"
+            itemContentView.text = "\(data.creationDate.basicFormatter)"
+            
+        case .due:
+            topItemImage.image = Constants.Images.dueImage
+            topItemLabel.text = "마감일"
+            itemContentView.text = "\(data.endDay.basicFormatter)"
+        case .tasks:
+            topItemImage.image = Constants.Images.tssksImage
+            topItemLabel.text = "업무"
         }
     }
     
@@ -61,7 +73,7 @@ extension ContainerItemView{
         }
         
         [topItemStackView,itemContentView].forEach{
-            self.addSubview($0)
+            addSubview($0)
         }
         
         topItemStackView.snp.makeConstraints{
@@ -73,8 +85,5 @@ extension ContainerItemView{
             $0.top.equalTo(topItemStackView.snp.bottom)
             $0.trailing.equalTo(topItemStackView.snp.trailing)
         }
-        
-
-        
     }
 }

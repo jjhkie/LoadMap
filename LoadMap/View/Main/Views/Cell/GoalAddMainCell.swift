@@ -21,7 +21,7 @@ final class GoalAddMainCell: UITableViewCell{
     private let descriptionPlaceHolder = "설명"
     
     private lazy var baseView = BaseView(editEnable: true).then{
-        $0.emojiImage.image = UIImage(systemName: "star")
+        $0.emojiImage.image = Constants.Images.startImage
         $0.emojiImage.tintColor = .brown
         
         $0.titleTextView.text = titlePlaceHolder
@@ -48,31 +48,39 @@ final class GoalAddMainCell: UITableViewCell{
 
 extension GoalAddMainCell{
     
-    func bind(_ VM: GoalAddViewModel){
+    func bind(viewmodel VM: GoalAddViewModel){
         
+        //제목 텍스트뷰 이벤트
+        /// 만약 텍스트의 색이 .lightGray이면서 placeHolder의 값과 같다면
+        /// 값이 없는 걸로 판단하고 "" 을 넣는다.
         baseView.titleTextView.rx.textWithBase
             .bind(onNext: {text, textView in
                 if text == self.titlePlaceHolder && textView.textColor == .lightGray{
-                    VM.titleText.onNext("")
+                    VM.titleOnNext("")
                 }else{
-                    VM.titleText.onNext(text)
+                    VM.titleOnNext(text)
                 }
             })
             .disposed(by: bag)
         
+        //설명 텍스트뷰 이벤트
+        /// 만약 텍스트의 색이 .lightGray이면서 placeHolder의 값과 같다면
+        /// 값이 없는 걸로 판단하고 "" 을 넣는다.
         descriptionTextField.rx.textWithBase
             .bind(onNext: {text, textView in
                 if text == self.descriptionPlaceHolder && textView.textColor == .lightGray{
-                    VM._descriptionText.onNext("")
+                    VM.descriptionOnNext("")
                 }else{
-                    VM._descriptionText.onNext(text)
+                    VM.descriptionOnNext(text)
                 }
             })
             .disposed(by: bag)
         
         
+        //커서를 줬을 때 
         baseView.titleTextView.rx.didBeginEditing
-            .subscribe(onNext: {
+            .subscribe(onNext: {[weak self] in
+                guard let self = self else { return }
                 if self.baseView.titleTextView.text == self.titlePlaceHolder{
                     self.baseView.titleTextView.text = ""
                     self.baseView.titleTextView.textColor = .black
@@ -81,7 +89,8 @@ extension GoalAddMainCell{
             .disposed(by: bag)
         
         baseView.titleTextView.rx.didEndEditing
-            .subscribe(onNext: {
+            .subscribe(onNext: {[weak self] in
+                guard let self = self else { return }
                 if self.baseView.titleTextView.text.isEmpty{
                     self.baseView.titleTextView.text = self.titlePlaceHolder
                     self.baseView.titleTextView.textColor = .lightGray
@@ -93,7 +102,8 @@ extension GoalAddMainCell{
         
         //[설명 텍스트뷰]에 커서를 뒀을 때 발생하는 이벤트
         descriptionTextField.rx.didBeginEditing
-            .subscribe(onNext: {
+            .subscribe(onNext: {[weak self] in
+                guard let self = self else { return }
                 if self.descriptionTextField.text == self.descriptionPlaceHolder{
                     self.descriptionTextField.text = ""
                     self.descriptionTextField.textColor = .black
@@ -103,19 +113,12 @@ extension GoalAddMainCell{
         
         //[설명 텍스트뷰]에 커서를 제거했을 때 발생하는 이벤트
         descriptionTextField.rx.didEndEditing
-            .subscribe(onNext: {
+            .subscribe(onNext: {[weak self] in
+                guard let self = self else { return }
                 if self.descriptionTextField.text.isEmpty{
                     self.descriptionTextField.text = self.descriptionPlaceHolder
                     self.descriptionTextField.textColor = .lightGray
                 }
-            })
-            .disposed(by: bag)
-        
-        
-        VM.selectedColor
-            .subscribe(onNext: {color in
-                
-                print(color.uiColor)
             })
             .disposed(by: bag)
     }

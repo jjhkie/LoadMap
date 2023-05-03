@@ -11,12 +11,12 @@ import Then
 import RxSwift
 import RxCocoa
 
-class GoalColorCell:UITableViewCell{
+final class GoalColorCell:UITableViewCell{
     
     private let bag = DisposeBag()
     
     private lazy var baseView = BaseView(editEnable: false).then{
-        $0.emojiImage.image = UIImage(systemName: "sparkles")
+        $0.emojiImage.image = Constants.Images.colorImage
         $0.emojiImage.tintColor = .brown
         
         $0.titleTextView.text = "색상"
@@ -27,11 +27,11 @@ class GoalColorCell:UITableViewCell{
         $0.axis = .horizontal
     }
     
-    let colorButton = UIColorWell().then{
+    private let colorButton = UIColorWell().then{
         $0.selectedColor = .black
     }
     
-    let freeView = UIView().then{
+    private let freeView = UIView().then{
         $0.setContentHuggingPriority(.defaultLow, for: .horizontal)
     }
     
@@ -48,28 +48,28 @@ class GoalColorCell:UITableViewCell{
 
 extension GoalColorCell{
     
-    func bind(_ VM: GoalAddViewModel){
-
+    func bind(viewmodel VM: GoalAddViewModel){
+        
         let colorObservable = colorButton.rx.controlEvent(.valueChanged)
             .map {
                 self.colorButton.selectedColor!.rgbValue
-                }
+            }
             .asObservable()
         
         colorObservable
-            .bind(to: VM.selectedColor)
+            .bind(to: VM._selectedColor)
             .disposed(by: bag)
-
+        
     }
     
     private func layout(){
         
-            contentView.addSubview(baseView)
+        contentView.addSubview(baseView)
         
         baseView.snp.makeConstraints{
             $0.edges.equalToSuperview()
         }
-
+        
         [colorButton,freeView].forEach{
             colorStackView.addArrangedSubview($0)
         }

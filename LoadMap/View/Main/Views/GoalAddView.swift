@@ -11,27 +11,33 @@ import Then
 import RxSwift
 import RxDataSources
 
+//TODO
+///item 추가 시 스크롤 자동으로 맨 밑으로 가도록 설정
+///키보드가 나왔을 때 위치 조정
+///추가된 Item의 cell 생성
+///추가된 tiem에 삭제 이벤트 구현
+///달력 오늘 날짜보다 뒤에 선택하는 걸 불가능하게 구현
 
 class GoalAddView:UIViewController{
     
     let bag = DisposeBag()
-    
+    deinit{
+        
+        print("GoalAddView   \(#function)")
+    }
     //뷰모델
     private let viewModel: GoalAddViewModel
     
-    
+    //초기화
     init(viewModel: GoalAddViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit{
-        print("종료되었습니다.")
-    }
+
     
     
     let tableView = UITableView().then{
@@ -39,12 +45,12 @@ class GoalAddView:UIViewController{
         $0.register(GoalDateCell.self, forCellReuseIdentifier: "dateCell")
         $0.register(GoalColorCell.self, forCellReuseIdentifier: "colorCell")
         $0.register(GoalItemCell.self, forCellReuseIdentifier: "itemCell")
+        $0.register(GoalTaskCell.self, forCellReuseIdentifier: "taskCell")
         $0.separatorInset = .zero
         $0.separatorStyle = .none
         $0.rowHeight = UITableView.automaticDimension
-        $0.estimatedRowHeight = 300.0
+        $0.estimatedRowHeight = 200
     }
-    
     
     
     override func viewDidLoad() {
@@ -63,11 +69,8 @@ class GoalAddView:UIViewController{
 //MARK: - Layout 및 UIUpdate.
 extension GoalAddView{
     
-    // tableView Cell 에 대한 설정
-    
     
     func bind(_ VM: GoalAddViewModel){
-        
         
         let input = GoalAddViewModel.Input()
         let output = VM.inOut(input: input)
@@ -75,14 +78,6 @@ extension GoalAddView{
         //TableView DataSource 구현
         output.tableData
             .drive(tableView.rx.items(dataSource: VM.tableViewDataSource()))
-            .disposed(by: bag)
-        
-        output.addPageModal
-            .emit(onNext: {
-                let view = GoalItemPageView()
-                view.bind(self.viewModel)
-                self.present(view, animated: true)
-            })
             .disposed(by: bag)
         
         output.emptyAlert
@@ -93,9 +88,10 @@ extension GoalAddView{
             .disposed(by: bag)
         
         output.successAdd
-            .emit(onNext: {
+            .emit(onNext: {[weak self] in
                 print("내용을 추가했습니다.")
-                //self.navigationController?.popViewController(animated: true)
+                guard let self = self else {return }
+                self.navigationController?.popViewController(animated: true)
             })
             .disposed(by: bag)
         
@@ -119,13 +115,9 @@ extension GoalAddView{
         self.navigationItem.rightBarButtonItem = addButton
     }
     @objc func addButton(){
-        
         viewModel.dataSave()
-        
-       
     }
 }
-
 
 
 

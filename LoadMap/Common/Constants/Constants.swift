@@ -16,11 +16,17 @@ struct Constants {
     
     struct Images{
         static let startImage = UIImage(systemName: "star")!
-        static let statusImage = UIImage(systemName: "playpause.fill")!
+        static let creationImage = UIImage(systemName: "playpause.fill")!
+        static let colorImage = UIImage(systemName: "sparkles")
+        static let dueImage = UIImage(systemName: "clock.badge.checkmark")
+        static let tssksImage = UIImage(systemName: "chart.bar.doc.horizontal")
+        static let calendarImage = UIImage(systemName: "calendar")
     }
 }
 
 enum DetailViewType{
     case title
-    case status
+    case creation
+    case due
+    case tasks
 }

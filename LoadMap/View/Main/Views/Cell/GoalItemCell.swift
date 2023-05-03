@@ -13,7 +13,7 @@ import RxCocoa
 
 class GoalItemCell: UITableViewCell{
     
-    private let bag = DisposeBag()
+    let bag = DisposeBag()
     
     private lazy var baseView = BaseView(editEnable: false).then{
         $0.emojiImage.image = UIImage(systemName: "list.bullet.clipboard")
@@ -23,24 +23,21 @@ class GoalItemCell: UITableViewCell{
         $0.titleTextView.text = "업무"
     }
     
-    var workArr: [String] = []
  
-    private let workTextPlaceHolder = "업무를 추가해주세요"
+    private let workTextPlaceHolder :String
     
-    private lazy var workTextView = UITextView().then{
+    var workTextView = UITextView().then{
         $0.isEditable = true
         $0.textColor = .lightGray
-        $0.text = workTextPlaceHolder
     }
     
-    private lazy var tableView = UITableView().then{
-        $0.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        workTextPlaceHolder = "업무를 추가해주세요"
+        workTextView.text = workTextPlaceHolder
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
-        baseView.backgroundColor = .red
+        bind()
         layout()
         
     }
@@ -51,9 +48,16 @@ class GoalItemCell: UITableViewCell{
 }
 
 extension GoalItemCell{
-   
-    func bind(_ VM: GoalAddViewModel){
+    func scrollBottom() {
+        guard let tableView = superview as? UITableView else { return }
         
+        let lastIndex = tableView.numberOfRows(inSection: 0) - 1
+        
+        let lastIndexPat = IndexPath(row: lastIndex, section: 0)
+        
+        tableView.scrollToRow(at: lastIndexPat, at: .bottom, animated: true)
+    }
+    func bind(){
         workTextView.rx.didEndEditing
             .subscribe(onNext: {[weak workTextView] in
                 guard let textView = workTextView else {return}
@@ -77,47 +81,24 @@ extension GoalItemCell{
             .disposed(by: bag)
         
         //textField enter 이벤트
+ 
+    }
+   
+    func bind(viewmodel VM: GoalAddViewModel){
+        
         workTextView.rx.didChange
             .subscribe(onNext: {[weak workTextView] in
                 guard let textView = workTextView else {return}
                 
                 if textView.text.last == "\n" && !textView.text.isEmpty {
-                    self.workArr.append(textView.text)
-                    VM.worksData.accept(self.workArr)
+   
                     textView.text = self.workTextPlaceHolder
                     textView.textColor = .lightGray
-                    textView.resignFirstResponder()
+                    //textView.resignFirstResponder()
                 }
             })
             .disposed(by: bag)
-        
-        VM.worksData.asDriver()
-            .drive(tableView.rx.items(cellIdentifier: "cell",cellType: UITableViewCell.self)){view,data,cell in
-                cell.textLabel?.text = data
-            }
-            .disposed(by: bag)
-        
-        VM.worksData.asObservable()
-                  .subscribe(onNext: { [weak tableView] items in
-                      guard let tableView = tableView else { return }
-                      let rowHeight: CGFloat = 50.0 // 각 셀의 높이
-                      let maxHeight: CGFloat = rowHeight * CGFloat(items.count) // 최대 높이
-                      print(maxHeight)
-                      tableView.snp.updateConstraints { make in
-                          make.height.equalTo( maxHeight)
-                      }
-                      self.baseView.snp.updateConstraints{
-                          $0.height.equalTo(300 + maxHeight)
-                          
-                      }
-                      self.baseView.infoStackView.snp.updateConstraints{
-                          $0.height.equalTo(100 + maxHeight)
-                      }
-                      self.baseView.backgroundColor = .blue
-                      self.baseView.infoStackView.backgroundColor = .red
 
-                  })
-                  .disposed(by: bag)
     }
     
     
@@ -126,25 +107,14 @@ extension GoalItemCell{
         
         baseView.snp.makeConstraints{
             $0.edges.equalToSuperview()
-            $0.height.equalTo(300)
+
         }
         
         
         baseView.infoStackView.addArrangedSubview(workTextView)
-        //baseView.addSubview(tableView)
-        baseView.infoStackView.addArrangedSubview(tableView)
-        baseView.infoStackView.snp.makeConstraints{
-            $0.height.equalTo(100)
-        }
-  
-        tableView.snp.makeConstraints{
-//            $0.top.equalTo(baseView.infoStackView.snp.bottom)
-//            $0.leading.equalTo(baseView.infoStackView.snp.leading)
-//            $0.bottom.equalToSuperview()
-//            $0.trailing.equalToSuperview()
-            $0.height.equalTo(0)
-        }
 
-        
+        baseView.infoStackView.snp.makeConstraints{
+            $0.height.equalTo(50)
+        }
     }
 }

@@ -41,12 +41,13 @@ class GoalColor:Object{
       }
 }
 
+
+
+
 class GoalItem:Object{
     @objc dynamic var itemName: String = ""
     @objc dynamic var itemComplete : Bool = false
 }
-
-
 
 //TableView 구현 데이터 타입
 enum CellType{
@@ -54,6 +55,7 @@ enum CellType{
     case color
     case setDay
     case works
+    case task(message: String)
     
 
     var cellName: String?{
@@ -66,6 +68,8 @@ enum CellType{
             return "기간"
         case .works:
             return "할일"
+        case .task(message: _):
+            return nil
         }
     }
 }
@@ -83,3 +87,4 @@ extension TableCellData: SectionModelType{
         self.items = items
     }
 }
+
