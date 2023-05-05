@@ -82,6 +82,15 @@ final class TaskCell: UICollectionViewCell{
             config.attributedTitle = titleAttr
         $0.configuration = config
     }
+    
+    private let detailButton = UIButton().then{
+        var config = UIButton.Configuration.filled()
+        config.titlePadding = 10
+        var titleAttr = AttributedString.init("상세")
+            titleAttr.font = .systemFont(ofSize: 8.0, weight: .heavy)
+            config.attributedTitle = titleAttr
+        $0.configuration = config
+    }
   
     
     //>> End
@@ -126,15 +135,33 @@ final class TaskCell: UICollectionViewCell{
 //MARK: - Layout
 extension TaskCell{
     func bind(_ VM: MainViewModel){
+        
+        //업무 완료 클릭 시 이벤트
         nextButton.rx.controlEvent(.touchUpInside)
             .bind(onNext: {[weak self] in
                 guard let self = self else {return }
                 VM.nextButtonConfigure(self.cellId!)
             })
             .disposed(by: bag)
+        
+        //상세 버튼 클릭 시 이동 이벤트
+        detailButton.rx.controlEvent(.touchUpInside)
+            .bind(onNext: {[weak self] in
+                guard let self = self else {return}
+                VM.itemIdToss(self.cellId!)
+            })
+            .disposed(by: bag)
     }
     
     func setView(_ data: Goal){
+        contentView.layer.masksToBounds = false
+        containerView.backgroundColor = .white
+        contentView.layer.masksToBounds = false
+        contentView.layer.shadowOffset = CGSize(width: 20, height: 15)
+        contentView.layer.shadowOpacity = 0.2
+        contentView.layer.shadowRadius = 10
+        contentView.layer.shadowColor = UIColor.lightGray.cgColor
+        
         cellId = data.id
         //Start
         startCircle.layer.borderColor = data.boxColor?.uiColor.cgColor
@@ -154,8 +181,8 @@ extension TaskCell{
         let completeData = taskCount.filter{
             $0.itemComplete == true
         }
-        
         progressValue(completeData.count, taskCount.count)
+        progressBar.tintColor = data.boxColor?.uiColor
         
         //End
         endCircle.backgroundColor = data.boxColor?.uiColor
@@ -206,7 +233,7 @@ extension TaskCell{
         
         lineContainerView.addSubview(infoLine)
         
-        [nextButton].forEach{
+        [nextButton,detailButton].forEach{
             buttonView.addSubview($0)
         }
         
@@ -239,10 +266,19 @@ extension TaskCell{
             $0.top.bottom.equalToSuperview()
             $0.trailing.equalToSuperview()
         }
+        
+        detailButton.snp.makeConstraints{
+            $0.width.height.equalTo(30)
+            $0.trailing.equalToSuperview()
+            $0.centerY.equalToSuperview()
+        }
         nextButton.snp.makeConstraints{
             $0.width.height.equalTo(30)
-            $0.center.equalToSuperview()
+            $0.trailing.equalTo(detailButton.snp.leading).offset(-10)
+            $0.centerY.equalToSuperview()
         }
+        
+
 
 
         
@@ -272,7 +308,7 @@ extension TaskCell{
         contentView.addSubview(containerView)
         
         containerView.snp.makeConstraints{
-            $0.edges.equalToSuperview()
+            $0.edges.equalToSuperview().inset(10)
         }
     }
 }

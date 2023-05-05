@@ -42,7 +42,7 @@ extension HomeHeaderView{
     }
     
     func bind(_ viewModel: MainViewModel){
-        prepareButton.rx.tap
+        prepareButton.rx.controlEvent(.touchUpInside)
             .subscribe(onNext: {[weak self] in
                 guard let self = self else {return}
                 if self.prepareButton.tag == 0{
@@ -67,7 +67,7 @@ extension HomeHeaderView{
         prepareButton.snp.makeConstraints{
             $0.width.height.equalTo(20)
             $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.trailing.equalToSuperview().inset(20)
         }
     }
 }

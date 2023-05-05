@@ -32,7 +32,8 @@ final class MainViewModel{
     let _prepareTask = PublishSubject<Void>()
     let _prepareNote = PublishSubject<Void>()
     
-    let expandedSections = BehaviorRelay<[Bool]>(value: [true, true])//remove
+    //task Detail 버튼 이벤트
+    let _detailTapped = PublishSubject<Goal.ID>()
     
     
 }
@@ -51,6 +52,7 @@ extension MainViewModel{
         let cellData : Driver<[MainModel]>
         let taskSignal : Signal<Void>
         let noteSignal : Signal<Void>
+        let detailSignal : Signal<Goal.ID>
         
     }
     
@@ -90,7 +92,8 @@ extension MainViewModel{
         return Output(
             cellData:_cellData.asDriver(onErrorJustReturn: []),
             taskSignal: _prepareTask.asSignal(onErrorJustReturn: Void()),
-            noteSignal: _prepareNote.asSignal(onErrorJustReturn: Void())
+            noteSignal: _prepareNote.asSignal(onErrorJustReturn: Void()),
+            detailSignal: _detailTapped.asSignal(onErrorJustReturn: "")
         )
     }
     
@@ -101,6 +104,10 @@ extension MainViewModel{
 
 //MARK: - Function
 extension MainViewModel{
+    
+    func itemIdToss(_ id: Goal.ID){
+        self._detailTapped.onNext(id)
+    }
     
     func nextButtonConfigure(_ id: Goal.ID){
         if let data = DataManager.shared.fetchData(type: Goal.self).filter(NSPredicate(format: "id = %@", id)).first{
@@ -122,25 +129,6 @@ extension MainViewModel{
         
     }
     
-    //버튼 눌렀을 때 업부에 대한 아이템 완료로 바꾸기
-    func configureCell(_ cell: HomeItemCell, at index: Int) {
-        cell.completeButtonTapped
-            .subscribe(onNext: {
-                
-                //let data = self.objectData[index]
-                //                try! self.realm.write{
-                //                    data.items.filter{
-                //                        $0.itemComplete == false
-                //                    }.first?.itemComplete = true
-                //
-                //                    if data.items.last?.itemComplete == true{
-                //                        data.completion = true
-                //                    }
-                //                }
-            })
-            .disposed(by: cell.bag)
-    }
-    
     func collectionViewDataSource() -> RxCollectionViewSectionedReloadDataSource<MainModel>{
         return RxCollectionViewSectionedReloadDataSource <MainModel>(
             configureCell: { dataSource, collectionView, indexPath, item in
@@ -151,8 +139,10 @@ extension MainViewModel{
                     cell.bind(self)
                     return cell
                 case .notesItem(value: let value):
-                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-                    cell.backgroundColor = .blue
+                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "memoCell", for: indexPath) as? MemoCell else {return UICollectionViewCell()}
+                    
+                    cell.setView()
+                    
                     return cell
                 }
             },configureSupplementaryView: {dataSource,collectionView,kind,indexPath -> UICollectionReusableView in
@@ -172,24 +162,7 @@ extension MainViewModel{
         )
     }
     
-    func tableDataSource() -> RxTableViewSectionedReloadDataSource<SectionModel<Bool, Goal>>{
-        return  RxTableViewSectionedReloadDataSource<SectionModel<Bool, Goal>>(configureCell:{(dataSource,tableView,indexPath, item) in
-            let cell = tableView.dequeueReusableCell(withIdentifier: "goalItemCell", for: indexPath) as! HomeItemCell
-            
-            let isExpanded = self.expandedSections.value[indexPath.section]
-            cell.contentView.isHidden = !isExpanded
-            cell.setData(item)
-            //cell.textLabel?.text = item.title
-            return cell
-        },titleForHeaderInSection: { dataSource, index in
-            if dataSource[index].model == true{
-                return "현재 진행 중인 업무 \(dataSource[index].items.count)"
-            }else{
-                return "진행 예정 업무 \(dataSource[index].items.count)"
-            }
-        })
-    }
-    
+
     
     
 }

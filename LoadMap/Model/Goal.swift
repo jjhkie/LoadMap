@@ -48,6 +48,7 @@ class GoalColor:Object{
 class GoalItem:Object{
     @objc dynamic var itemName: String = ""
     @objc dynamic var itemComplete : Bool = false
+    @objc dynamic var itemCompleteDate : Date?
 }
 
 //TableView 구현 데이터 타입

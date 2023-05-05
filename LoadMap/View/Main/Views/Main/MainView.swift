@@ -28,6 +28,7 @@ final class MainView: UIViewController{
     
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout()).then{
         $0.register(TaskCell.self, forCellWithReuseIdentifier: "taskCell")
+        $0.register(MemoCell.self, forCellWithReuseIdentifier: "memoCell")
         $0.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")// remove
         $0.register(HomeHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         $0.isScrollEnabled = true
@@ -96,8 +97,17 @@ extension MainView{
             })
             .disposed(by: bag)
         
-        collectionView.rx.setDelegate(self).disposed(by: bag)
-
+        output.detailSignal
+            .emit(onNext: {id in
+                if let navigation = self.navigationController{
+                    navigation.tabBarController?.tabBar.isHidden = true
+                    let viewModel = TaskDetailViewModel(id: id)
+                    let view = TaskDetailView(viewModel: viewModel)
+                    
+                    self.navigationController?.pushViewController(view, animated: true)
+                }
+            })
+            .disposed(by: bag)
 
     }
 }
@@ -118,36 +128,10 @@ extension MainView{
         
         //컬렉션뷰 오토레이아웃
         collectionView.snp.makeConstraints{
-            $0.edges.equalTo(view.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 20))
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
             
         }
 
     }
 }
 
-extension MainView: UITableViewDelegate{
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        let view = GoalHeaderView()
-        view.button.rx.tap.subscribe(onNext: {
-
-            var value = self.viewModel.expandedSections.value
-            value[section] = !value[section]
-            self.viewModel.expandedSections.accept(value)
-            tableView.beginUpdates()
-            tableView.reloadData()
-
-            
-            tableView.endUpdates()
-
-        })
-        .disposed(by: bag)
-        view.layoutIfNeeded()
-        return view
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let object = viewModel.expandedSections.value
-        return  object[indexPath.section] ? UITableView.automaticDimension : 0.0
-    }
-}

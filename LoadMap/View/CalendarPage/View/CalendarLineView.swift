@@ -12,6 +12,12 @@ import Then
 import RxCocoa
 import RxSwift
 
+//TODO
+/// note 와 task 가 전부 나오도록 설정
+/// dot 개수에 최대 몇개까지 나오게 할 수 있는 지 확인 후
+/// 개수 제한이 너무 적다면 collectionView로 직접 제작
+/// 날짜 클릭 시 날짜에 해당하는 task 와 note가 나오고 시간으로 정렬
+
 class CalendarLineView: UIViewController{
     
     let viewmodel = CalendarLineViewModel()
@@ -203,11 +209,13 @@ extension CalendarLineView: FSCalendarDataSource{
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         
         print(date.koreanTime)
-        return viewmodel.objectData.filter{
-            
-            return  $0.startDay <= date.koreanTime && $0.endDay >= date.koreanTime
-            
-        }.count
+//        return viewmodel.objectData.filter{
+//
+//            return  $0.startDay <= date.koreanTime && $0.endDay >= date.koreanTime
+//
+//        }.count
+        
+        return 10
     }
 }
 
