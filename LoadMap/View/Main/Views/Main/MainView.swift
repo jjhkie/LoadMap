@@ -17,29 +17,28 @@ import RxCocoa
 /// progressBar animation 적용
 /// 진행중인 것과 예정인 것 나누기
 /// today 정보 다 가져오기[ Task , Note 로 구분 ].
-/// horizontal scroll이 가능하도록 설정
+/// CollectionView horizontal scroll이 가능하도록 설정
 /// 
-final class GoalView: UIViewController{
+final class MainView: UIViewController{
     
     private let bag = DisposeBag()
     
-    private let viewModel: GoalViewModel
+    private let viewModel: MainViewModel
     
-    //글 추가 작성 버튼 
-    private let addButton = UIButton().then{
-        var config = UIButton().fillCustomButtony
-        config.image = UIImage(systemName: "plus")
-        config.imagePadding = 10
-        $0.configuration = config
-    }
     
-    private let tableView = UITableView().then{ tableView in
-        tableView.backgroundColor = .lightGray
-        tableView.separatorStyle = .none
-        //tableView.layoutMargins = UIEdgeInsets(top: 10, left: 30, bottom: 100, right: 30)
-        tableView.register(HomeItemCell.self, forCellReuseIdentifier: "goalItemCell")
-    }
-    init(viewModel: GoalViewModel) {
+    private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout()).then{
+        $0.register(TaskCell.self, forCellWithReuseIdentifier: "taskCell")
+        $0.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")// remove
+        $0.register(HomeHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        $0.isScrollEnabled = true
+        $0.showsHorizontalScrollIndicator = false
+        $0.showsVerticalScrollIndicator = false
+        $0.alwaysBounceVertical = false//vertical 스크롤만 막기 
+}
+    
+
+
+    init(viewModel: MainViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -47,6 +46,7 @@ final class GoalView: UIViewController{
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.tabBarController?.tabBar.isHidden = false
@@ -61,74 +61,71 @@ final class GoalView: UIViewController{
 }
 
 //MARK: - Bind
-extension GoalView{
-    func bind(_ VM: GoalViewModel){
-        let input = GoalViewModel.Input()
+extension MainView{
+    func bind(_ VM: MainViewModel){
+        let input = MainViewModel.Input()
         let output = VM.inOut(input: input)
         
         
-        //추가 버튼 클릭 이벤트
-        //클릭 시 AddPage로 이동
-        addButton.rx.tap
-            .subscribe(onNext: {
+
+        
+        output.cellData
+            .drive(collectionView.rx.items(dataSource: VM.collectionViewDataSource()))
+            .disposed(by: bag)
+        
+        output.taskSignal
+            .emit(onNext: {
                 if let navigation = self.navigationController{
                     navigation.tabBarController?.tabBar.isHidden = true
                     let view = GoalAddView(viewModel: GoalAddViewModel())
                     self.navigationController?.pushViewController(view, animated: true)
                 }
-               
             })
             .disposed(by: bag)
         
-        output.cellData
-            .drive(tableView.rx.items(dataSource: VM.tableDataSource()))
-            .disposed(by: bag)
-        
-        tableView.rx.setDelegate(self)
-            .disposed(by: bag)
-        
-        tableView.rx.modelSelected(Goal.self)
-            .bind(onNext: {_ in
+        output.noteSignal
+            .emit(onNext: {
                 
-                print(#function)
-                //self.present(view, animated: true)
+                if let navigation = self.navigationController{
+                    navigation.tabBarController?.tabBar.isHidden = true
+                    let viewModel = NoteAddView()
+                    viewModel.selectedDate = Date()
+                    self.navigationController?.pushViewController(viewModel, animated: true)
+                }
+
             })
             .disposed(by: bag)
+        
+        collectionView.rx.setDelegate(self).disposed(by: bag)
+
+
     }
 }
 
 //MARK: - Layout
-extension GoalView{
+extension MainView{
     
     private func attribute(){
         
         navigationController?.navigationBar.isHidden = true
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .white
         
     }
     private func layout(){
-        [tableView,addButton].forEach{
+        [collectionView].forEach{
             view.addSubview($0)
         }
         
-        
-        //글작성 버튼 오토레이아웃
-        addButton.snp.makeConstraints{
-            $0.width.height.equalTo(50)
-            $0.bottom.trailing.equalTo(view.safeAreaLayoutGuide).offset(-10)
-        }
-        
-        //테이블뷰 오토레이아웃
-        tableView.snp.makeConstraints{
-            $0.edges.equalTo(view.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20))
+        //컬렉션뷰 오토레이아웃
+        collectionView.snp.makeConstraints{
+            $0.edges.equalTo(view.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 20))
             
         }
-        
 
     }
 }
 
-extension GoalView: UITableViewDelegate{
+extension MainView: UITableViewDelegate{
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let view = GoalHeaderView()

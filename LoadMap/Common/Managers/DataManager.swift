@@ -27,4 +27,33 @@ class DataManager{
             realm.add(object)
         }
     }
+    
+    func updateData<T:Object>(object: T, with dictionary: [String: Any?]) {
+            try! realm.write {
+                for (key, value) in dictionary {
+                    if let value = value {
+                        object.setValue(value, forKey: key)
+                    }
+                }
+            }
+        }
+    
+    //목표 아이템 수정하기
+    func updateGoalItem(item: GoalItem, with dictionary: [String: Any?]) {
+        try! realm.write {
+            for (key, value) in dictionary {
+                if let value = value {
+                    switch key {
+                    case "itemName":
+                        item.itemName = value as! String
+                    case "itemComplete":
+                        item.itemComplete = value as! Bool
+                    default:
+                        break
+                    }
+                }
+            }
+        }
+    }
 }
+

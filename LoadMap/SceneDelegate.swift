@@ -63,7 +63,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             var viewController: UIViewController {
                 switch self {
                 case .home:
-                    return UINavigationController(rootViewController: GoalView(viewModel: GoalViewModel()))
+                    return UINavigationController(rootViewController: MainView(viewModel: MainViewModel()))
                 case .note:
                     return UINavigationController(rootViewController: NoteView())
                 case .calendar:

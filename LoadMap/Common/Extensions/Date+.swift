@@ -63,7 +63,7 @@ extension Date{
     
     
     func endOfDay() -> Date{
-        var calendar = Calendar.current
+        let calendar = Calendar.current
         return calendar.date(bySettingHour: 23, minute: 59, second: 59, of: self)!
     }
 }
