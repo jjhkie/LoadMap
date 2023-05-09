@@ -26,13 +26,11 @@ class NoteView: UIViewController{
         $0.register(FSCalendarCell.self, forCellReuseIdentifier: "Cell")
         $0.scope = .week
         $0.backgroundColor = .white
-        
     }
     
     private let tableView = UITableView().then{
         $0.register(NoteCell.self, forCellReuseIdentifier: "noteCell")
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,13 +98,13 @@ extension NoteView{
     }
     
     @objc func addButtonPressed(){
-        let view = NoteAddView()
-        if let selectedDate = calendar.selectedDate{
-            view.selectedDate = selectedDate
-        }else{
-            view.selectedDate = Date()
-        }
-        self.navigationController?.pushViewController(view, animated: true)
+//        let view = NoteAddView()
+//        if let selectedDate = calendar.selectedDate{
+//            view.selectedDate = selectedDate
+//        }else{
+//            view.selectedDate = Date()
+//        }
+//        self.navigationController?.pushViewController(view, animated: true)
     }
     
     private func layout(){

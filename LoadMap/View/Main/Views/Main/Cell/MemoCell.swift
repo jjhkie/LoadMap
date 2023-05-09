@@ -39,12 +39,30 @@ final class MemoCell: UICollectionViewCell{
 
 extension MemoCell{
     
-    func setView(){
-        priorityView.backgroundColor = .red
+    func setView(_ data: Note){
         
-        contentLabel.text = "abcdfeakljgeklgjaklgjwkgerlg"
+        switch data.important{
+        case "low":
+            priorityView.backgroundColor = .green
+        case "middle":
+            priorityView.backgroundColor = .blue
+        case "high":
+            priorityView.backgroundColor = .red
+        default:
+            break
+        }
         
-        timeBefore.text = "1시간전"
+        
+        contentLabel.text = data.noteContent
+        
+        ///작성 시간 출력
+        let time = Date().koreanTime.dayOfTime - data.noteDate.dayOfTime
+        
+        if time == 0{
+            timeBefore.text = "방금 전"
+        }else{
+            timeBefore.text = "\(time)시간 전"
+        }
     }
     
     private func layout(){

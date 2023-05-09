@@ -1,48 +1,35 @@
 //
-//  MainView+Layout.swift
+//  TaskDetailLayout.swift
 //  LoadMap
 //
-//  Created by 김진혁 on 2023/05/04.
+//  Created by 김진혁 on 2023/05/08.
 //
 
 import UIKit
 
 
-extension MainView{
-    static func collectionViewLayout() -> UICollectionViewCompositionalLayout{
+extension TaskDetailView{
+    
+    static func taskDetailViewLayout() -> UICollectionViewCompositionalLayout{
         UICollectionViewCompositionalLayout{ section, env -> NSCollectionLayoutSection? in
             switch section{
             case 0:
                 let itemSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
-                    heightDimension: .fractionalHeight(1)
+                    heightDimension: .fractionalHeight(0.25)
                 )
                 
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
                 let groupSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
-                    heightDimension: .fractionalHeight(0.4)
+                    heightDimension: .fractionalHeight(0.2)
                 )
                 
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 
-            
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .paging
-                
-                let headerSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1),
-                    heightDimension: .absolute(50))
-                
-                let header = NSCollectionLayoutBoundarySupplementaryItem(
-                    layoutSize: headerSize,
-                    elementKind: UICollectionView.elementKindSectionHeader,
-                    alignment: .top)
-                
-                
-                 
-                section.boundarySupplementaryItems = [header]
                 
                 return section
             case 1:
@@ -99,5 +86,3 @@ extension MainView{
         }
     }
 }
-
-

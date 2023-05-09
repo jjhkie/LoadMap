@@ -11,9 +11,10 @@ import RealmSwift
 
 class Note: Object{
     
-    @objc dynamic var noteDate : String?
-    @objc dynamic var priority : String?
-    @objc dynamic var noteContent: String?
+    @objc dynamic var noteDate : Date = Date()
+    @objc dynamic var priority : String = "low"
+    @objc dynamic var noteContent: String = ""
+    @objc dynamic var important: String = ""
 }
 
 

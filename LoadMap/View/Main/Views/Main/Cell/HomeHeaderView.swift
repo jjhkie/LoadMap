@@ -13,6 +13,8 @@ final class HomeHeaderView:UICollectionReusableView{
     
     private let bag = DisposeBag()
     
+    var headerTag: Int?
+    
     private let mainLabel = UILabel().then{
         $0.font = .dovemayoFont(ofSize: 16)
     }
@@ -20,6 +22,11 @@ final class HomeHeaderView:UICollectionReusableView{
     private let prepareButton = UIButton().then{
         $0.configuration = $0.fillCustomButtony
         $0.setImage(UIImage(systemName: "pencil"), for: .normal)
+    }
+    
+    private let pageControl = UIPageControl().then{
+        $0.hidesForSinglePage = true
+        
     }
     
     
@@ -38,10 +45,21 @@ extension HomeHeaderView{
     
     func setDate(_ labelText: String,_ section: Int){
         mainLabel.text = labelText
+        headerTag = section
         prepareButton.tag = section
     }
     
     func bind(_ viewModel: MainViewModel){
+        
+        if headerTag == 0{
+            pageControl.numberOfPages = viewModel.taskDataCount
+        }else{
+            pageControl.numberOfPages = (viewModel.noteDataCount / 3) + 1
+        }
+       
+        pageControl.pageIndicatorTintColor = .darkGray
+        pageControl.currentPageIndicatorTintColor = .red
+        pageControl.currentPage = 0
         prepareButton.rx.controlEvent(.touchUpInside)
             .subscribe(onNext: {[weak self] in
                 guard let self = self else {return}
@@ -55,7 +73,7 @@ extension HomeHeaderView{
     }
     
     private func layout(){
-        [mainLabel,prepareButton].forEach{
+        [mainLabel,prepareButton,pageControl].forEach{
             addSubview($0)
         }
         
@@ -68,6 +86,11 @@ extension HomeHeaderView{
             $0.width.height.equalTo(20)
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(20)
+        }
+        
+        pageControl.snp.makeConstraints{
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(mainLabel.snp.bottom)
         }
     }
 }

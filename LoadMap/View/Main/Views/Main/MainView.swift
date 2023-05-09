@@ -11,15 +11,14 @@ import Then
 import RealmSwift
 import RxSwift
 import RxCocoa
+import RxDataSources
 
 
 //TODO :
 /// progressBar animation 적용
-/// 진행중인 것과 예정인 것 나누기
 /// today 정보 다 가져오기[ Task , Note 로 구분 ].
-/// CollectionView horizontal scroll이 가능하도록 설정
 /// 
-final class MainView: UIViewController{
+final class MainView: UIViewController, UIScrollViewDelegate{
     
     private let bag = DisposeBag()
     
@@ -68,10 +67,8 @@ extension MainView{
         let output = VM.inOut(input: input)
         
         
-
-        
         output.cellData
-            .drive(collectionView.rx.items(dataSource: VM.collectionViewDataSource()))
+            .drive(collectionView.rx.items(dataSource: collectionViewDataSource()))
             .disposed(by: bag)
         
         output.taskSignal
@@ -84,14 +81,15 @@ extension MainView{
             })
             .disposed(by: bag)
         
+        ///메모 작성 페이지로 이동
+        ///오늘 날짜로만 작성
         output.noteSignal
             .emit(onNext: {
                 
                 if let navigation = self.navigationController{
                     navigation.tabBarController?.tabBar.isHidden = true
-                    let viewModel = NoteAddView()
-                    viewModel.selectedDate = Date()
-                    self.navigationController?.pushViewController(viewModel, animated: true)
+                    let view = NoteAddView(selectedDate: Date())
+                    self.navigationController?.pushViewController(view, animated: true)
                 }
 
             })
@@ -108,6 +106,8 @@ extension MainView{
                 }
             })
             .disposed(by: bag)
+        
+        
 
     }
 }
@@ -117,7 +117,7 @@ extension MainView{
     
     private func attribute(){
         
-        navigationController?.navigationBar.isHidden = true
+       
         view.backgroundColor = .white
         
     }
@@ -129,9 +129,44 @@ extension MainView{
         //컬렉션뷰 오토레이아웃
         collectionView.snp.makeConstraints{
             $0.edges.equalTo(view.safeAreaLayoutGuide)
-            
         }
 
     }
 }
 
+//MARK: - DataSource Func
+extension MainView{
+    
+    func collectionViewDataSource() -> RxCollectionViewSectionedReloadDataSource<MainModel>{
+        return RxCollectionViewSectionedReloadDataSource <MainModel>(
+            configureCell: { dataSource, collectionView, indexPath, item in
+                switch dataSource[indexPath]{
+                case .tasksItem(value: let value):
+                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "taskCell", for: indexPath) as? TaskCell else { return UICollectionViewCell()}
+                    cell.setView(value)
+                    cell.bind(self.viewModel)
+                    return cell
+                case .notesItem(value: let value):
+                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "memoCell", for: indexPath) as? MemoCell else {return UICollectionViewCell()}
+                    
+                    cell.setView(value)
+                    
+                    return cell
+                }
+            },configureSupplementaryView: {dataSource,collectionView,kind,indexPath -> UICollectionReusableView in
+                switch kind{
+                case UICollectionView.elementKindSectionHeader:
+                    guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? HomeHeaderView else { return UICollectionReusableView()}
+                    
+                    let text = dataSource.sectionModels[indexPath.section].title
+                    header.setDate(text,indexPath.section)
+                    header.bind(self.viewModel)
+                   
+                    return header
+                default:
+                    fatalError()
+                }
+            }
+        )
+    }
+}

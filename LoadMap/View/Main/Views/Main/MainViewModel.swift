@@ -35,6 +35,15 @@ final class MainViewModel{
     //task Detail 버튼 이벤트
     let _detailTapped = PublishSubject<Goal.ID>()
     
+    //taskItem Count
+    var taskDataCount: Int{
+        return taskData.count
+    }
+    
+    //noteItem Count
+    var noteDataCount: Int{
+        return noteData.count
+    }
     
 }
 
@@ -110,6 +119,7 @@ extension MainViewModel{
     }
     
     func nextButtonConfigure(_ id: Goal.ID){
+        print("실행")
         if let data = DataManager.shared.fetchData(type: Goal.self).filter(NSPredicate(format: "id = %@", id)).first{
             if let item =  data.items.filter(NSPredicate(format: "itemComplete = %d", false)).first{
                 
@@ -126,41 +136,8 @@ extension MainViewModel{
         }else{
             print("그 id의 값은 없습니다.")
         }
-        
     }
-    
-    func collectionViewDataSource() -> RxCollectionViewSectionedReloadDataSource<MainModel>{
-        return RxCollectionViewSectionedReloadDataSource <MainModel>(
-            configureCell: { dataSource, collectionView, indexPath, item in
-                switch dataSource[indexPath]{
-                case .tasksItem(value: let value):
-                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "taskCell", for: indexPath) as? TaskCell else { return UICollectionViewCell()}
-                    cell.setView(value)
-                    cell.bind(self)
-                    return cell
-                case .notesItem(value: let value):
-                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "memoCell", for: indexPath) as? MemoCell else {return UICollectionViewCell()}
-                    
-                    cell.setView()
-                    
-                    return cell
-                }
-            },configureSupplementaryView: {dataSource,collectionView,kind,indexPath -> UICollectionReusableView in
-                switch kind{
-                case UICollectionView.elementKindSectionHeader:
-                    guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? HomeHeaderView else { return UICollectionReusableView()}
-                    
-                    let text = dataSource.sectionModels[indexPath.section].title
-                    header.setDate(text,indexPath.section)
-                    header.bind(self)
-                   
-                    return header
-                default:
-                    fatalError()
-                }
-            }
-        )
-    }
+ 
     
 
     

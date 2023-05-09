@@ -45,9 +45,10 @@ extension NoteViewModel{
         let _cellData = selectedDate
             .flatMap{value -> Observable<[Results<Note>.ElementType]> in
                 
-                let predicate = NSPredicate(format: "noteDate == %@",value.dayStringText)
-                let filterData = self.noteData.filter(predicate)
-                return Observable.array(from: filterData)
+//                let predicate = NSPredicate(format: "noteDate == %@",value.dayStringText)
+//                let filterData = self.noteData.filter(predicate)
+//                return Observable.array(from: filterData)
+                return Observable.array(from: self.noteData)
             }
         
 

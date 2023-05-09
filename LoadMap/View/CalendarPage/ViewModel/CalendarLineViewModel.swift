@@ -13,13 +13,10 @@ import Foundation
 
 final class CalendarLineViewModel{
     
-    private let realm = try! Realm()
     let dateObservable = BehaviorSubject(value: Date())
     
-    var objectData: Results<Goal> = DataManager.shared.fetchData(type: Goal.self)
-    
-   
-    
+    var objectData: Results<Note> = DataManager.shared.fetchData(type: Note.self)
+
 }
 
 extension CalendarLineViewModel{
@@ -30,13 +27,13 @@ extension CalendarLineViewModel{
     }
     
     struct Output{
-        let cellData : Driver<[Goal]>
+        let cellData : Driver<[Note]>
     }
     
     func inOut(input: Input) -> Output {
         
-        let _cellData = dateObservable.flatMap { date -> Observable<[Goal]> in
-            let filteredData = self.objectData.filter("startDay <= %@ AND endDay => %@", date, date)
+        let _cellData = dateObservable.flatMap { date -> Observable<[Note]> in
+            let filteredData = self.objectData.filter(NSPredicate(format: "noteDate >= %@ && noteDate <= %@",date.startOfDay().koreanTime as NSDate, date.endOfDay().koreanTime as NSDate))
             return Observable.array(from: filteredData)
         }
                 
@@ -45,5 +42,15 @@ extension CalendarLineViewModel{
 
         
         return Output(cellData: _cellData.asDriver(onErrorJustReturn: []))
+    }
+}
+
+
+extension CalendarLineViewModel{
+    
+    func dotCount(_ date: Date) -> Int{
+        return objectData.filter{
+            $0.noteDate.dayBefore().basicFormatter == date.basicFormatter
+        }.count
     }
 }

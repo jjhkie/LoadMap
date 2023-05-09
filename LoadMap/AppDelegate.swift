@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             print("---------------------")
         }
-        //print(Realm.Configuration.defaultConfiguration.fileURL)
+        print(Realm.Configuration.defaultConfiguration.fileURL)
 //        
 //        UINavigationBar.appearance().tintColor = .red
 //        UINavigationBar.appearance().backgroundColor = .red

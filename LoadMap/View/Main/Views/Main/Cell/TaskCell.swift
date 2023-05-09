@@ -19,7 +19,7 @@ final class TaskCell: UICollectionViewCell{
     
     var cellId: Goal.ID?
     
-    let bag = DisposeBag()
+    private let bag = DisposeBag()
     
     // [Stack] 전체 스택뷰
     private let containerView = UIStackView().then{
@@ -63,6 +63,7 @@ final class TaskCell: UICollectionViewCell{
     
     private let currentTaskLabel = UILabel().then{
         $0.font = .dovemayoFont(ofSize: 14)
+        $0.numberOfLines = 0
     }
     
     private let progressBar = UIProgressView()
@@ -138,11 +139,15 @@ extension TaskCell{
         
         //업무 완료 클릭 시 이벤트
         nextButton.rx.controlEvent(.touchUpInside)
+            .debug()
             .bind(onNext: {[weak self] in
                 guard let self = self else {return }
-                VM.nextButtonConfigure(self.cellId!)
+                print("abc")
+                //두 번 작동...
+                // disposedBag을 제대로 설정해줘야하는데 .. 아직 이해 못함
+                //VM.nextButtonConfigure(self.cellId!)
             })
-            .disposed(by: bag)
+            .disposed(by: self.bag)
         
         //상세 버튼 클릭 시 이동 이벤트
         detailButton.rx.controlEvent(.touchUpInside)
@@ -170,11 +175,22 @@ extension TaskCell{
         
         //Middle
         infoLine.backgroundColor = data.boxColor?.uiColor
-        currentTaskLabel.text = data.items.first{
-            $0.itemComplete == false
-        }?.itemName
         
-        nextTaskLabel.text = "다음 정보를 가져올 라벨 "
+        let task = data.items.filter{
+            $0.itemComplete == false
+        }
+        
+        if let item = task.first{
+            currentTaskLabel.text = "현재 업무는 \(item.itemName)"
+        }
+        
+        if task.count > 1{
+            let nextTask = task[1].itemName
+            nextTaskLabel.text = "다음 업무는 \(nextTask)"
+        }else{
+            nextTaskLabel.text = "다음 업무가 없습니다."
+        }
+
         
         //프로그래스바
         let taskCount = data.items
@@ -262,7 +278,7 @@ extension TaskCell{
         }
         
         buttonView.snp.makeConstraints{
-            $0.width.equalTo(40)
+            $0.width.equalTo(100)
             $0.top.bottom.equalToSuperview()
             $0.trailing.equalToSuperview()
         }

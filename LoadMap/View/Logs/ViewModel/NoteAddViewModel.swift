@@ -25,7 +25,11 @@ class NoteAddViewModel{
     let bag = DisposeBag()
     let realm = try! Realm()
     
-    var noteText = BehaviorSubject(value: "")
+    let noteText = BehaviorSubject(value: "")
+    
+    let _noteImportant = BehaviorSubject<String>(value:"low")
+    
+    let _noteDate = PublishSubject<Date>()
     
     let _noteSaved = PublishSubject<Void>()
 }
@@ -33,7 +37,7 @@ class NoteAddViewModel{
 extension NoteAddViewModel{
     
     struct Input{
-        let addButtonTapped: Observable<Void>
+       
     }
     
     struct Output{
@@ -42,12 +46,7 @@ extension NoteAddViewModel{
     
     func inOut(input: Input) -> Output {
         
-        input.addButtonTapped
-            .subscribe(onNext: {
-                self.addNote()
-                self._noteSaved.onNext(Void())
-            })
-            .disposed(by: bag)
+
         
         
         return Output(noteSaved: _noteSaved.asSignal(onErrorJustReturn: Void()))
@@ -56,13 +55,19 @@ extension NoteAddViewModel{
 
 
 extension NoteAddViewModel{
-    func addNote(){
-        
+    func addNote(date: Date){
         let newNote = Note()
-        newNote.noteDate = noteDate
+        newNote.noteDate = date.koreanTime
+        newNote.important = try! _noteImportant.value()
         newNote.noteContent = try! noteText.value()
         
         DataManager.shared.addData(object: newNote)
+        _noteSaved.onNext(Void())
+    }
+    
+    func importantTap(_ value: String){
+        _noteImportant.onNext(value)
+        
         
     }
 }

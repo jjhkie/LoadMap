@@ -65,7 +65,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 case .home:
                     return UINavigationController(rootViewController: MainView(viewModel: MainViewModel()))
                 case .note:
-                    return UINavigationController(rootViewController: NoteView())
+                    return UINavigationController(rootViewController: LogsView(viewModel: LogsViewModel()))
                 case .calendar:
                     return CalendarLineView()
                 case .fail:

@@ -49,6 +49,14 @@ class GoalItem:Object{
     @objc dynamic var itemName: String = ""
     @objc dynamic var itemComplete : Bool = false
     @objc dynamic var itemCompleteDate : Date?
+    @objc dynamic var itemStartDate : Date?
+    var tags = List<ItemTag>()
+    var parentTask = LinkingObjects(fromType: Goal.self, property: "items")
+}
+
+class ItemTag:Object{
+    @objc dynamic var tagName: String?
+    var parentItem = LinkingObjects(fromType: GoalItem.self, property: "tags")
 }
 
 //TableView 구현 데이터 타입

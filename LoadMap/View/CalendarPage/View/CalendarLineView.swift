@@ -13,20 +13,23 @@ import RxCocoa
 import RxSwift
 
 //TODO
-/// note 와 task 가 전부 나오도록 설정
+/// note
 /// dot 개수에 최대 몇개까지 나오게 할 수 있는 지 확인 후
 /// 개수 제한이 너무 적다면 collectionView로 직접 제작
 /// 날짜 클릭 시 날짜에 해당하는 task 와 note가 나오고 시간으로 정렬
+///
+/// 스크롤하여 tableView의 화면이 더 커졌을 때
+/// 셀의 크기가 내용에 맞게 사이즈가 변화하여 내용이 전부 보이도록 설정
 
-class CalendarLineView: UIViewController{
+final class CalendarLineView: UIViewController{
     
-    let viewmodel = CalendarLineViewModel()
+    private let viewmodel = CalendarLineViewModel()
     
     private let bag = DisposeBag()
     
     
     //캘린더
-    let calendar = FSCalendar().then{
+    private let calendar = FSCalendar().then{
         $0.register(FSCalendarCell.self, forCellReuseIdentifier: "Cell")
         $0.scope = .month
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -35,9 +38,10 @@ class CalendarLineView: UIViewController{
     }
     
     //하단 테이블뷰
-    let tableView = UITableView().then{
+    private let tableView = UITableView().then{
+        $0.register(NoteTableCell.self, forCellReuseIdentifier: "noteTableCell")
         $0.register(UITableViewCell.self, forCellReuseIdentifier: "tableCell")
-        $0.backgroundColor = .red
+
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
@@ -95,22 +99,26 @@ extension CalendarLineView:UIGestureRecognizerDelegate{
 extension CalendarLineView{
     
     func setCalendarUI(){
-        
+   
         self.calendar.locale = Locale(identifier: "ko_KR")
         // 캘린더 스크롤 방향 지정
         self.calendar.scrollDirection = .horizontal
         
         // Header dateFormat, 년도, 월 폰트(사이즈)와 색, 가운데 정렬
-        self.calendar.appearance.headerDateFormat = "MM월"
-        //.calendar.appearance.headerTitleFont = UIFont.SpoqaHanSans(type: .Bold, size: 20)
+
+        self.calendar.appearance.headerDateFormat = "yyyy년 MM월"
+        self.calendar.appearance.headerTitleFont = .dovemayoFont(ofSize: 30)
         self.calendar.appearance.headerTitleColor = UIColor(named: "FFFFFF")?.withAlphaComponent(0.9)
-        self.calendar.appearance.headerTitleAlignment = .center
+        self.calendar.appearance.headerTitleAlignment = .left
         
-        // 요일 글자 색
+        self.calendar.appearance.headerMinimumDissolvedAlpha = 0.0
+        
+        // 요일 글자
         self.calendar.appearance.weekdayTextColor = UIColor(named: "F5F5F5")?.withAlphaComponent(0.2)
+        self.calendar.appearance.weekdayFont = .dovemayoFont(ofSize: 18)
         // 캘린더 높이 지정
-        self.calendar.headerHeight = 30
-        self.calendar.weekdayHeight = 10
+        self.calendar.headerHeight = 80
+        self.calendar.weekdayHeight = 20
         // 캘린더의 cornerRadius 지정
         self.calendar.layer.cornerRadius = 10
         
@@ -121,7 +129,7 @@ extension CalendarLineView{
         // 날짜 색
         self.calendar.appearance.titleDefaultColor = UIColor.black.withAlphaComponent(0.5)
         // 달에 유효하지않은 날짜 지우기
-        //self.calendar.placeholderType = .none
+        self.calendar.placeholderType = .none
         
         // 캘린더 숫자와 subtitle간의 간격 조정
         self.calendar.appearance.subtitleOffset = CGPoint(x: 0, y: 4)
@@ -134,8 +142,9 @@ extension CalendarLineView{
         
         
         output.cellData
-            .drive(tableView.rx.items(cellIdentifier: "tableCell",cellType: UITableViewCell.self)){row,data,cell in
-                cell.textLabel?.text = "\(data.endDay)"
+            .drive(tableView.rx.items(cellIdentifier: "noteTableCell",cellType: NoteTableCell.self)){row,data,cell in
+                print(data)
+                cell.setView(data)
                
                 
             }
@@ -151,7 +160,7 @@ extension CalendarLineView{
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             $0.height.height.equalTo(UIScreen.main.bounds.height * 0.5)
-            //calendarHeihtConstraint = $0.height.equalToSuperview().constraint
+           
         }
         tableView.snp.makeConstraints{
             $0.top.equalTo(calendar.snp.bottom)
@@ -208,14 +217,8 @@ extension CalendarLineView: FSCalendarDataSource{
     // 이벤트 밑에 Dot 표시 개수
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         
-        print(date.koreanTime)
-//        return viewmodel.objectData.filter{
-//
-//            return  $0.startDay <= date.koreanTime && $0.endDay >= date.koreanTime
-//
-//        }.count
-        
-        return 10
+
+        return viewmodel.dotCount(date)
     }
 }
 
@@ -237,10 +240,8 @@ extension CalendarLineView: FSCalendarDelegate,FSCalendarDelegateAppearance{
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
         let currentPageDate = calendar.currentPage
 
-      
-          
-       
     }
+    
     func calendar(_ calendar: FSCalendar, weekdayView weekday: UIView, weekdayTextAlignmentFor date: Date) -> NSTextAlignment {
         return .center // 요일 텍스트 중앙 정렬
     }
@@ -248,22 +249,19 @@ extension CalendarLineView: FSCalendarDelegate,FSCalendarDelegateAppearance{
     //특정 날짜를 선택할 때 호출되는 메서드
     // 사용자가 특정 날짜를 선택할 수 있는지 여부를 결정할 수 있다.
     func calendar(_ calendar: FSCalendar, shouldSelect date: Date, at monthPosition: FSCalendarMonthPosition) -> Bool {
-        let today = Date()
-        if date < today{
-            //현재 날짜 이전의 날짜는 선택할 수 없도록 설정
-            return false
-        }else{
-            return true
-        }
+        return true
     }
     
     //MARK:  DidSelectDate
     //특정 날짜를 선택했을 때 호출되는 메서드
     //특정 날짜를 선택했을 때 어떤 작업을 수행할 지 설정
-    
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         viewmodel.dateObservable.onNext(date.koreanTime)
         print(date.koreanTime)
+        print(date.koreanTime.basicFormatter)
+        print(date.basicFormatter)
+        print(date.dayStringText)
+
         tableView.reloadData()
         
     }
@@ -300,13 +298,7 @@ extension CalendarLineView: FSCalendarDelegate,FSCalendarDelegateAppearance{
     //기본 배경 색상을 설정하는 메서드
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor? {
-        let calendar = Calendar.current
-         let components = calendar.dateComponents([.year, .month, .day], from: date)
-         if components.day == 1 {
-             return UIColor.green
-         } else {
-             return nil
-         }
+        return nil
     }
 
     //MARK:  FillSelectionColorFor
@@ -336,7 +328,7 @@ extension CalendarLineView: FSCalendarDelegate,FSCalendarDelegateAppearance{
     //MARK:  TitleSelectionColorForDate
     //달력에서 선택된 날짜의 텍스트의 색상을 설정하는 메서드
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleSelectionColorFor date: Date) -> UIColor? {
-        return .blue
+        return .white
     }
     
     //MARK:  SubtitleDefaultColorForDate
@@ -389,13 +381,22 @@ extension CalendarLineView: FSCalendarDelegate,FSCalendarDelegateAppearance{
     
     // 날짜의 글씨 자체를 오늘로 바꾸기
     func calendar(_ calendar: FSCalendar, titleFor date: Date) -> String? {
-        switch date {
-        case Date():
-            return "오늘"
-        default:
-            return nil
-        }
+        switch date.basicFormatter {
+        case Date().basicFormatter:
+                return "오늘"
+            default:
+                return nil
+            }
     }
+    
+    func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
+        switch date.basicFormatter {
+        case Date().basicFormatter:
+                return "오늘"
+            default:
+                return nil
+            }
+        }
     
     
 }
