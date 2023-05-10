@@ -54,7 +54,9 @@ extension HomeHeaderView{
         if headerTag == 0{
             pageControl.numberOfPages = viewModel.taskDataCount
         }else{
-            pageControl.numberOfPages = (viewModel.noteDataCount / 3) + 1
+            pageControl.numberOfPages = viewModel.noteDataCount % 3 > 0 ? (viewModel.noteDataCount / 3) + 1 : (viewModel.noteDataCount / 3)
+            
+            
         }
        
         pageControl.pageIndicatorTintColor = .darkGray

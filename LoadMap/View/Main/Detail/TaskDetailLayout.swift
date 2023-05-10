@@ -31,6 +31,20 @@ extension TaskDetailView{
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .paging
                 
+                let headerSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .absolute(50))
+                
+                let header = NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: headerSize,
+                    elementKind: UICollectionView.elementKindSectionHeader,
+                    alignment: .top)
+                
+                
+                 
+                section.boundarySupplementaryItems = [header]
+                
+                
                 return section
             case 1:
                 let itemSize = NSCollectionLayoutSize(

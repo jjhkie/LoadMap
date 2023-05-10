@@ -33,13 +33,19 @@ extension TaskDetailViewModel{
     }
     
     struct Output{
+        let viewData: Driver<[SectionModel<Task, TaskItem>]>
     }
     
     func inOut(input: Input) -> Output{
 
         
+        let _selectedTask = Observable.collection(from: selectedTask)
+            .map{tasks -> [SectionModel<Task, TaskItem>] in
+                return [ SectionModel(model: tasks.first!, items: Array(tasks.first!.items))]
+            }
+        
         return Output(
-            
+            viewData: _selectedTask.asDriver(onErrorJustReturn: [])
         )
     }
 }

@@ -18,7 +18,7 @@ import RxDataSources
 /// progressBar animation 적용
 /// today 정보 다 가져오기[ Task , Note 로 구분 ].
 /// 
-final class MainView: UIViewController, UIScrollViewDelegate{
+final class MainView: UIViewController{
     
     private let bag = DisposeBag()
     
@@ -26,9 +26,10 @@ final class MainView: UIViewController, UIScrollViewDelegate{
     
     
     private let taskCollectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout()).then{
+        
         $0.register(TaskCell.self, forCellWithReuseIdentifier: "taskCell")
         $0.register(HomeHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
-        $0.isScrollEnabled = false
+        $0.isScrollEnabled = true
         $0.showsHorizontalScrollIndicator = false
         $0.showsVerticalScrollIndicator = false
         $0.alwaysBounceVertical = false//vertical 스크롤만 막기
@@ -83,13 +84,11 @@ extension MainView{
             .drive(noteCollectionView.rx.items(dataSource: noteViewDataSource()))
             .disposed(by: bag)
         
+        //데이터가 있는 지 확인하여 없는 경우 backgroundView를 추가하여 특정 뷰를 보여준다.
         output.taskCellData
             .subscribe(onNext: {task in
-   
                 if let dataEmpty = task.first?.items.isEmpty{
                     if dataEmpty{
-                        
-                        
                         let emptyView = self.createEmptyView()
                         self.taskCollectionView.backgroundView = emptyView
                     }else{
@@ -99,6 +98,7 @@ extension MainView{
             })
             .disposed(by: bag)
         
+        //데이터가 있는 지 확인하여 없는 경우 backgroundView를 추가하여 특정 뷰를 보여준다.
         output.noteCellData
             .subscribe(onNext: {note in
                 if let dataEmpty = note.first?.items.isEmpty{
@@ -112,6 +112,18 @@ extension MainView{
             })
             .disposed(by: bag)
         
+        //스크롤 이벤트를 적용하여 pagecontrol값 변경
+        taskCollectionView.rx.contentOffset
+            .bind(onNext: {
+                print($0)
+            })
+            .disposed(by: bag)
+        
+        taskCollectionView.rx.didScroll
+            .bind(onNext: {
+                print($0)
+            })
+            .disposed(by: bag)
 
         
         

@@ -321,6 +321,14 @@ extension TaskCell{
             containerView.addArrangedSubview($0)
         }
         
+        titleLabel.snp.makeConstraints{
+            $0.leading.equalToSuperview().offset(20)
+        }
+        
+        descriptionLabel.snp.makeConstraints{
+            $0.leading.equalToSuperview().offset(20)
+        }
+        
         contentView.addSubview(containerView)
         
         containerView.snp.makeConstraints{
