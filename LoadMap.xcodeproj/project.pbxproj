@@ -14,7 +14,7 @@
 		B90084D629EEA136006D7E39 /* TaskAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90084D529EEA136006D7E39 /* TaskAddView.swift */; };
 		B90084D929EEA5C5006D7E39 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = B90084D829EEA5C5006D7E39 /* FSCalendar */; };
 		B90084DB29EEA5D5006D7E39 /* CalendarLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90084DA29EEA5D5006D7E39 /* CalendarLineView.swift */; };
-		B93A698C2A0521090083B03C /* MemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93A698B2A0521090083B03C /* MemoCell.swift */; };
+		B93A698C2A0521090083B03C /* TodayNoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93A698B2A0521090083B03C /* TodayNoteCell.swift */; };
 		B93A698E2A0532F90083B03C /* TaskDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93A698D2A0532F90083B03C /* TaskDetailView.swift */; };
 		B93A69902A0533130083B03C /* TaskDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93A698F2A0533130083B03C /* TaskDetailViewModel.swift */; };
 		B941F0DF29FBF0D6008993D7 /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B941F0DE29FBF0D6008993D7 /* TaskView.swift */; };
@@ -72,7 +72,7 @@
 		B90084CD29EE1F69006D7E39 /* NoteAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteAddView.swift; sourceTree = "<group>"; };
 		B90084D529EEA136006D7E39 /* TaskAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskAddView.swift; sourceTree = "<group>"; };
 		B90084DA29EEA5D5006D7E39 /* CalendarLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarLineView.swift; sourceTree = "<group>"; };
-		B93A698B2A0521090083B03C /* MemoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoCell.swift; sourceTree = "<group>"; };
+		B93A698B2A0521090083B03C /* TodayNoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayNoteCell.swift; sourceTree = "<group>"; };
 		B93A698D2A0532F90083B03C /* TaskDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailView.swift; sourceTree = "<group>"; };
 		B93A698F2A0533130083B03C /* TaskDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailViewModel.swift; sourceTree = "<group>"; };
 		B941F0DE29FBF0D6008993D7 /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
@@ -232,7 +232,7 @@
 			children = (
 				B94BB8C72A037DD90091827B /* HomeHeaderView.swift */,
 				B9C7B4A32A047FDE005D15BD /* TaskCell.swift */,
-				B93A698B2A0521090083B03C /* MemoCell.swift */,
+				B93A698B2A0521090083B03C /* TodayNoteCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -520,7 +520,7 @@
 				B94B3A352A086F3A0018FD7E /* NoteTableCell.swift in Sources */,
 				B90084C729EE0F3E006D7E39 /* NoteCell.swift in Sources */,
 				B94B3A382A08B9D40018FD7E /* TaskDetailLayout.swift in Sources */,
-				B93A698C2A0521090083B03C /* MemoCell.swift in Sources */,
+				B93A698C2A0521090083B03C /* TodayNoteCell.swift in Sources */,
 				B9F1D47529F9428A00DE7D84 /* CalendarLineViewModel.swift in Sources */,
 				B94BB8C82A037DD90091827B /* HomeHeaderView.swift in Sources */,
 				B94C5A552A0B104200BB22DE /* TaskViewModel.swift in Sources */,

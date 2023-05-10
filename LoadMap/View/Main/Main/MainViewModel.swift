@@ -58,7 +58,8 @@ extension MainViewModel{
     struct Output {
         //let cellData : Driver<[SectionModel<Bool, Goal>]>
         //let cellData : Driver<[MainSection]>
-        let cellData : Driver<[MainModel]>
+        let taskCellData : Observable<[SectionModel<String, Task>]>
+        let noteCellData : Observable<[SectionModel<String, Note>]>
         let taskSignal : Signal<Void>
         let noteSignal : Signal<Void>
         let detailSignal : Signal<Task.ID>
@@ -67,22 +68,32 @@ extension MainViewModel{
     
     func inOut(input: Input) -> Output {
         
+
+        let _taskArr: Observable<[SectionModel<String, Task>]> = Observable.collection(from: taskData)
+            .map { tasks -> [SectionModel<String, Task>] in
+                return [SectionModel(model: "Tasks", items: Array(tasks))]
+            }
+
+        let _noteArr: Observable<[SectionModel<String, Note>]> = Observable.collection(from: noteData)
+            .map { notes -> [SectionModel<String, Note>] in
+                return [SectionModel(model: "Notes", items: Array(notes))]
+            }
+
+
+
+
+  
         
-        let _taskArr = Observable.array(from: taskData)
-            .startWith()
-        
-        let _noteArr = Observable.array(from: noteData)
         
         
-        
-        let _cellData = Observable.combineLatest(_taskArr, _noteArr).map{tasks,notes in
-            [
-                MainModel.tasks(title: "task", items: tasks.map{.tasksItem($0)}),
-                MainModel.notes(title: "note", items: notes.map{.notesItem($0)})
-                
-            ]
-        }
-        
+//        let _cellData = Observable.combineLatest(_taskArr, _noteArr).map{tasks,notes in
+//            [
+//                MainModel.tasks(title: "task", items: tasks.map{.tasksItem($0)}),
+//                MainModel.notes(title: "note", items: notes.map{.notesItem($0)})
+//
+//            ]
+//        }
+//
         
         //        let _cellData = Observable.collection(from: objectData)
         //            .map{
@@ -97,7 +108,8 @@ extension MainViewModel{
         
         
         return Output(
-            cellData:_cellData.asDriver(onErrorJustReturn: []),
+            taskCellData: _taskArr.asObservable(),
+            noteCellData: _noteArr.asObservable(),
             taskSignal: _prepareTask.asSignal(onErrorJustReturn: Void()),
             noteSignal: _prepareNote.asSignal(onErrorJustReturn: Void()),
             detailSignal: _detailTapped.asSignal(onErrorJustReturn: "")

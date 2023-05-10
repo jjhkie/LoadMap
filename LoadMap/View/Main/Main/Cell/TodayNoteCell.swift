@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-final class MemoCell: UICollectionViewCell{
+final class TodayNoteCell: UICollectionViewCell{
     
     private let containerStackView = UIStackView().then{
         $0.axis = .horizontal
@@ -37,7 +37,7 @@ final class MemoCell: UICollectionViewCell{
     }
 }
 
-extension MemoCell{
+extension TodayNoteCell{
     
     func setView(_ data: Note){
         

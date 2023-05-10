@@ -32,7 +32,7 @@ final class HomeHeaderView:UICollectionReusableView{
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        mainLabel.text = "header 입니다"
         layout()
     }
     

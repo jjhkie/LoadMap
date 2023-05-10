@@ -17,7 +17,6 @@ class TaskViewModel{
         DataManager.shared.fetchData(type: Task.self)
     }
     
-    let defaultTask = Task() //
     
 }
 

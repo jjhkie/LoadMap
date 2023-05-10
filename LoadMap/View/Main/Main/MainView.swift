@@ -25,19 +25,27 @@ final class MainView: UIViewController, UIScrollViewDelegate{
     private let viewModel: MainViewModel
     
     
-    private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout()).then{
+    private let taskCollectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout()).then{
         $0.register(TaskCell.self, forCellWithReuseIdentifier: "taskCell")
-        $0.register(MemoCell.self, forCellWithReuseIdentifier: "memoCell")
-        $0.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")// remove
         $0.register(HomeHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
-        $0.isScrollEnabled = true
+        $0.isScrollEnabled = false
         $0.showsHorizontalScrollIndicator = false
         $0.showsVerticalScrollIndicator = false
-        $0.alwaysBounceVertical = false//vertical 스크롤만 막기 
-}
+        $0.alwaysBounceVertical = false//vertical 스크롤만 막기
+    }
     
-
-
+    private let noteCollectionView = UICollectionView(frame: .zero, collectionViewLayout: noteViewLayout() ).then{
+        $0.register(TodayNoteCell.self, forCellWithReuseIdentifier: "noteCell")
+        $0.register(HomeHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        $0.isScrollEnabled = false
+        $0.showsHorizontalScrollIndicator = false
+        $0.showsVerticalScrollIndicator = false
+        $0.alwaysBounceVertical = false//vertical 스크롤만 막기
+        $0.register(HomeHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+    }
+    
+    
+    
     init(viewModel: MainViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -53,7 +61,7 @@ final class MainView: UIViewController, UIScrollViewDelegate{
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         attribute()
         bind(viewModel)
         layout()
@@ -67,9 +75,45 @@ extension MainView{
         let output = VM.inOut(input: input)
         
         
-        output.cellData
-            .drive(collectionView.rx.items(dataSource: collectionViewDataSource()))
+        output.taskCellData.asDriver(onErrorJustReturn: [])
+            .drive(taskCollectionView.rx.items(dataSource: taskViewDataSource()))
             .disposed(by: bag)
+        
+        output.noteCellData.asDriver(onErrorJustReturn: [])
+            .drive(noteCollectionView.rx.items(dataSource: noteViewDataSource()))
+            .disposed(by: bag)
+        
+        output.taskCellData
+            .subscribe(onNext: {task in
+   
+                if let dataEmpty = task.first?.items.isEmpty{
+                    if dataEmpty{
+                        
+                        
+                        let emptyView = self.createEmptyView()
+                        self.taskCollectionView.backgroundView = emptyView
+                    }else{
+                        self.taskCollectionView.backgroundView = nil
+                    }
+                }
+            })
+            .disposed(by: bag)
+        
+        output.noteCellData
+            .subscribe(onNext: {note in
+                if let dataEmpty = note.first?.items.isEmpty{
+                    if dataEmpty{
+                        let emptyView = self.createEmptyView()
+                        self.noteCollectionView.backgroundView = emptyView
+                    }else{
+                        self.noteCollectionView.backgroundView = nil
+                    }
+                }
+            })
+            .disposed(by: bag)
+        
+
+        
         
         output.taskSignal
             .emit(onNext: {
@@ -81,6 +125,8 @@ extension MainView{
             })
             .disposed(by: bag)
         
+        
+        
         ///메모 작성 페이지로 이동
         ///오늘 날짜로만 작성
         output.noteSignal
@@ -91,7 +137,7 @@ extension MainView{
                     let view = NoteAddView(selectedDate: Date())
                     self.navigationController?.pushViewController(view, animated: true)
                 }
-
+                
             })
             .disposed(by: bag)
         
@@ -108,7 +154,7 @@ extension MainView{
             .disposed(by: bag)
         
         
-
+        
     }
 }
 
@@ -117,51 +163,97 @@ extension MainView{
     
     private func attribute(){
         
-       
+        
         view.backgroundColor = .white
         
     }
     private func layout(){
-        [collectionView].forEach{
+        [taskCollectionView,noteCollectionView].forEach{
             view.addSubview($0)
         }
         
         //컬렉션뷰 오토레이아웃
-        collectionView.snp.makeConstraints{
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
+        taskCollectionView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.equalTo(view.safeAreaLayoutGuide)
+            $0.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.height.equalTo(view.safeAreaLayoutGuide.snp.height).dividedBy(2.0)
         }
-
+        
+        noteCollectionView.snp.makeConstraints{
+            $0.top.equalTo(taskCollectionView.snp.bottom).offset(20)
+            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
+        }
+        
+    }
+    
+    private func createEmptyView() -> UIView {
+        let emptyView = UIView(frame: taskCollectionView.bounds)
+        
+        let label = UILabel()
+        label.text = "데이터 없음"
+        
+        label.textAlignment = .center
+        label.textColor = .gray
+        
+        emptyView.addSubview(label)
+        
+        label.snp.makeConstraints{
+            //$0.width.height.equalTo(500)
+            $0.center.equalToSuperview()
+        }
+        
+        return emptyView
     }
 }
 
 //MARK: - DataSource Func
 extension MainView{
     
-    func collectionViewDataSource() -> RxCollectionViewSectionedReloadDataSource<MainModel>{
-        return RxCollectionViewSectionedReloadDataSource <MainModel>(
+    func taskViewDataSource() -> RxCollectionViewSectionedReloadDataSource<SectionModel<String, Task>>{
+        return RxCollectionViewSectionedReloadDataSource <SectionModel<String, Task>>(
             configureCell: { dataSource, collectionView, indexPath, item in
-                switch dataSource[indexPath]{
-                case .tasksItem(value: let value):
-                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "taskCell", for: indexPath) as? TaskCell else { return UICollectionViewCell()}
-                    cell.setView(value)
-                    cell.bind(self.viewModel)
-                    return cell
-                case .notesItem(value: let value):
-                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "memoCell", for: indexPath) as? MemoCell else {return UICollectionViewCell()}
-                    
-                    cell.setView(value)
-                    
-                    return cell
-                }
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "taskCell", for: indexPath) as? TaskCell else { return UICollectionViewCell()}
+                cell.setView(item)
+                cell.bind(self.viewModel)
+                return cell
+                
             },configureSupplementaryView: {dataSource,collectionView,kind,indexPath -> UICollectionReusableView in
                 switch kind{
                 case UICollectionView.elementKindSectionHeader:
                     guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? HomeHeaderView else { return UICollectionReusableView()}
                     
-                    let text = dataSource.sectionModels[indexPath.section].title
-                    header.setDate(text,indexPath.section)
-                    header.bind(self.viewModel)
-                   
+                    let text = dataSource.sectionModels[indexPath.section].model
+                                     header.setDate(text,0)
+                                       header.bind(self.viewModel)
+                    
+                    return header
+                default:
+                    fatalError()
+                }
+            }
+        )
+    }
+    
+    func noteViewDataSource() -> RxCollectionViewSectionedReloadDataSource<SectionModel<String, Note>>{
+        return RxCollectionViewSectionedReloadDataSource <SectionModel<String, Note>>(
+            configureCell: { dataSource, collectionView, indexPath, item in
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "noteCell", for: indexPath) as? TodayNoteCell else { return UICollectionViewCell()}
+                
+                cell.setView(item)
+                
+                return cell
+                
+            },configureSupplementaryView: {dataSource,collectionView,kind,indexPath -> UICollectionReusableView in
+                switch kind{
+                case UICollectionView.elementKindSectionHeader:
+                    guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? HomeHeaderView else { return UICollectionReusableView()}
+                    
+                    let text = dataSource.sectionModels[indexPath.section].model
+                                     header.setDate(text,1)
+                                       header.bind(self.viewModel)
+                    
                     return header
                 default:
                     fatalError()
