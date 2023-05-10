@@ -75,7 +75,7 @@ extension MainView{
             .emit(onNext: {
                 if let navigation = self.navigationController{
                     navigation.tabBarController?.tabBar.isHidden = true
-                    let view = GoalAddView(viewModel: GoalAddViewModel())
+                    let view = TaskAddView(viewModel: TaskAddViewModel())
                     self.navigationController?.pushViewController(view, animated: true)
                 }
             })

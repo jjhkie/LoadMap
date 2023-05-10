@@ -14,7 +14,7 @@ import FSCalendar
 
 
 
-final class GoalDateCell: UITableViewCell{
+final class TaskDateCell: UITableViewCell{
     
     let bag = DisposeBag()
     
@@ -78,14 +78,14 @@ final class GoalDateCell: UITableViewCell{
     }
 }
 
-extension GoalDateCell{
+extension TaskDateCell{
     
     func reload() {
         guard let tableView = superview as? UITableView, let indexPath = tableView.indexPath(for: self) else { return }
         tableView.reloadRows(at: [indexPath], with: .none)
     }
     
-    func bind(viewmodel VM: GoalAddViewModel){
+    func bind(viewmodel VM: TaskAddViewModel){
         oneDayCalendar.rx.date
             .subscribe(onNext: {
                 VM.startDateOnNext($0)

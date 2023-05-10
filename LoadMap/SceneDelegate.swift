@@ -69,7 +69,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 case .calendar:
                     return CalendarLineView()
                 case .fail:
-                    return FailGoalView()
+                    return TaskView(viewModel: TaskViewModel())
                 }
             }
 

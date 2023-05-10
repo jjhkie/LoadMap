@@ -17,7 +17,7 @@ import RxCocoa
 //MARK: - Init & Views
 final class TaskCell: UICollectionViewCell{
     
-    var cellId: Goal.ID?
+    var cellId: Task.ID?
     
     private let bag = DisposeBag()
     
@@ -158,7 +158,7 @@ extension TaskCell{
             .disposed(by: bag)
     }
     
-    func setView(_ data: Goal){
+    func setView(_ data: Task){
         contentView.layer.masksToBounds = false
         containerView.backgroundColor = .white
         contentView.layer.masksToBounds = false

@@ -53,7 +53,7 @@ extension Date{
     var transformComponents: DateComponents{
         let calendar = Calendar.current
 
-        return calendar.dateComponents([.year, .month, .day], from: self)
+        return calendar.dateComponents([.year, .month, .day, .weekday], from: self)
     }
     
     ///시간을 한국 기준으로

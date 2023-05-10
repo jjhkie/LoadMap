@@ -16,10 +16,10 @@ import RxDataSources
 /// task note 데이터 작성 날짜가 오늘인 데이터만 가져오기 
 final class MainViewModel{
     
-    let bag = DisposeBag()
+    private let bag = DisposeBag()
     
-    var taskData: Results<Goal>{
-        DataManager.shared.fetchData(type: Goal.self)
+    var taskData: Results<Task>{
+        DataManager.shared.fetchData(type: Task.self)
             .filter(NSPredicate(format: "completion == %d", false))
     }
     
@@ -33,7 +33,7 @@ final class MainViewModel{
     let _prepareNote = PublishSubject<Void>()
     
     //task Detail 버튼 이벤트
-    let _detailTapped = PublishSubject<Goal.ID>()
+    let _detailTapped = PublishSubject<Task.ID>()
     
     //taskItem Count
     var taskDataCount: Int{
@@ -61,7 +61,7 @@ extension MainViewModel{
         let cellData : Driver<[MainModel]>
         let taskSignal : Signal<Void>
         let noteSignal : Signal<Void>
-        let detailSignal : Signal<Goal.ID>
+        let detailSignal : Signal<Task.ID>
         
     }
     
@@ -69,6 +69,7 @@ extension MainViewModel{
         
         
         let _taskArr = Observable.array(from: taskData)
+            .startWith()
         
         let _noteArr = Observable.array(from: noteData)
         
@@ -76,13 +77,10 @@ extension MainViewModel{
         
         let _cellData = Observable.combineLatest(_taskArr, _noteArr).map{tasks,notes in
             [
-                MainModel.tasks(title: "task", items: tasks.map{.tasksItem(value: $0)}),
-                MainModel.notes(title: "note", items: notes.map{.notesItem(value: $0)})
+                MainModel.tasks(title: "task", items: tasks.map{.tasksItem($0)}),
+                MainModel.notes(title: "note", items: notes.map{.notesItem($0)})
                 
             ]
-            
-            
-            
         }
         
         
@@ -114,13 +112,13 @@ extension MainViewModel{
 //MARK: - Function
 extension MainViewModel{
     
-    func itemIdToss(_ id: Goal.ID){
+    func itemIdToss(_ id: Task.ID){
         self._detailTapped.onNext(id)
     }
     
-    func nextButtonConfigure(_ id: Goal.ID){
+    func nextButtonConfigure(_ id: Task.ID){
         print("실행")
-        if let data = DataManager.shared.fetchData(type: Goal.self).filter(NSPredicate(format: "id = %@", id)).first{
+        if let data = DataManager.shared.fetchData(type: Task.self).filter(NSPredicate(format: "id = %@", id)).first{
             if let item =  data.items.filter(NSPredicate(format: "itemComplete = %d", false)).first{
                 
                 DataManager.shared.updateGoalItem(item:item , with: ["itemComplete" : true])
@@ -146,8 +144,8 @@ extension MainViewModel{
 
 
 enum MainItem{
-    case tasksItem(value: Goal)
-    case notesItem(value: Note)
+    case tasksItem(Task)
+    case notesItem(Note)
 }
 
 enum MainModel{

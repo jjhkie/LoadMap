@@ -29,24 +29,26 @@ final class LogsViewModel{
         ])
     ])
     
+    private let selectedDate = BehaviorSubject(value: Date())
+    
     
     var noteData : Results<Note>{
         DataManager.shared.fetchData(type: Note.self)
     }
     
-    var taskData : Results<Goal>{
-        DataManager.shared.fetchData(type: Goal.self)
+    var taskData : Results<Task>{
+        DataManager.shared.fetchData(type: Task.self)
     }
     
-    var itemData : Results<GoalItem>{
-        DataManager.shared.fetchData(type: GoalItem.self)
+    var itemData : Results<TaskItem>{
+        DataManager.shared.fetchData(type: TaskItem.self)
     }
     
     var tagData : Results<ItemTag>{
         DataManager.shared.fetchData(type: ItemTag.self)
     }
     var dateValues: [Date] {
-        return noteData.map { $0.noteDate }
+        return noteData.map { $0.dateOfCreation }
     }
     
 }

@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class GoalTaskCell: UITableViewCell{
+final class ItemCell: UITableViewCell{
     
     let taskLabel = UILabel()
     
@@ -24,7 +24,7 @@ final class GoalTaskCell: UITableViewCell{
     }
 }
 
-extension GoalTaskCell{
+extension ItemCell{
     
     private func layout(){
         contentView.addSubview(taskLabel)

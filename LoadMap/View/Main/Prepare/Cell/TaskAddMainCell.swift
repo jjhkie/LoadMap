@@ -12,7 +12,7 @@ import RxSwift
 import RxCocoa
 
 
-final class GoalAddMainCell: UITableViewCell{
+final class TaskAddMainCell: UITableViewCell{
     
     private let bag = DisposeBag()
     
@@ -30,7 +30,6 @@ final class GoalAddMainCell: UITableViewCell{
 
     //설명
     private lazy var descriptionTextField = UITextView().then{
-        $0.commonBackgroundColor()
         $0.text = descriptionPlaceHolder
         $0.isEditable = true
         $0.textColor = .lightGray
@@ -48,16 +47,16 @@ final class GoalAddMainCell: UITableViewCell{
     }
 }
 
-extension GoalAddMainCell{
+extension TaskAddMainCell{
     
-    func bind(viewmodel VM: GoalAddViewModel){
+    func bind(viewmodel VM: TaskAddViewModel){
         
         //제목 텍스트뷰 이벤트
         /// 만약 텍스트의 색이 .lightGray이면서 placeHolder의 값과 같다면
         /// 값이 없는 걸로 판단하고 "" 을 넣는다.
         baseView.titleTextView.rx.textWithBase
             .bind(onNext: {text, textView in
-                if text == self.titlePlaceHolder && textView.textColor == .lightGray{
+                if text == self.titlePlaceHolder && textView.textColor == UIColor.lightGray{
                     VM.titleOnNext("")
                 }else{
                     VM.titleOnNext(text)

@@ -22,7 +22,9 @@ extension UIColor{
         return UIColor(red: 231/255.0, green: 70/255.0, blue: 70/255.0, alpha: 1.0)
     }
     
-    var rgbValue: GoalColor{
+    
+    //remove?
+    var rgbValue: TaskColor{
         var red: CGFloat = 0.0
         var green: CGFloat = 0.0
         var blue: CGFloat = 0.0
@@ -31,9 +33,8 @@ extension UIColor{
         self.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
 
         
-        let value = GoalColor(red: red, green: green, blue: blue, alpha: alpha)
+        let value = TaskColor(red: red, green: green, blue: blue, alpha: alpha)
 
         return value
     }
-    
 }

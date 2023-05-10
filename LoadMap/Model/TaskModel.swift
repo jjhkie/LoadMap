@@ -9,21 +9,21 @@ import RealmSwift
 import RxDataSources
 import UIKit
 
-class Goal: Object,Identifiable{
+class Task: Object,Identifiable{
     @objc dynamic var id = UUID().uuidString
     
     @objc dynamic var title: String = ""
 
     @objc dynamic var content: String = ""
-    @objc dynamic var boxColor : GoalColor?
-    @objc dynamic var creationDate : Date = Date()
+    @objc dynamic var boxColor : TaskColor?
+    @objc dynamic var dateOfCreation : Date = Date()
     @objc dynamic var startDay : Date = Date()
     @objc dynamic var endDay : Date = Date()
     @objc dynamic var completion : Bool = false
-    var items = List<GoalItem>()
+    var items = List<TaskItem>()
 }
 
-class GoalColor:Object{
+class TaskColor:Object{
     @objc dynamic var red: Float = 0.0
     @objc dynamic var green: Float = 0.0
     @objc dynamic var blue: Float = 0.0
@@ -45,19 +45,6 @@ class GoalColor:Object{
 
 
 
-class GoalItem:Object{
-    @objc dynamic var itemName: String = ""
-    @objc dynamic var itemComplete : Bool = false
-    @objc dynamic var itemCompleteDate : Date?
-    @objc dynamic var itemStartDate : Date?
-    var tags = List<ItemTag>()
-    var parentTask = LinkingObjects(fromType: Goal.self, property: "items")
-}
-
-class ItemTag:Object{
-    @objc dynamic var tagName: String?
-    var parentItem = LinkingObjects(fromType: GoalItem.self, property: "tags")
-}
 
 //TableView 구현 데이터 타입
 enum CellType{

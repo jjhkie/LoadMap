@@ -56,7 +56,7 @@ extension MemoCell{
         contentLabel.text = data.noteContent
         
         ///작성 시간 출력
-        let time = Date().koreanTime.dayOfTime - data.noteDate.dayOfTime
+        let time = Date().koreanTime.dayOfTime - data.dateOfCreation.dayOfTime
         
         if time == 0{
             timeBefore.text = "방금 전"

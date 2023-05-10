@@ -18,18 +18,21 @@ import RxDataSources
 ///추가된 tiem에 삭제 이벤트 구현
 ///달력 오늘 날짜보다 뒤에 선택하는 걸 불가능하게 구현
 
-class GoalAddView:UIViewController{
+final class TaskAddView:UIViewController{
+    
+    deinit{
+        print("TaskAddView   \(#function)")
+    }
+    
     
     let bag = DisposeBag()
-    deinit{
-        
-        print("GoalAddView   \(#function)")
-    }
+    
+
     //뷰모델
-    private let viewModel: GoalAddViewModel
+    private let viewModel: TaskAddViewModel
     
     //초기화
-    init(viewModel: GoalAddViewModel) {
+    init(viewModel: TaskAddViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -41,11 +44,11 @@ class GoalAddView:UIViewController{
     
     
     let tableView = UITableView().then{
-        $0.register(GoalAddMainCell.self, forCellReuseIdentifier: "mainCell")
-        $0.register(GoalDateCell.self, forCellReuseIdentifier: "dateCell")
-        $0.register(GoalColorCell.self, forCellReuseIdentifier: "colorCell")
-        $0.register(GoalItemCell.self, forCellReuseIdentifier: "itemCell")
-        $0.register(GoalTaskCell.self, forCellReuseIdentifier: "taskCell")
+        $0.register(TaskAddMainCell.self, forCellReuseIdentifier: "mainCell")
+        $0.register(TaskDateCell.self, forCellReuseIdentifier: "dateCell")
+        $0.register(TaskColorCell.self, forCellReuseIdentifier: "colorCell")
+        $0.register(TaskItemCell.self, forCellReuseIdentifier: "itemCell")
+        $0.register(ItemCell.self, forCellReuseIdentifier: "taskCell")
         $0.separatorInset = .zero
         $0.separatorStyle = .none
         $0.rowHeight = UITableView.automaticDimension
@@ -71,12 +74,12 @@ class GoalAddView:UIViewController{
 }
 
 //MARK: - Layout 및 UIUpdate.
-extension GoalAddView{
+extension TaskAddView{
     
     
-    func bind(_ VM: GoalAddViewModel){
+    func bind(_ VM: TaskAddViewModel){
         
-        let input = GoalAddViewModel.Input()
+        let input = TaskAddViewModel.Input()
         let output = VM.inOut(input: input)
         
         //TableView DataSource 구현
@@ -113,7 +116,7 @@ extension GoalAddView{
 }
 
 //MARK: - NavigationBar
-extension GoalAddView{
+extension TaskAddView{
     private func navigationBarAdd(){
         let addButton = UIBarButtonItem(title: "추가", style: .plain, target: self, action: #selector(addButton))
         self.navigationItem.rightBarButtonItem = addButton

@@ -21,5 +21,4 @@ extension Reactive where Base: UITextView {
             .map { ($0, self.base) }
         return ControlEvent(events: source)
     }
-    
 }

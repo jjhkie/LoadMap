@@ -14,14 +14,14 @@ import RxRealm
 
 
 final class TaskDetailViewModel{
-    private let id : Goal.ID
+    private let id : Task.ID
     
-    init(id: Goal.ID) {
+    init(id: Task.ID) {
         self.id = id
     }
     
-    var selectedTask: Results<Goal>{
-        DataManager.shared.fetchData(type: Goal.self)
+    var selectedTask: Results<Task>{
+        DataManager.shared.fetchData(type: Task.self)
             .filter(NSPredicate(format: "id == %@", id))
     }
     
@@ -36,9 +36,6 @@ extension TaskDetailViewModel{
     }
     
     func inOut(input: Input) -> Output{
-        var selectedItems: Results<GoalItem>? {
-            return selectedTask.first?.items.sorted(byKeyPath: "abc")
-        }
 
         
         return Output(

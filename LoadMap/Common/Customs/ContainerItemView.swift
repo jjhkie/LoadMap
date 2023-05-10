@@ -11,7 +11,7 @@ import Then
 
 final class ContainerItemView: UIView{
     
-    var data: Goal
+    var data: Task
     
     private  var topItemStackView = UIStackView().then{
         $0.axis = .horizontal
@@ -30,7 +30,7 @@ final class ContainerItemView: UIView{
         $0.numberOfLines = 0
     }
     
-    init(content : Goal, type : DetailViewType){
+    init(content : Task, type : DetailViewType){
         self.data = content
         super.init(frame: .zero)
         
@@ -54,7 +54,7 @@ extension ContainerItemView{
         case .creation:
             topItemImage.image = Constants.Images.creationImage
             topItemLabel.text = "작성한 날짜"
-            itemContentView.text = "\(data.creationDate.basicFormatter)"
+            itemContentView.text = "\(data.dateOfCreation.basicFormatter)"
             
         case .due:
             topItemImage.image = Constants.Images.dueImage

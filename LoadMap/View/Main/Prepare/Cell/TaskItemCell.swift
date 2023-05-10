@@ -11,7 +11,7 @@ import Then
 import RxSwift
 import RxCocoa
 
-class GoalItemCell: UITableViewCell{
+class TaskItemCell: UITableViewCell{
     
     let bag = DisposeBag()
     
@@ -29,7 +29,6 @@ class GoalItemCell: UITableViewCell{
     var workTextView = UITextView().then{
         $0.isEditable = true
         $0.textColor = .lightGray
-        $0.commonBackgroundColor()
     }
     
     
@@ -48,7 +47,7 @@ class GoalItemCell: UITableViewCell{
     }
 }
 
-extension GoalItemCell{
+extension TaskItemCell{
     func scrollBottom() {
         guard let tableView = superview as? UITableView else { return }
         
@@ -85,7 +84,7 @@ extension GoalItemCell{
  
     }
    
-    func bind(viewmodel VM: GoalAddViewModel){
+    func bind(viewmodel VM: TaskAddViewModel){
         
         workTextView.rx.didChange
             .subscribe(onNext: {[weak workTextView] in

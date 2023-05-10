@@ -140,10 +140,19 @@ extension CalendarLineView{
         let input = CalendarLineViewModel.Input()
         let output = VM.inOut(input: input)
         
-        
         output.cellData
+            .subscribe(onNext: {data in
+                if data.isEmpty{
+                    self.tableView.backgroundView = self.createEmptyView()
+                }else{
+                    self.tableView.backgroundView = nil
+                }
+            })
+            .disposed(by: bag)
+        
+        output.cellData.asDriver(onErrorJustReturn: [])
             .drive(tableView.rx.items(cellIdentifier: "noteTableCell",cellType: NoteTableCell.self)){row,data,cell in
-                print(data)
+
                 cell.setView(data)
                
                 
@@ -168,6 +177,25 @@ extension CalendarLineView{
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
             
         }
+    }
+    
+    private func createEmptyView() -> UIView {
+        let emptyView = UIView(frame: tableView.bounds)
+        
+        let label = UILabel()
+        label.text = "데이터 없음"
+        
+        label.textAlignment = .center
+        label.textColor = .gray
+        
+        emptyView.addSubview(label)
+        
+        label.snp.makeConstraints{
+            //$0.width.height.equalTo(500)
+            $0.center.equalToSuperview()
+        }
+        
+        return emptyView
     }
 }
 

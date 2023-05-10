@@ -27,13 +27,13 @@ extension CalendarLineViewModel{
     }
     
     struct Output{
-        let cellData : Driver<[Note]>
+        let cellData : Observable<[Note]>
     }
     
     func inOut(input: Input) -> Output {
         
         let _cellData = dateObservable.flatMap { date -> Observable<[Note]> in
-            let filteredData = self.objectData.filter(NSPredicate(format: "noteDate >= %@ && noteDate <= %@",date.startOfDay().koreanTime as NSDate, date.endOfDay().koreanTime as NSDate))
+            let filteredData = self.objectData.filter(NSPredicate(format: "dateOfCreation >= %@ && dateOfCreation <= %@",date.startOfDay().koreanTime as NSDate, date.endOfDay().koreanTime as NSDate))
             return Observable.array(from: filteredData)
         }
                 
@@ -41,7 +41,7 @@ extension CalendarLineViewModel{
                 
 
         
-        return Output(cellData: _cellData.asDriver(onErrorJustReturn: []))
+        return Output(cellData: _cellData.asObservable())
     }
 }
 
@@ -50,7 +50,7 @@ extension CalendarLineViewModel{
     
     func dotCount(_ date: Date) -> Int{
         return objectData.filter{
-            $0.noteDate.dayBefore().basicFormatter == date.basicFormatter
+            $0.dateOfCreation.dayBefore().basicFormatter == date.basicFormatter
         }.count
     }
 }

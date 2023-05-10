@@ -23,7 +23,7 @@ protocol DataFunc{
     func endDateOnNext(_ value: Date)
 }
 
-final class GoalAddViewModel{
+final class TaskAddViewModel{
     
     private let bag = DisposeBag()
     
@@ -38,7 +38,7 @@ final class GoalAddViewModel{
     
     private let _descriptionText = BehaviorSubject<String>(value: "")
  
-    let _selectedColor = BehaviorSubject<GoalColor>(value: GoalColor())
+    let _selectedColor = BehaviorSubject<TaskColor>(value: TaskColor())
     
     let _startDate = BehaviorSubject<Date>(value: Date())
     let _endDate = BehaviorSubject<Date>(value: Date())
@@ -53,7 +53,7 @@ final class GoalAddViewModel{
 }
 
 //MARK: - data Function
-extension GoalAddViewModel:DataFunc{
+extension TaskAddViewModel:DataFunc{
 
     func titleOnNext(_ value: String){
         _titleText.onNext(value)
@@ -76,7 +76,7 @@ extension GoalAddViewModel:DataFunc{
 }
 
 //MARK: - Input Output
-extension GoalAddViewModel{
+extension TaskAddViewModel{
     
     struct Input{
         
@@ -105,7 +105,7 @@ extension GoalAddViewModel{
 }
 
 //MARK: - Function
-extension GoalAddViewModel:GoalAddPro{
+extension TaskAddViewModel:GoalAddPro{
     
     
     func dataSave(){
@@ -140,7 +140,7 @@ extension GoalAddViewModel:GoalAddPro{
         if alertString != ""{
             _emptyAlert.onNext(alertString)
         }else{
-            let data = Goal()
+            let data = Task()
             data.content = try! _descriptionText.value()
             data.title = try! _titleText.value()
             data.boxColor = try! _selectedColor.value()
@@ -148,7 +148,7 @@ extension GoalAddViewModel:GoalAddPro{
             data.endDay = try! _endDate.value().endOfDay().koreanTime
             
             for value in workIsValue{
-                let item = GoalItem()
+                let item = TaskItem()
                 item.itemName = value
                 data.items.append(item)
             }
@@ -165,26 +165,26 @@ extension GoalAddViewModel:GoalAddPro{
                 
                 switch item{
                 case .title:
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "mainCell") as? GoalAddMainCell else {return UITableViewCell()}
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "mainCell") as? TaskAddMainCell else {return UITableViewCell()}
                    
                     cell.bind(viewmodel: self)
                     
                     return cell
                 case .color:
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "colorCell") as? GoalColorCell else {return UITableViewCell()}
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "colorCell") as? TaskColorCell else {return UITableViewCell()}
                     
                     cell.bind(viewmodel: self)
                     
                     return cell
                 case .setDay:
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "dateCell") as? GoalDateCell else {return UITableViewCell()}
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "dateCell") as? TaskDateCell else {return UITableViewCell()}
 
                     
                     cell.bind(viewmodel: self)
                     
                     return cell
                 case .works:
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell") as? GoalItemCell else {return UITableViewCell()}
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell") as? TaskItemCell else {return UITableViewCell()}
                     
                     cell.workTextView.rx.didChange
                         .bind(onNext:{
@@ -209,7 +209,7 @@ extension GoalAddViewModel:GoalAddPro{
                     
                     return cell
                 case .task(message: let message):
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "taskCell") as? GoalTaskCell else {return UITableViewCell()}
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "taskCell") as? ItemCell else {return UITableViewCell()}
   
   
                     cell.taskLabel.text = message

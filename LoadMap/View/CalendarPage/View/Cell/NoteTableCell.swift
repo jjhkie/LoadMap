@@ -53,7 +53,7 @@ final class NoteTableCell: UITableViewCell{
 extension NoteTableCell{
     
     func setView(_ data: Note){
-        dateLabel.text = "\(data.noteDate.dayOfTimeString)"
+        dateLabel.text = "\(data.dateOfCreation.dayOfTimeString)"
         contentLabel.text = data.noteContent
     }
     

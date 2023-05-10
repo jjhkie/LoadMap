@@ -11,7 +11,7 @@ import Then
 import RxSwift
 import RxCocoa
 
-final class GoalColorCell:UITableViewCell{
+final class TaskColorCell:UITableViewCell{
     
     private let bag = DisposeBag()
     
@@ -46,9 +46,9 @@ final class GoalColorCell:UITableViewCell{
     }
 }
 
-extension GoalColorCell{
+extension TaskColorCell{
     
-    func bind(viewmodel VM: GoalAddViewModel){
+    func bind(viewmodel VM: TaskAddViewModel){
         
         let colorObservable = colorButton.rx.controlEvent(.valueChanged)
             .map {

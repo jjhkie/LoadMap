@@ -57,7 +57,7 @@ extension NoteAddViewModel{
 extension NoteAddViewModel{
     func addNote(date: Date){
         let newNote = Note()
-        newNote.noteDate = date.koreanTime
+        newNote.dateOfCreation = date.koreanTime
         newNote.important = try! _noteImportant.value()
         newNote.noteContent = try! noteText.value()
         
